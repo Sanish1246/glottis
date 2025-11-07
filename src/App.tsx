@@ -12,26 +12,26 @@ function App() {
   return (
     <div>
       <header>
-        <nav className="flex flex-row justify-between mt-1 border-2 rounded-lg">
+        <nav className="flex flex-row justify-between mt-1 rounded-lg">
           <h1 className="self-center text-md md:text-2xl font-extrabold">
             Glottis
           </h1>
 
           <div className="flex flex-row gap-4 items-center">
-            <Link to="/">
-              <a className="hover:underline">Home</a>
+            <Link to="/" className="hover:underline">
+              Home
             </Link>
-            <Link to="/">
-              <a className="hover:underline">User</a>
+            <Link to="/" className="hover:underline">
+              User
             </Link>
-            <Link to="/">
-              <a className="hover:underline">Lessons</a>
+            <Link to="/lesson" className="hover:underline">
+              Lessons
             </Link>
-            <Link to="/">
-              <a className="hover:underline">Flashcards</a>
+            <Link to="/" className="hover:underline">
+              Flashcards
             </Link>
-            <Link to="/">
-              <a className="hover:underline">Deck</a>
+            <Link to="/" className="hover:underline">
+              Deck
             </Link>
           </div>
         </nav>

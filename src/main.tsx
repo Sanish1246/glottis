@@ -6,12 +6,16 @@ import "./index.css";
 import App from "./App.tsx";
 
 import Landing from "./components/pages/Landing.tsx";
+import Lesson from "./components/pages/Lesson.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    children: [{ index: true, element: <Landing /> }],
+    children: [
+      { index: true, element: <Landing /> },
+      { path: "lesson", element: <Lesson /> },
+    ],
   },
 ]);
 
