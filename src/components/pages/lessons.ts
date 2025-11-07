@@ -47,12 +47,6 @@ const lesson = {
         audio: "Microsoft Elsa - Italian (Italy)",
       },
     ],
-    features: [
-      "audio_normal",
-      "audio_slow",
-      "translation_toggle",
-      "roleplay_mode",
-    ],
   },
 
   vocabulary: [
@@ -60,19 +54,19 @@ const lesson = {
       category: "Greetings",
       items: [
         {
-          italian: "Ciao",
+          word: "Ciao",
           english: "Hi / Bye (informal)",
-          audio: "/audio/vocab/ciao.mp3",
+          audio: "Microsoft Cosimo - Italian (Italy)",
         },
         {
-          italian: "Buongiorno",
+          word: "Buongiorno",
           english: "Good morning",
-          audio: "/audio/vocab/buongiorno.mp3",
+          audio: "Microsoft Cosimo - Italian (Italy)",
         },
         {
-          italian: "Arrivederci",
+          word: "Arrivederci",
           english: "Goodbye",
-          audio: "/audio/vocab/arrivederci.mp3",
+          audio: "Microsoft Cosimo - Italian (Italy)",
         },
       ],
     },
@@ -80,53 +74,78 @@ const lesson = {
       category: "Introductions",
       items: [
         {
-          italian: "Come ti chiami?",
+          word: "Come ti chiami?",
           english: "What's your name? (informal)",
-          audio: "/audio/vocab/cometichiami.mp3",
+          audio: "Microsoft Cosimo - Italian (Italy)",
         },
         {
-          italian: "Mi chiamo...",
+          word: "Mi chiamo...",
           english: "My name is...",
-          audio: "/audio/vocab/michiamo.mp3",
+          audio: "Microsoft Cosimo - Italian (Italy)",
         },
         {
-          italian: "Piacere",
+          word: "Piacere",
           english: "Nice to meet you",
-          audio: "/audio/vocab/piacere.mp3",
+          audio: "Microsoft Cosimo - Italian (Italy)",
         },
       ],
     },
   ],
 
   grammar: [
+{
+  title: "Verb ESSERE (to be)",
+  type: "table",
+  content: [
     {
-      title: "Verb ESSERE (to be)",
-      type: "table",
-      content: [
-        { italian: "io sono", english: "I am", example: "Io sono Marco" },
-        {
-          italian: "tu sei",
-          english: "you are (informal)",
-          example: "Tu sei di Roma",
-        },
-        {
-          italian: "lui/lei è",
-          english: "he/she is",
-          example: "Lui è italiano",
-        },
-      ],
-      notes: [
-        "Essere is irregular.",
-        "Subject pronouns are often omitted in Italian.",
-      ],
+      verb: "io sono",
+      english: "I am",
+      example: "Io sono Marco"
     },
+    {
+      verb: "tu sei",
+      english: "you are (informal)",
+      example: "Tu sei di Roma"
+    },
+    {
+      verb: "lui/lei è",
+      english: "he/she is",
+      example: "Lui è italiano / Lei è italiana"
+    },
+    {
+      verb: "Lei è",
+      english: "you are (formal)",
+      example: "Lei è il signor Rossi"
+    },
+    {
+      verb: "noi siamo",
+      english: "we are",
+      example: "Noi siamo studenti"
+    },
+    {
+      verb: "voi siete",
+      english: "you are (plural)",
+      example: "Voi siete americani"
+    },
+    {
+      verb: "loro sono",
+      english: "they are",
+      example: "Loro sono insegnanti"
+    }
+  ],
+  notes: [
+    "Essere is irregular.",
+    "Subject pronouns (io, tu, lui, etc.) are often omitted in Italian.",
+    "Formal 'you' (Lei) always takes the third person singular form 'è'."
+  ]
+},
     {
       title: "Verb CHIAMARSI (to be called)",
       type: "table",
       content: [
-        { italian: "io mi chiamo", english: "I am called" },
-        { italian: "tu ti chiami", english: "you are called" },
-        { italian: "lui/lei si chiama", english: "he/she is called" },
+        { verb: "io mi chiamo", english: "I am called" },
+        { verb: "tu ti chiami", english: "you are called" },
+        { verb: "lui/lei si chiama", english: "he/she is called" },
       ],
       notes: [
         "Chiamarsi is a reflexive verb.",

@@ -7,6 +7,7 @@ import App from "./App.tsx";
 
 import Landing from "./components/pages/Landing.tsx";
 import Lesson from "./components/pages/Lesson.tsx";
+import LessonsList from "./components/pages/LessonsList.tsx";
 
 const router = createBrowserRouter([
   {
@@ -14,7 +15,8 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       { index: true, element: <Landing /> },
-      { path: "lesson", element: <Lesson /> },
+      { path: "lessons", element: <LessonsList /> },
+      { path: "lessons/lesson", element: <Lesson /> },
     ],
   },
 ]);

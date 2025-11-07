@@ -1,6 +1,17 @@
 import React, { useEffect, useState } from "react";
 import lesson from "./lessons";
 import SpeechButton from "../ui/SpeechButton";
+import FlashcardList from "../ui/FlashcardList";
+
+interface FlashCardProps {
+  front: string;
+  back: string;
+  lang: string;
+}
+
+const addToDeck = (card: FlashCardProps) => {
+  console.log(card, " Added");
+};
 
 const Lesson = () => {
   return (
@@ -20,14 +31,23 @@ const Lesson = () => {
           {lesson.introduction.dialogue.map((d, index) => (
             <li key={index}>
               <span className="font-semibold">{d.speaker}:</span> {d.text}
-              <SpeechButton
-                text={d.text} // 👈 qui scegli la voce
-                lang="it-IT"
-                voiceName={d.audio}
-              />
+              <SpeechButton text={d.text} lang="it-IT" voiceName={d.audio} />
             </li>
           ))}
         </ul>
+      </div>
+      <div>
+        <h2>Vocabulary</h2>
+
+        {lesson.vocabulary.map((l, index) => (
+          <div key={index} className="mx-auto">
+            <h3>{l.category}</h3>
+            <FlashcardList
+              cardList={l.items}
+              addToDeck={addToDeck}
+            ></FlashcardList>
+          </div>
+        ))}
       </div>
     </div>
   );

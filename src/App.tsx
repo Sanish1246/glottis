@@ -5,10 +5,10 @@ import "./App.css";
 function App() {
   // const { isLoggedIn, setIsLoggedIn, user, setUser } = useUser();
 
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  // const [isLoginOpen, setIsLoginOpen] = useState(false);
+  // const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   return (
     <div>
       <header>
@@ -24,7 +24,7 @@ function App() {
             <Link to="/" className="hover:underline">
               User
             </Link>
-            <Link to="/lesson" className="hover:underline">
+            <Link to="/lessons" className="hover:underline">
               Lessons
             </Link>
             <Link to="/" className="hover:underline">

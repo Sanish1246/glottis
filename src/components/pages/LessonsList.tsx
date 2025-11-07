@@ -1,7 +1,11 @@
-import React from "react";
+import { Link } from "react-router-dom";
 
 const LessonsList = () => {
-  return <div>LessonsList</div>;
+  return (
+    <div>
+      <Link to="lesson">Lesson 1 - Greetings and Introductions</Link>
+    </div>
+  );
 };
 
 export default LessonsList;

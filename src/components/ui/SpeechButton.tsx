@@ -3,12 +3,12 @@ import React, { useEffect, useState } from "react";
 interface SpeechButtonProps {
   text: string;
   lang?: string;
-  voiceName?: string; // voce passata come prop
+  voiceName?: string;
 }
 
 const SpeechButton: React.FC<SpeechButtonProps> = ({
   text,
-  lang = "it-IT",
+  lang,
   voiceName,
 }) => {
   const [voice, setVoice] = useState<SpeechSynthesisVoice | null>(null);
@@ -58,7 +58,7 @@ const SpeechButton: React.FC<SpeechButtonProps> = ({
     const utter = new SpeechSynthesisUtterance(text);
     utter.lang = lang;
     if (voice) utter.voice = voice;
-    utter.rate = 0.9;
+    utter.rate = 1;
     utter.pitch = 1;
     utter.volume = 1;
 
@@ -69,7 +69,7 @@ const SpeechButton: React.FC<SpeechButtonProps> = ({
     <button
       onClick={handleSpeak}
       className="mx-2 p-2 text-gray-600 hover:text-gray-800 rounded transition-colors"
-      title="Ascolta"
+      title="Listen"
     >
       🔊
     </button>
