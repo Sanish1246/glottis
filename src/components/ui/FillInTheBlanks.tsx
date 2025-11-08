@@ -11,9 +11,15 @@ interface Question {
 
 interface QuestionProp {
   question: Question;
+  correctFib: number;
+  setCorrectFib: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const FillInTheBlanks = ({ question }: QuestionProp) => {
+const FillInTheBlanks = ({
+  question,
+  correctFib,
+  setCorrectFib,
+}: QuestionProp) => {
   const [newAnswer, setNewAnswer] = useState("");
   function checkAnswer() {
     if (newAnswer.toLowerCase() == question.answer.toLowerCase()) {
@@ -26,6 +32,7 @@ const FillInTheBlanks = ({ question }: QuestionProp) => {
         },
       });
       setNewAnswer("");
+      setCorrectFib((prevCount) => prevCount + 1);
     } else {
       toast.error("Wrong answer!", {
         action: {

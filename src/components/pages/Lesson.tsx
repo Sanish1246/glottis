@@ -5,8 +5,6 @@ import FlashcardList from "../ui/FlashcardList";
 import GrammarTable from "../ui/GrammarTable";
 import FillInTheBlanks from "../ui/FillInTheBlanks";
 
-let correctFiB = 0;
-
 interface FlashCardProps {
   front: string;
   back: string;
@@ -18,6 +16,7 @@ const addToDeck = (card: FlashCardProps) => {
 };
 
 const Lesson = () => {
+  const [correctFib, setCorrectFib] = useState(0);
   return (
     <div>
       <h1>
@@ -74,9 +73,16 @@ const Lesson = () => {
         <h2>Exercises - Test your knowledge</h2>
         <h3>Fill in the blanks</h3>
         {lesson.exercises[0].questions.map((q, index) => (
-          <div key={index} className="mx-auto">
+          <div
+            key={index}
+            className={`mx-auto ${index == correctFib ? "block" : "hidden"}`}
+          >
             <h3>Question {index + 1}</h3>
-            <FillInTheBlanks question={q}></FillInTheBlanks>
+            <FillInTheBlanks
+              question={q}
+              correctFib={correctFib}
+              setCorrectFib={setCorrectFib}
+            ></FillInTheBlanks>
           </div>
         ))}
       </div>
