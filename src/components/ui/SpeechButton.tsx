@@ -49,10 +49,10 @@ const SpeechButton: React.FC<SpeechButtonProps> = ({
     };
   }, [lang, voiceName]);
 
-  const handleSpeak = () => {
+  const handleSpeak = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
     if (!text) return;
 
-    // Interrompe eventuali parlati in corso
     speechSynthesis.cancel();
 
     const utter = new SpeechSynthesisUtterance(text);
@@ -68,7 +68,7 @@ const SpeechButton: React.FC<SpeechButtonProps> = ({
   return (
     <button
       onClick={handleSpeak}
-      className="mx-2 p-2 text-gray-600 hover:text-gray-800 rounded transition-colors"
+      className="mx-2 p-2 text-gray-600 hover:text-gray-800 rounded transition-colors hover:cursor-pointer"
       title="Listen"
     >
       🔊

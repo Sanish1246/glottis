@@ -55,7 +55,7 @@ const Flashcard = ({ front, back, onAdd, lang }: FlashCardProps) => {
                 e.stopPropagation();
                 onAdd({ front, back, lang });
               }}
-              className=" bg-blue-500 text-white px-2  rounded-md text-sm hover:bg-blue-600 transition-colors"
+              className=" bg-blue-500 text-white px-2  rounded-md text-sm hover:bg-blue-600 transition-colors hover:cursor-pointer"
             >
               ➕
             </button>
@@ -80,7 +80,7 @@ const Flashcard = ({ front, back, onAdd, lang }: FlashCardProps) => {
                 e.stopPropagation();
                 onAdd({ front, back, lang });
               }}
-              className=" bg-blue-500 text-white px-2 py-1 rounded-md text-sm hover:bg-blue-600 transition-colors"
+              className=" bg-blue-500 text-white px-2 py-1 rounded-md text-sm hover:bg-blue-600 transition-colors hover:cursor-pointer"
             >
               ➕
             </button>

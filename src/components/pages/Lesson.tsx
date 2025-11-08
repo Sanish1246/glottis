@@ -3,6 +3,9 @@ import lesson from "./lessons";
 import SpeechButton from "../ui/SpeechButton";
 import FlashcardList from "../ui/FlashcardList";
 import GrammarTable from "../ui/GrammarTable";
+import FillInTheBlanks from "../ui/FillInTheBlanks";
+
+let correctFiB = 0;
 
 interface FlashCardProps {
   front: string;
@@ -63,6 +66,17 @@ const Lesson = () => {
                 <li key={index}>{n}</li>
               ))}
             </ul>
+          </div>
+        ))}
+      </div>
+
+      <div>
+        <h2>Exercises - Test your knowledge</h2>
+        <h3>Fill in the blanks</h3>
+        {lesson.exercises[0].questions.map((q, index) => (
+          <div key={index} className="mx-auto">
+            <h3>Question {index + 1}</h3>
+            <FillInTheBlanks question={q}></FillInTheBlanks>
           </div>
         ))}
       </div>

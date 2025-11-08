@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Toaster } from "@/components/ui/sonner";
 import "./App.css";
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
 
       <main>
         <Outlet />
+        <Toaster richColors />
       </main>
     </div>
   );

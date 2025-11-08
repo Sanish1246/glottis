@@ -156,7 +156,7 @@ const lesson = {
       ],
       notes: [
         "Chiamarsi is a reflexive verb.",
-        "Common usage: 'Mi chiamo + name'.",
+        "Common usage: 'Mi chiamo + name', which translates to 'My name is + name'.",
       ],
     },
   ],
