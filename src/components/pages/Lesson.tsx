@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import lesson from "./lessons";
 import SpeechButton from "../ui/SpeechButton";
 import FlashcardList from "../ui/FlashcardList";
+import GrammarTable from "../ui/GrammarTable";
 
 interface FlashCardProps {
   front: string;
@@ -46,6 +47,22 @@ const Lesson = () => {
               cardList={l.items}
               addToDeck={addToDeck}
             ></FlashcardList>
+          </div>
+        ))}
+      </div>
+
+      <div>
+        <h2>Grammar</h2>
+        {lesson.grammar.map((g, index) => (
+          <div key={index} className="mx-auto">
+            <h3>{g.title}</h3>
+            <GrammarTable grammarPoint={g.content}></GrammarTable>
+            <h3>Notes</h3>
+            <ul>
+              {g.notes.map((n, index) => (
+                <li key={index}>{n}</li>
+              ))}
+            </ul>
           </div>
         ))}
       </div>

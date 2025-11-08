@@ -98,39 +98,46 @@ const lesson = {
   type: "table",
   content: [
     {
-      verb: "io sono",
+      verb: "Io sono",
       english: "I am",
-      example: "Io sono Marco"
+      example: "Io sono Marco",
+      audio: "Microsoft Cosimo - Italian (Italy)",
     },
     {
-      verb: "tu sei",
-      english: "you are (informal)",
-      example: "Tu sei di Roma"
+      verb: "Tu sei",
+      english: "You are (informal)",
+      example: "Tu sei di Roma",
+      audio: "Microsoft Cosimo - Italian (Italy)"
     },
     {
-      verb: "lui/lei è",
-      english: "he/she is",
-      example: "Lui è italiano / Lei è italiana"
+      verb: "Lui/Lei è",
+      english: "He/She is",
+      example: "Lui è italiano / Lei è italiana",
+      audio: "Microsoft Cosimo - Italian (Italy)"
     },
     {
       verb: "Lei è",
       english: "you are (formal)",
-      example: "Lei è il signor Rossi"
+      example: "Lei è il signor Rossi",
+      audio: "Microsoft Cosimo - Italian (Italy)"
     },
     {
-      verb: "noi siamo",
-      english: "we are",
-      example: "Noi siamo studenti"
+      verb: "Noi siamo",
+      english: "We are",
+      example: "Noi siamo studenti",
+      audio: "Microsoft Cosimo - Italian (Italy)"
     },
     {
-      verb: "voi siete",
-      english: "you are (plural)",
-      example: "Voi siete americani"
+      verb: "Voi siete",
+      english: "You are (plural)",
+      example: "Voi siete americani",
+      audio: "Microsoft Cosimo - Italian (Italy)"
     },
     {
-      verb: "loro sono",
-      english: "they are",
-      example: "Loro sono insegnanti"
+      verb: "Loro sono",
+      english: "They are",
+      example: "Loro sono insegnanti",
+      audio: "Microsoft Cosimo - Italian (Italy)"
     }
   ],
   notes: [
