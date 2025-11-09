@@ -19,11 +19,19 @@ const addToDeck = (card: FlashCardProps) => {
 const Lesson = () => {
   const [correctFib, setCorrectFib] = useState(0);
   const [correctMcq, setCorrectMcq] = useState(0);
+
+  const totalFib = lesson.fib.length;
+  const totalMcq = lesson.mcq.length;
+
+  const allExercisesCompleted =
+    correctFib >= totalFib && correctMcq >= totalMcq;
+
   return (
     <div>
       <h1>
         Lesson {lesson.lessonNumber} - {lesson.title}
       </h1>
+
       <ul className="list-disc">
         {lesson.objectives.map((objective, index) => (
           <li key={index}>{objective}</li>
@@ -41,16 +49,13 @@ const Lesson = () => {
           ))}
         </ul>
       </div>
+
       <div>
         <h2>Vocabulary</h2>
-
         {lesson.vocabulary.map((l, index) => (
           <div key={index} className="mx-auto">
             <h3>{l.category}</h3>
-            <FlashcardList
-              cardList={l.items}
-              addToDeck={addToDeck}
-            ></FlashcardList>
+            <FlashcardList cardList={l.items} addToDeck={addToDeck} />
           </div>
         ))}
       </div>
@@ -60,68 +65,112 @@ const Lesson = () => {
         {lesson.grammar.map((g, index) => (
           <div key={index} className="mx-auto">
             <h3>{g.title}</h3>
-            <GrammarTable grammarPoint={g.content}></GrammarTable>
+            <GrammarTable grammarPoint={g.content} />
             <h3>Notes</h3>
             <ul>
-              {g.notes.map((n, index) => (
-                <li key={index}>{n}</li>
+              {g.notes.map((n, idx) => (
+                <li key={idx}>{n}</li>
               ))}
             </ul>
           </div>
         ))}
       </div>
 
+      {/* --- Exercises --- */}
       <div>
         <h2>Exercises - Test your knowledge</h2>
-        <h3>Fill in the blanks</h3>
-        {lesson.fib.map((q, index) => (
-          <div
-            key={index}
-            className={`mx-auto ${index == correctFib ? "block" : "hidden"}`}
-          >
-            <h3>Question {index + 1}</h3>
-            <FillInTheBlanks question={q} setCorrectFib={setCorrectFib} />
+        {correctFib < totalFib && (
+          <>
+            <h3>Fill in the blanks</h3>
+            {lesson.fib.map((q, index) => (
+              <div
+                key={index}
+                className={`mx-auto ${
+                  index === correctFib ? "block" : "hidden"
+                }`}
+              >
+                <h3>Question {index + 1}</h3>
+                <FillInTheBlanks question={q} setCorrectFib={setCorrectFib} />
+              </div>
+            ))}
+          </>
+        )}
+
+        {/* --- Transition message before MCQs --- */}
+        {correctFib === totalFib && correctMcq === 0 && (
+          <div className="mt-5 text-center p-4 bg-green-100 rounded-xl shadow">
+            <h3 className="text-xl font-semibold text-green-800">
+              🎉 Congratulations!
+            </h3>
+            <p className="text-green-700">
+              You've completed all the Fill in the Blanks questions. <br />
+              Let's move on to the Multiple Choice questions!
+            </p>
           </div>
-        ))}
+        )}
 
-        <h3>Multiple Choice questions</h3>
-        {lesson.mcq.map((q, index) => (
-          <div
-            key={index}
-            className={`mx-auto ${index == correctMcq ? "block" : "hidden"}`}
-          >
-            <h3>Question {index + 1}</h3>
-            <Mcq question={q} setCorrectMcq={setCorrectMcq} />
+        {/* --- Multiple Choice Questions --- */}
+        {correctFib >= totalFib && correctMcq < totalMcq && (
+          <>
+            <h3 className="mt-5">Multiple Choice Questions</h3>
+            {lesson.mcq.map((q, index) => (
+              <div
+                key={index}
+                className={`mx-auto ${
+                  index === correctMcq ? "block" : "hidden"
+                }`}
+              >
+                <h3>Question {index + 1}</h3>
+                <Mcq question={q} setCorrectMcq={setCorrectMcq} />
+              </div>
+            ))}
+          </>
+        )}
+
+        {allExercisesCompleted && (
+          <div className="mt-5 text-center p-5 bg-blue-100 rounded-xl shadow-md">
+            <h3 className="text-2xl font-bold text-blue-800">
+              🎉 Excellent work!
+            </h3>
+            <p className="text-blue-700 mt-2">
+              You've successfully completed all exercises in this lesson.
+              <br />
+              Let's move on to the cultural note and final summary.
+            </p>
           </div>
-        ))}
+        )}
       </div>
 
-      <div>
-        <h2>Cultural note</h2>
-        <h3> {lesson.cultural_note.title}</h3>
-        <ul className="list-disc">
-          {lesson.cultural_note.content.map((note, index) => (
-            <li key={index}>{note}</li>
-          ))}
-        </ul>
-      </div>
+      {allExercisesCompleted && (
+        <div className="mt-8">
+          <h2>Cultural note</h2>
+          <h3>{lesson.cultural_note.title}</h3>
+          <ul className="list-disc">
+            {lesson.cultural_note.content.map((note, index) => (
+              <li key={index}>{note}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
-      <div>
-        <h2>Wrapping up</h2>
-        <h3>Grammar points learned in this lesson:</h3>
-        <ul className="list-disc">
-          {lesson.summary.grammarPoints.map((point, index) => (
-            <li key={index}>{point}</li>
-          ))}
-        </ul>
+      {allExercisesCompleted && (
+        <div className="mt-8">
+          <h2>Wrapping up</h2>
+          <h3>Grammar points learned in this lesson:</h3>
+          <ul className="list-disc">
+            {lesson.summary.grammarPoints.map((point, index) => (
+              <li key={index}>{point}</li>
+            ))}
+          </ul>
 
-        <h3>Skills learned in this lesson:</h3>
-        <ul className="list-disc">
-          {lesson.summary.skills.map((skill, index) => (
-            <li key={index}>{skill}</li>
-          ))}
-        </ul>
-      </div>
+          <h3>Skills learned in this lesson:</h3>
+          <ul className="list-disc">
+            {lesson.summary.skills.map((skill, index) => (
+              <li key={index}>{skill}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

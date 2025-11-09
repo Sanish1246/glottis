@@ -98,43 +98,43 @@ const lesson = {
   type: "table",
   content: [
     {
-      verb: "Io sono",
+      point: "Io sono",
       english: "I am",
       example: "Io sono Marco",
       audio: "Microsoft Cosimo - Italian (Italy)",
     },
     {
-      verb: "Tu sei",
+      point: "Tu sei",
       english: "You are (informal)",
       example: "Tu sei di Roma",
       audio: "Microsoft Cosimo - Italian (Italy)"
     },
     {
-      verb: "Lui/Lei è",
+      point: "Lui/Lei è",
       english: "He/She is",
       example: "Lui è italiano / Lei è italiana",
       audio: "Microsoft Cosimo - Italian (Italy)"
     },
     {
-      verb: "Lei è",
+      point: "Lei è",
       english: "you are (formal)",
       example: "Lei è il signor Rossi",
       audio: "Microsoft Cosimo - Italian (Italy)"
     },
     {
-      verb: "Noi siamo",
+      point: "Noi siamo",
       english: "We are",
       example: "Noi siamo studenti",
       audio: "Microsoft Cosimo - Italian (Italy)"
     },
     {
-      verb: "Voi siete",
+      point: "Voi siete",
       english: "You are (plural)",
       example: "Voi siete americani",
       audio: "Microsoft Cosimo - Italian (Italy)"
     },
     {
-      verb: "Loro sono",
+      point: "Loro sono",
       english: "They are",
       example: "Loro sono insegnanti",
       audio: "Microsoft Cosimo - Italian (Italy)"
@@ -150,9 +150,9 @@ const lesson = {
       title: "Verb CHIAMARSI (to be called)",
       type: "table",
       content: [
-        { verb: "io mi chiamo", english: "I am called",example:"",audio:"Microsoft Cosimo - Italian (Italy)" },
-        { verb: "tu ti chiami", english: "you are called",example:"",audio:"Microsoft Cosimo - Italian (Italy)" },
-        { verb: "lui/lei si chiama", english: "he/she is called",example:"",audio:"Microsoft Cosimo - Italian (Italy)" },
+        { point: "io mi chiamo", english: "I am called",example:"",audio:"Microsoft Cosimo - Italian (Italy)" },
+        { point: "tu ti chiami", english: "you are called",example:"",audio:"Microsoft Cosimo - Italian (Italy)" },
+        { point: "lui/lei si chiama", english: "he/she is called",example:"",audio:"Microsoft Cosimo - Italian (Italy)" },
       ],
       notes: [
         "Chiamarsi is a reflexive verb.",

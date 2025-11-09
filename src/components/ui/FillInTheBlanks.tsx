@@ -16,6 +16,7 @@ interface QuestionProp {
 
 const FillInTheBlanks = ({ question, setCorrectFib }: QuestionProp) => {
   const [newAnswer, setNewAnswer] = useState("");
+
   function checkAnswer() {
     if (newAnswer.toLowerCase() == question.answer.toLowerCase()) {
       toast.success("Correct Answer!", {

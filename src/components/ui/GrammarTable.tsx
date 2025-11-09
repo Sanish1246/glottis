@@ -12,7 +12,7 @@ import SpeechButton from "./SpeechButton";
 const lang = "it-IT";
 
 interface GrammarPoint {
-  verb: string;
+  point: string;
   english: string;
   example: string;
   audio: string;
@@ -36,7 +36,7 @@ const GrammarTable = ({ grammarPoint }: GrammarTableProps) => {
       <TableBody>
         {grammarPoint.map((g, index) => (
           <TableRow key={index}>
-            <TableCell className="font-medium">{g.verb}</TableCell>
+            <TableCell className="font-medium">{g.point}</TableCell>
             <TableCell>{g.english}</TableCell>
             <TableCell>{g.example}</TableCell>
             <TableCell>
