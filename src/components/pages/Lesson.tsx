@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import lesson from "./lessons";
 import SpeechButton from "../ui/SpeechButton";
 import FlashcardList from "../ui/FlashcardList";
 import GrammarTable from "../ui/GrammarTable";
 import FillInTheBlanks from "../ui/FillInTheBlanks";
+import Mcq from "../ui/Mcq";
 
 interface FlashCardProps {
   front: string;
@@ -17,6 +18,7 @@ const addToDeck = (card: FlashCardProps) => {
 
 const Lesson = () => {
   const [correctFib, setCorrectFib] = useState(0);
+  const [correctMcq, setCorrectMcq] = useState(0);
   return (
     <div>
       <h1>
@@ -72,19 +74,53 @@ const Lesson = () => {
       <div>
         <h2>Exercises - Test your knowledge</h2>
         <h3>Fill in the blanks</h3>
-        {lesson.exercises[0].questions.map((q, index) => (
+        {lesson.fib.map((q, index) => (
           <div
             key={index}
             className={`mx-auto ${index == correctFib ? "block" : "hidden"}`}
           >
             <h3>Question {index + 1}</h3>
-            <FillInTheBlanks
-              question={q}
-              correctFib={correctFib}
-              setCorrectFib={setCorrectFib}
-            ></FillInTheBlanks>
+            <FillInTheBlanks question={q} setCorrectFib={setCorrectFib} />
           </div>
         ))}
+
+        <h3>Multiple Choice questions</h3>
+        {lesson.mcq.map((q, index) => (
+          <div
+            key={index}
+            className={`mx-auto ${index == correctMcq ? "block" : "hidden"}`}
+          >
+            <h3>Question {index + 1}</h3>
+            <Mcq question={q} setCorrectMcq={setCorrectMcq} />
+          </div>
+        ))}
+      </div>
+
+      <div>
+        <h2>Cultural note</h2>
+        <h3> {lesson.cultural_note.title}</h3>
+        <ul className="list-disc">
+          {lesson.cultural_note.content.map((note, index) => (
+            <li key={index}>{note}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h2>Wrapping up</h2>
+        <h3>Grammar points learned in this lesson:</h3>
+        <ul className="list-disc">
+          {lesson.summary.grammarPoints.map((point, index) => (
+            <li key={index}>{point}</li>
+          ))}
+        </ul>
+
+        <h3>Skills learned in this lesson:</h3>
+        <ul className="list-disc">
+          {lesson.summary.skills.map((skill, index) => (
+            <li key={index}>{skill}</li>
+          ))}
+        </ul>
       </div>
     </div>
   );

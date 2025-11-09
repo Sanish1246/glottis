@@ -150,9 +150,9 @@ const lesson = {
       title: "Verb CHIAMARSI (to be called)",
       type: "table",
       content: [
-        { verb: "io mi chiamo", english: "I am called" },
-        { verb: "tu ti chiami", english: "you are called" },
-        { verb: "lui/lei si chiama", english: "he/she is called" },
+        { verb: "io mi chiamo", english: "I am called",example:"",audio:"Microsoft Cosimo - Italian (Italy)" },
+        { verb: "tu ti chiami", english: "you are called",example:"",audio:"Microsoft Cosimo - Italian (Italy)" },
+        { verb: "lui/lei si chiama", english: "he/she is called",example:"",audio:"Microsoft Cosimo - Italian (Italy)" },
       ],
       notes: [
         "Chiamarsi is a reflexive verb.",
@@ -161,11 +161,8 @@ const lesson = {
     },
   ],
 
-  exercises: [
-    {
-      type: "fill_in_the_blank",
-      difficulty: "easy",
-      questions: [
+
+      fib: [
         {
           text: "Io ___ Marco.",
           options: ["sono", "sei", "è"],
@@ -177,11 +174,9 @@ const lesson = {
           answer: "chiami",
         },
       ],
-    },
-    {
-      type: "multiple_choice",
-      difficulty: "medium",
-      questions: [
+
+
+      mcq: [
         {
           question: "How do you say 'Hello' informally in Italian?",
           options: ["Buongiorno", "Ciao", "Salve"],
@@ -193,8 +188,8 @@ const lesson = {
           answer: "Where are you from?",
         },
       ],
-    },
-  ],
+
+
 
   final_quiz: {
     totalQuestions: 15,
@@ -207,7 +202,7 @@ const lesson = {
     content: [
       "Italians use 'Lei' in formal situations and 'tu' with friends and family.",
       "Handshakes are common in formal settings.",
-      "'Ciao' is both hello and goodbye — informal only!",
+      "'Ciao' is both hello and goodbye - informal only!",
     ],
     media: {
       video: "/videos/italian_greetings.mp4",

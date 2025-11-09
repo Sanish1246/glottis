@@ -11,15 +11,10 @@ interface Question {
 
 interface QuestionProp {
   question: Question;
-  correctFib: number;
   setCorrectFib: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const FillInTheBlanks = ({
-  question,
-  correctFib,
-  setCorrectFib,
-}: QuestionProp) => {
+const FillInTheBlanks = ({ question, setCorrectFib }: QuestionProp) => {
   const [newAnswer, setNewAnswer] = useState("");
   function checkAnswer() {
     if (newAnswer.toLowerCase() == question.answer.toLowerCase()) {
