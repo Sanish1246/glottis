@@ -33,6 +33,9 @@ function App() {
             <Link to="/" className="hover:underline">
               Deck
             </Link>
+            <Link to="athena" className="hover:underline">
+              Athena
+            </Link>
           </div>
         </nav>
       </header>
