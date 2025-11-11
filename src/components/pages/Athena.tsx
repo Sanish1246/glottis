@@ -25,9 +25,7 @@ const Athena = () => {
               }`}
             >
               {/* Formatting the answer by the bot using ReactMarkdown to support markdown syntax */}
-              {/* <p className={`p-2`}> */}
               <ReactMarkdown>{msg.text}</ReactMarkdown>
-              {/* </p> */}
             </div>
           ))}
         </div>

@@ -6,7 +6,7 @@ const QrCode = () => {
 
   useEffect(() => {
     const fetchQr = () => {
-      fetch("http://localhost:3001/qr")
+      fetch("http://localhost:8000/webhook/qr")
         .then((res) => res.json())
         .then((data) => {
           if (data.qr) {
@@ -39,6 +39,7 @@ const QrCode = () => {
       ) : (
         <p>✅ WhatsApp is already connected or QR not available</p>
       )}
+      <p>Or use this link: https://wa.me/15551710457</p>
     </div>
   );
 };
