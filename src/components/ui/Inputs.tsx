@@ -1,11 +1,21 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "./button";
 
-const Inputs = ({ setMessages }) => {
+interface Message {
+  id: number;
+  text: string;
+  sender: string;
+}
+
+interface messageProp {
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
+}
+
+const Inputs = ({ setMessages }: messageProp) => {
   const [newMessage, setNewMessage] = useState("");
 
   async function sendMessage() {
-    setMessages((prev: string) => [
+    setMessages((prev: Message[]) => [
       ...prev,
       { id: prev.length + 1, text: newMessage, sender: "user" },
     ]);
@@ -19,7 +29,7 @@ const Inputs = ({ setMessages }) => {
         body: JSON.stringify({ query: newMessage }),
       });
       const data = await response.json();
-      setMessages((prev: string) => [
+      setMessages((prev: Message[]) => [
         ...prev,
         { id: prev.length + 1, text: data.response, sender: "bot" },
       ]);

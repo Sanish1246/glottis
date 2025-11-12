@@ -18,13 +18,13 @@ const SpeechButton: React.FC<SpeechButtonProps> = ({
       const voices = speechSynthesis.getVoices();
       console.log(voices);
 
-      // Cerca prima un match esatto con la prop voiceName
+
       let selected: SpeechSynthesisVoice | undefined;
       if (voiceName) {
         selected = voices.find((v) => v.name === voiceName);
       }
 
-      // Se non trovato, fallback su prima voce con lingua corrispondente
+
       if (!selected) {
         selected = voices.find((v) => v.lang === lang);
       }
@@ -38,10 +38,10 @@ const SpeechButton: React.FC<SpeechButtonProps> = ({
       }
     };
 
-    // Carica subito le voci
+
     loadVoices();
 
-    // Ricarica quando le voci cambiano
+  
     speechSynthesis.onvoiceschanged = loadVoices;
 
     return () => {

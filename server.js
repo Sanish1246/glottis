@@ -6,6 +6,7 @@ import ngrok from "ngrok";
 import path from "path";
 import cors from "cors";
 import { fileURLToPath } from "url";
+import { connectToDb } from "./db.js";
 import whatsappRoutes from "./routes/WhatsappRoute.js";
 import chatbotRoutes from "./routes/ChatbotRoute.js";
 
@@ -47,36 +48,41 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
-// Starting server + ngrok
-app.listen(PORT, async () => {
-  console.log(`🚀 Server listening on http://localhost:${PORT}`);
+async function startServer() {
+  await connectToDb();
+  // Starting server + ngrok
+  app.listen(PORT, async () => {
+    console.log(`🚀 Server listening on http://localhost:${PORT}`);
 
-  try {
-    const url = await ngrok.connect(PORT);
-    console.log(`🌍 Ngrok active`);
+    try {
+      const url = await ngrok.connect(PORT);
+      console.log(`🌍 Ngrok active`);
 
-    // Update ngrok endpoint automatically
-    await axios.post(
-      `https://graph.facebook.com/v22.0/${APP_ID}/subscriptions`,
-      {
-        object: "whatsapp_business_account",
-        callback_url: `${url}/webhook`,
-        verify_token: VERIFY_TOKEN,
-        fields: "messages",
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.APP_ACCESS_TOKEN}`,
-          "Content-Type": "application/json",
+      // Update ngrok endpoint automatically
+      await axios.post(
+        `https://graph.facebook.com/v22.0/${APP_ID}/subscriptions`,
+        {
+          object: "whatsapp_business_account",
+          callback_url: `${url}/webhook`,
+          verify_token: VERIFY_TOKEN,
+          fields: "messages",
         },
-      }
-    );
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.APP_ACCESS_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-    console.log("✅ Webhook updated on Meta");
-  } catch (err) {
-    console.error(
-      "❌ Error starting ngrok or updating Meta Webhook:",
-      err.response?.data || err
-    );
-  }
-});
+      console.log("✅ Webhook updated on Meta");
+    } catch (err) {
+      console.error(
+        "❌ Error starting ngrok or updating Meta Webhook:",
+        err.response?.data || err
+      );
+    }
+  });
+}
+
+startServer();
