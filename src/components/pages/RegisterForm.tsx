@@ -41,7 +41,7 @@ const RegisterForm = ({
   onClose,
 }: RegisterFormProps) => {
   const { setUser } = useUser();
-  // 1. Define your form.
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -51,19 +51,51 @@ const RegisterForm = ({
     },
   });
 
-  // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoggedIn(true);
-    setUser({ username: values.username, favourites: [], invoices: [] });
-    if (onClose) onClose();
-    toast.success("User Registered!", {
-      action: {
-        label: "Close",
-        onClick: () => {
-          toast.dismiss();
-        },
+    fetch("http://localhost:8000/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    });
+      body: JSON.stringify(values),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.user) {
+          setIsLoggedIn(true);
+          setUser({ username: values.username, email: values.email });
+          if (onClose) onClose();
+          toast.success("User Logged in!", {
+            action: {
+              label: "Close",
+              onClick: () => {
+                toast.dismiss();
+              },
+            },
+          });
+        }
+        if (data.error) {
+          //Validation failed
+          toast.error(data.error, {
+            action: {
+              label: "Close",
+              onClick: () => {
+                toast.dismiss();
+              },
+            },
+          });
+        }
+      })
+      .catch((error) => {
+        toast.error(error, {
+          action: {
+            label: "Close",
+            onClick: () => {
+              toast.dismiss();
+            },
+          },
+        });
+      });
   }
 
   function openLogin() {

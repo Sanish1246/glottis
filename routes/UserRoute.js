@@ -10,12 +10,12 @@ router.post("/register", async (req, res) => {
 
     // check if username exists
     const usernameExisting = await User.findOne({ username });
-    if (existing) {
+    if (usernameExisting) {
       return res.status(409).json({ error: "Username already taken" });
     }
 
     const emailExisting = await User.findOne({ email });
-    if (existing) {
+    if (emailExisting) {
       return res.status(409).json({ error: "Email already taken" });
     }
 
@@ -65,7 +65,7 @@ router.post("/login", async (req, res) => {
 
     res.json({
       message: "Login successful",
-      user: { id: user._id, username: user.username, score: user.score },
+      user: { id: user._id, username: user.username, email: user.email },
     });
   } catch (err) {
     console.error("Login failed:", err);
