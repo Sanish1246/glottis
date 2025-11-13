@@ -9,6 +9,7 @@ import { fileURLToPath } from "url";
 import { connectToDb } from "./db.js";
 import whatsappRoutes from "./routes/WhatsappRoute.js";
 import chatbotRoutes from "./routes/ChatbotRoute.js";
+import userRoutes from "./routes/UserRoute.js";
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ const __dirname = path.dirname(__filename);
 // Static files
 app.use(express.static(path.join(__dirname)));
 
+app.use("/", userRoutes);
 app.use("/chatbot", chatbotRoutes);
 app.use("/webhook", whatsappRoutes);
 
