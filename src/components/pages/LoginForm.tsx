@@ -59,7 +59,7 @@ const LoginForm = ({
       .then((data) => {
         if (data.user) {
           setIsLoggedIn(true);
-          setUser({ username: values.username, favourites: [], invoices: [] });
+          setUser({ username: values.username });
           if (onClose) onClose();
           toast.success("User Logged in!", {
             action: {

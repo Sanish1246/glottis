@@ -28,6 +28,11 @@ router.post("/register", async (req, res) => {
       password: hashedPassword,
     });
 
+    req.session.user = {
+      username: newUser.username,
+      email: newUser.email,
+    };
+
     res.status(201).json({
       message: "User registered successfully",
       user: {
@@ -71,6 +76,13 @@ router.post("/login", async (req, res) => {
     console.error("Login failed:", err);
     res.status(500).json({ error: "Server error during login" });
   }
+});
+
+router.delete("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) return res.status(500).json({ error: "Logout failed" });
+    res.status(200).json({ message: "User logged out successfully" });
+  });
 });
 
 export default router;

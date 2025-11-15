@@ -204,14 +204,9 @@ const lesson = {
       "Handshakes are common in formal settings.",
       "'Ciao' is both hello and goodbye - informal only!",
     ],
-    media: {
-      video: "/videos/italian_greetings.mp4",
-      images: ["/images/ciao_1.jpg", "/images/handshake.jpg"],
-    },
   },
 
   summary: {
-    vocabularyCount: 25,
     grammarPoints: ["Essere", "Chiamarsi", "Pronouns", "Formal vs Informal"],
     skills: [
       "Greet and introduce yourself",

@@ -64,6 +64,7 @@ const RegisterForm = ({
         if (data.user) {
           setIsLoggedIn(true);
           setUser({ username: values.username, email: values.email });
+
           if (onClose) onClose();
           toast.success("User Logged in!", {
             action: {
