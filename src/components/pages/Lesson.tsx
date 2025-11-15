@@ -1,10 +1,13 @@
-import { useState } from "react";
-import lesson from "./lessons";
+import { useState, useEffect } from "react";
+import { useParams, useLocation } from "react-router-dom";
+import { toast } from "sonner";
 import SpeechButton from "../ui/SpeechButton";
 import FlashcardList from "../ui/FlashcardList";
 import GrammarTable from "../ui/GrammarTable";
 import FillInTheBlanks from "../ui/FillInTheBlanks";
 import Mcq from "../ui/Mcq";
+
+type LessonData = any;
 
 interface FlashCardProps {
   front: string;
@@ -19,6 +22,37 @@ const addToDeck = (card: FlashCardProps) => {
 const Lesson = () => {
   const [correctFib, setCorrectFib] = useState(0);
   const [correctMcq, setCorrectMcq] = useState(0);
+
+  const { lessonId } = useParams<{ lessonId: string }>();
+  const location = useLocation();
+  const initialLesson =
+    (location.state as { lesson?: LessonData } | null)?.lesson || null;
+
+  const [lesson, setLesson] = useState<LessonData | null>(initialLesson);
+
+  useEffect(() => {
+    if (lesson || !lessonId) return;
+    const fetchLesson = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:8000/lessons/content/${lessonId}`
+        );
+        if (!res.ok) throw new Error("Failed to fetch lesson");
+        const data = await res.json();
+        setLesson(data);
+      } catch (error) {
+        toast.error(String(error), {
+          action: {
+            label: "Close",
+            onClick: () => {
+              toast.dismiss();
+            },
+          },
+        });
+      }
+    };
+    fetchLesson();
+  }, [lessonId, lesson]);
 
   const totalFib = lesson.fib.length;
   const totalMcq = lesson.mcq.length;

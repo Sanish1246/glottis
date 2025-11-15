@@ -36,7 +36,7 @@ app.use(express.static(path.join(__dirname)));
 app.use("/", userRoutes);
 app.use("/chatbot", chatbotRoutes);
 app.use("/webhook", whatsappRoutes);
-app.use("/lesson", lessonRoutes);
+app.use("/lessons", lessonRoutes);
 
 app.use(
   session({

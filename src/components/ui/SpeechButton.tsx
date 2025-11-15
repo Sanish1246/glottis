@@ -16,14 +16,11 @@ const SpeechButton: React.FC<SpeechButtonProps> = ({
   useEffect(() => {
     const loadVoices = () => {
       const voices = speechSynthesis.getVoices();
-      console.log(voices);
-
 
       let selected: SpeechSynthesisVoice | undefined;
       if (voiceName) {
         selected = voices.find((v) => v.name === voiceName);
       }
-
 
       if (!selected) {
         selected = voices.find((v) => v.lang === lang);
@@ -38,10 +35,8 @@ const SpeechButton: React.FC<SpeechButtonProps> = ({
       }
     };
 
-
     loadVoices();
 
-  
     speechSynthesis.onvoiceschanged = loadVoices;
 
     return () => {
