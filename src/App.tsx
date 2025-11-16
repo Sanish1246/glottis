@@ -44,7 +44,7 @@ function App() {
               <DropdownMenuContent align="end">
                 {isLoggedIn ? (
                   <>
-                    <Link to="/">
+                    <Link to="/path">
                       <DropdownMenuItem>Language path</DropdownMenuItem>
                     </Link>
                     <Link to="/">
