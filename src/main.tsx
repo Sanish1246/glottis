@@ -4,11 +4,13 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import App from "./App.tsx";
 import { UserProvider } from "./components/context/UserContext";
+import { LanguageProvider } from "./components/context/LanguageContext";
 
 import Landing from "./components/pages/Landing.tsx";
 import Lesson from "./components/pages/Lesson.tsx";
 import LessonsList from "./components/pages/LessonsList.tsx";
 import Athena from "./components/pages/Athena.tsx";
+import PathToggle from "./components/pages/PathToggle.tsx";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +21,7 @@ const router = createBrowserRouter([
       { path: "lessons", element: <LessonsList /> },
       { path: "lessons/:lessonId", element: <Lesson /> },
       { path: "athena", element: <Athena /> },
+      { path: "path", element: <PathToggle /> },
     ],
   },
 ]);
@@ -26,7 +29,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <UserProvider>
-      <RouterProvider router={router} />
+      <LanguageProvider>
+        <RouterProvider router={router} />
+      </LanguageProvider>
     </UserProvider>
   </StrictMode>
 );

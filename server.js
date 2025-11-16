@@ -62,7 +62,7 @@ async function startServer() {
       const url = await ngrok.connect(PORT);
       console.log(`🌍 Ngrok active`);
 
-      // Update ngrok endpoint automatically
+      // Update ngrok endpoint automatically to allow access to the Whatsapp cloud API
       await axios.post(
         `https://graph.facebook.com/v22.0/${APP_ID}/subscriptions`,
         {

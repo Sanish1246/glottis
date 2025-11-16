@@ -35,7 +35,9 @@ function App() {
             </Link>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <a className="hover:cursor-pointer hover:underline">User</a>
+                <a className="hover:cursor-pointer hover:underline">
+                  {isLoggedIn ? user.username : "User"}
+                </a>
               </DropdownMenuTrigger>
               <span className="sr-only">User</span>
 
@@ -43,10 +45,10 @@ function App() {
                 {isLoggedIn ? (
                   <>
                     <Link to="/">
-                      <DropdownMenuItem>Favourites</DropdownMenuItem>
+                      <DropdownMenuItem>Language path</DropdownMenuItem>
                     </Link>
                     <Link to="/">
-                      <DropdownMenuItem>Invoices</DropdownMenuItem>
+                      <DropdownMenuItem>Dashboard</DropdownMenuItem>
                     </Link>
                     <hr></hr>
                     <DropdownMenuItem

@@ -1,15 +1,18 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useLanguage } from "../context/LanguageContext";
 
 const LessonsList = () => {
-  const lang = "italian";
+  const { languagePath } = useLanguage();
   const [lessonArray, setLessonArray] = useState([]);
 
   useEffect(() => {
     const fetchLessons = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/lessons/${lang}`);
+        const response = await fetch(
+          `http://localhost:8000/lessons/${languagePath}`
+        );
         const data = await response.json();
         setLessonArray(data);
       } catch (error) {
@@ -24,7 +27,7 @@ const LessonsList = () => {
       }
     };
     fetchLessons();
-  }, []);
+  }, [languagePath]);
 
   return (
     <div>

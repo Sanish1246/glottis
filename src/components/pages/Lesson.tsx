@@ -37,7 +37,6 @@ const Lesson = () => {
         const res = await fetch(
           `http://localhost:8000/lessons/content/${lessonId}`
         );
-        if (!res.ok) throw new Error("Failed to fetch lesson");
         const data = await res.json();
         setLesson(data);
       } catch (error) {
@@ -67,7 +66,7 @@ const Lesson = () => {
       </h1>
 
       <ul className="list-disc">
-        {lesson.objectives.map((objective, index) => (
+        {lesson.objectives.map((objective: string, index: number) => (
           <li key={index}>{objective}</li>
         ))}
       </ul>
@@ -75,7 +74,7 @@ const Lesson = () => {
       <div className="mt-5">
         <h2>{lesson.introduction.scene}</h2>
         <ul className="mt-5 list-disc">
-          {lesson.introduction.dialogue.map((d, index) => (
+          {lesson.introduction.dialogue.map((d, index: number) => (
             <li key={index}>
               <span className="font-semibold">{d.speaker}:</span> {d.text}
               <SpeechButton text={d.text} lang="it-IT" voiceName={d.audio} />
@@ -86,7 +85,7 @@ const Lesson = () => {
 
       <div>
         <h2>Vocabulary</h2>
-        {lesson.vocabulary.map((l, index) => (
+        {lesson.vocabulary.map((l, index: number) => (
           <div key={index} className="mx-auto">
             <h3>{l.category}</h3>
             <FlashcardList cardList={l.items} addToDeck={addToDeck} />
@@ -96,7 +95,7 @@ const Lesson = () => {
 
       <div>
         <h2>Grammar</h2>
-        {lesson.grammar.map((g, index) => (
+        {lesson.grammar.map((g, index: number) => (
           <div key={index} className="mx-auto">
             <h3>{g.title}</h3>
             <GrammarTable grammarPoint={g.content} />
@@ -110,13 +109,13 @@ const Lesson = () => {
         ))}
       </div>
 
-      {/* --- Exercises --- */}
+      {/*  Exercises  */}
       <div>
         <h2>Exercises - Test your knowledge</h2>
         {correctFib < totalFib && (
           <>
             <h3>Fill in the blanks</h3>
-            {lesson.fib.map((q, index) => (
+            {lesson.fib.map((q, index: number) => (
               <div
                 key={index}
                 className={`mx-auto ${
@@ -130,7 +129,7 @@ const Lesson = () => {
           </>
         )}
 
-        {/* --- Transition message before MCQs --- */}
+        {/*  Transition message before MCQs  */}
         {correctFib === totalFib && correctMcq === 0 && (
           <div className="mt-5 text-center p-4 bg-green-100 rounded-xl shadow">
             <h3 className="text-xl font-semibold text-green-800">
@@ -143,11 +142,11 @@ const Lesson = () => {
           </div>
         )}
 
-        {/* --- Multiple Choice Questions --- */}
+        {/*  Multiple Choice Questions */}
         {correctFib >= totalFib && correctMcq < totalMcq && (
           <>
             <h3 className="mt-5">Multiple Choice Questions</h3>
-            {lesson.mcq.map((q, index) => (
+            {lesson.mcq.map((q, index: number) => (
               <div
                 key={index}
                 className={`mx-auto ${
@@ -180,7 +179,7 @@ const Lesson = () => {
           <h2>Cultural note</h2>
           <h3>{lesson.cultural_note.title}</h3>
           <ul className="list-disc">
-            {lesson.cultural_note.content.map((note, index) => (
+            {lesson.cultural_note.content.map((note: string, index: number) => (
               <li key={index}>{note}</li>
             ))}
           </ul>
@@ -192,14 +191,16 @@ const Lesson = () => {
           <h2>Wrapping up</h2>
           <h3>Grammar points learned in this lesson:</h3>
           <ul className="list-disc">
-            {lesson.summary.grammarPoints.map((point, index) => (
-              <li key={index}>{point}</li>
-            ))}
+            {lesson.summary.grammarPoints.map(
+              (point: string, index: number) => (
+                <li key={index}>{point}</li>
+              )
+            )}
           </ul>
 
           <h3>Skills learned in this lesson:</h3>
           <ul className="list-disc">
-            {lesson.summary.skills.map((skill, index) => (
+            {lesson.summary.skills.map((skill: string, index: number) => (
               <li key={index}>{skill}</li>
             ))}
           </ul>
