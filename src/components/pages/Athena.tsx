@@ -2,6 +2,15 @@ import { useState } from "react";
 import Inputs from "../ui/Inputs";
 import QrCode from "../ui/QrCode";
 import ReactMarkdown from "react-markdown";
+import { Button } from "../ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { MessageCircle } from "lucide-react";
 
 const Athena = () => {
   const [messages, setMessages] = useState([
@@ -10,7 +19,23 @@ const Athena = () => {
 
   return (
     <div>
-      <h1 className="text-extrabold text-3xl">Athena</h1>
+      <div className="flex flex-row justify-between">
+        <h1 className="text-extrabold text-3xl">Athena</h1>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="bg-[#25D366] hover:bg-[#068936]">
+              <MessageCircle /> Use on Whatsapp
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Chat on Whatsapp</DialogTitle>
+            </DialogHeader>
+            <QrCode />
+          </DialogContent>
+        </Dialog>
+      </div>
+
       <div>
         <div className=" h-[35rem] flex flex-col overflow-y-auto">
           {/* Applying different formatting based on who sends the message */}
@@ -30,7 +55,6 @@ const Athena = () => {
         </div>
       </div>
       <Inputs setMessages={setMessages} />
-      <QrCode />
     </div>
   );
 };

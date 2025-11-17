@@ -47,19 +47,9 @@ const McqSchema = new mongoose.Schema({
   answer: { type: String, required: true },
 });
 
-const FinalQuizSchema = new mongoose.Schema({
-  totalQuestions: { type: Number, required: true },
-  passScore: { type: Number, required: true },
-  sections: [String],
-});
-
 const CulturalNoteSchema = new mongoose.Schema({
   title: { type: String, required: true },
   content: [String],
-  media: {
-    video: { type: String },
-    images: [String],
-  },
 });
 
 const SummarySchema = new mongoose.Schema({
@@ -86,8 +76,6 @@ const LessonSchema = new mongoose.Schema({
   grammar: [GrammarSchema],
   fib: [FillInBlankSchema],
   mcq: [McqSchema],
-
-  final_quiz: FinalQuizSchema,
 
   cultural_note: CulturalNoteSchema,
 

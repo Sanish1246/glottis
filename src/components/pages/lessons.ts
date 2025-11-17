@@ -149,11 +149,44 @@ const lesson = {
     {
       title: "Verb CHIAMARSI (to be called)",
       type: "table",
-      content: [
-        { point: "io mi chiamo", english: "I am called",example:"",audio:"Microsoft Cosimo - Italian (Italy)" },
-        { point: "tu ti chiami", english: "you are called",example:"",audio:"Microsoft Cosimo - Italian (Italy)" },
-        { point: "lui/lei si chiama", english: "he/she is called",example:"",audio:"Microsoft Cosimo - Italian (Italy)" },
-      ],
+      content:  [
+  { 
+    point: "io mi chiamo", 
+    english: "I am called",
+    example: "Io mi chiamo Marco.",
+    audio: "Microsoft Cosimo - Italian (Italy)" 
+  },
+  { 
+    point: "tu ti chiami", 
+    english: "you are called",
+    example: "Tu ti chiami Luca?",
+    audio: "Microsoft Cosimo - Italian (Italy)" 
+  },
+  { 
+    point: "lui/lei si chiama", 
+    english: "he/she is called",
+    example: "Lei si chiama Anna.",
+    audio: "Microsoft Cosimo - Italian (Italy)" 
+  },
+  { 
+    point: "noi ci chiamiamo", 
+    english: "we are called",
+    example: "Noi ci chiamiamo Rossi.",
+    audio: "Microsoft Cosimo - Italian (Italy)" 
+  },
+  { 
+    point: "voi vi chiamate", 
+    english: "you (plural) are called",
+    example: "Voi vi chiamate Bianchi?",
+    audio: "Microsoft Cosimo - Italian (Italy)" 
+  },
+  { 
+    point: "loro si chiamano", 
+    english: "they are called",
+    example: "Loro si chiamano Paolo e Chiara.",
+    audio: "Microsoft Cosimo - Italian (Italy)" 
+  }
+],
       notes: [
         "Chiamarsi is a reflexive verb.",
         "Common usage: 'Mi chiamo + name', which translates to 'My name is + name'.",
@@ -173,6 +206,22 @@ const lesson = {
           options: ["chiamo", "chiami", "chiama"],
           answer: "chiami",
         },
+                {
+          text: "Noi ___ italiani",
+          options: ["sono", "siamo", "sei"],
+          answer: "siamo",
+        },
+                {
+          text: "Lei ___ chiama Maria",
+          options: ["ti", "mi", "si"],
+          answer: "si",
+        },
+                {
+          text: "___ ti chiami Luca?",
+          options: ["tu", "io", "voi"],
+          answer: "tu",
+        },
+        
       ],
 
 
@@ -187,15 +236,25 @@ const lesson = {
           options: ["What's your name?", "Where are you from?", "How are you?"],
           answer: "Where are you from?",
         },
+        {
+          question: "Which sentence means 'My name is Luca'?",
+          options: ["Io sono Luca", "Mi chiamo Luca", "Tu ti chiami Luca"],
+          answer: "Mi chiamo Luca",
+        },
+        {
+          question: "How do you formally address someone with 'you are'?",
+          options: ["Tu sei", "Lei è", "Voi siete"],
+          answer: "Lei è",
+        },
+        {
+          question: "What is the correct translation of 'We are students'?",
+          options: ["Noi siamo studenti", "Noi sono studenti", "Loro siamo studenti"],
+          answer: "Noi siamo studenti",
+        },
       ],
 
 
 
-  final_quiz: {
-    totalQuestions: 15,
-    passScore: 70,
-    sections: ["fill_in_the_blank", "multiple_choice"],
-  },
 
   cultural_note: {
     title: "Italian Greetings",

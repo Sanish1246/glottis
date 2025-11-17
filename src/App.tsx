@@ -1,9 +1,18 @@
 import { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
 import LoginForm from "@/components/pages/LoginForm";
 import RegisterForm from "@/components/pages/RegisterForm";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogHeader,
+  DialogFooter,
+  DialogDescription,
+  DialogTitle,
+  DialogClose,
+} from "@/components/ui/dialog";
 import { useUser } from "@/components/context/UserContext";
 import {
   DropdownMenu,
@@ -11,6 +20,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Button } from "./components/ui/button";
+import { toast } from "sonner";
 
 import "./App.css";
 
@@ -20,7 +31,7 @@ function App() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   return (
     <div>
       <header>
@@ -33,58 +44,89 @@ function App() {
             <Link to="/" className="hover:underline">
               Home
             </Link>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <a className="hover:cursor-pointer hover:underline">
-                  {isLoggedIn ? user.username : "User"}
-                </a>
-              </DropdownMenuTrigger>
-              <span className="sr-only">User</span>
+            <Dialog>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <a className="hover:cursor-pointer hover:underline">
+                    {isLoggedIn ? user.username : "User"}
+                  </a>
+                </DropdownMenuTrigger>
+                <span className="sr-only">User</span>
 
-              <DropdownMenuContent align="end">
-                {isLoggedIn ? (
-                  <>
-                    <Link to="/path">
-                      <DropdownMenuItem>Language path</DropdownMenuItem>
-                    </Link>
-                    <Link to="/">
-                      <DropdownMenuItem>Dashboard</DropdownMenuItem>
-                    </Link>
-                    <hr></hr>
-                    <DropdownMenuItem
+                <DropdownMenuContent align="end">
+                  {isLoggedIn ? (
+                    <>
+                      <Link to="/path">
+                        <DropdownMenuItem>Language path</DropdownMenuItem>
+                      </Link>
+                      <Link to="/">
+                        <DropdownMenuItem>Dashboard</DropdownMenuItem>
+                      </Link>
+                      <hr></hr>
+                      <DialogTrigger asChild>
+                        <DropdownMenuItem variant="destructive">
+                          Logout
+                        </DropdownMenuItem>
+                      </DialogTrigger>
+                    </>
+                  ) : (
+                    <>
+                      <DropdownMenuItem onClick={() => setIsRegisterOpen(true)}>
+                        Register
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => setIsLoginOpen(true)}>
+                        Login
+                      </DropdownMenuItem>
+                    </>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Logout</DialogTitle>
+                  <DialogDescription>Do you want to logout?</DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button
                       variant="destructive"
                       onClick={() => {
+                        navigate("/");
                         setIsLoggedIn(false);
                         setUser(null);
-                        console.log(user.username);
+                        toast.success("User Logged out!", {
+                          action: {
+                            label: "Close",
+                            onClick: () => {
+                              toast.dismiss();
+                            },
+                          },
+                        });
                       }}
                     >
-                      Logout
-                    </DropdownMenuItem>
-                  </>
-                ) : (
-                  <>
-                    <DropdownMenuItem onClick={() => setIsRegisterOpen(true)}>
-                      Register
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setIsLoginOpen(true)}>
-                      Login
-                    </DropdownMenuItem>
-                  </>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                      Confirm
+                    </Button>
+                  </DialogClose>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
             <Link to="/lessons" className="hover:underline">
               Lessons
             </Link>
             <Link to="/" className="hover:underline">
-              Flashcards
+              Biblíon
             </Link>
             <Link to="/" className="hover:underline">
               Deck
             </Link>
             <Link to="athena" className="hover:underline">
               Athena
+            </Link>
+            <Link to="/" className="hover:underline">
+              Agorà
+            </Link>
+            <Link to="/" className="hover:underline">
+              Immersion
             </Link>
           </div>
         </nav>
@@ -110,6 +152,7 @@ function App() {
             />
           </DialogContent>
         </Dialog>
+
         <Outlet />
         <Toaster richColors />
       </main>
