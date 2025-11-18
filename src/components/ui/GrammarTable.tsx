@@ -9,8 +9,6 @@ import {
 } from "@/components/ui/table";
 import SpeechButton from "./SpeechButton";
 
-const lang = "it-IT";
-
 interface GrammarPoint {
   point: string;
   english: string;
@@ -19,10 +17,11 @@ interface GrammarPoint {
 }
 
 interface GrammarTableProps {
+  lang: string;
   grammarPoint: GrammarPoint[];
 }
 
-const GrammarTable = ({ grammarPoint }: GrammarTableProps) => {
+const GrammarTable = ({ lang, grammarPoint }: GrammarTableProps) => {
   return (
     <Table>
       <TableHeader>

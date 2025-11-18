@@ -1,13 +1,16 @@
 import mongoose from "mongoose";
 
-const AudioSchema = new mongoose.Schema({
-  voice: { type: String },
-});
-
-const DialogueSchema = new mongoose.Schema({
+const DialogueLineSchema = new mongoose.Schema({
   speaker: { type: String, required: true },
   text: { type: String, required: true },
   audio: { type: String },
+});
+
+const DialogueBlockSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  scene: { type: String, required: true },
+  type: { type: String, required: true },
+  lines: [DialogueLineSchema],
 });
 
 const VocabularyItemSchema = new mongoose.Schema({
@@ -30,7 +33,7 @@ const GrammarContentSchema = new mongoose.Schema({
 
 const GrammarSchema = new mongoose.Schema({
   title: { type: String, required: true },
-  type: { type: String, required: true }, // es. "table"
+  type: { type: String, required: true },
   content: [GrammarContentSchema],
   notes: [String],
 });
@@ -52,24 +55,31 @@ const CulturalNoteSchema = new mongoose.Schema({
   content: [String],
 });
 
+const AdditionalResourceSchema = new mongoose.Schema({
+  type: { type: String, required: true },
+  title: { type: String, required: true },
+  url: { type: String, required: true },
+});
+
 const SummarySchema = new mongoose.Schema({
-  vocabularyCount: Number,
   grammarPoints: [String],
   skills: [String],
 });
 
 const LessonSchema = new mongoose.Schema({
   language: { type: String, required: true },
+
+  // AGGIUNTO: Campo language
+  voice_language: { type: String, required: true },
+
   level: { type: String, required: true },
   lessonNumber: { type: Number, required: true },
   title: { type: String, required: true },
-  estimatedTime: { type: String },
 
   objectives: [String],
 
   introduction: {
-    scene: { type: String, required: true },
-    dialogue: [DialogueSchema],
+    dialogues: [DialogueBlockSchema],
   },
 
   vocabulary: [VocabularyCategorySchema],
@@ -78,6 +88,8 @@ const LessonSchema = new mongoose.Schema({
   mcq: [McqSchema],
 
   cultural_note: CulturalNoteSchema,
+
+  additional_resources: [AdditionalResourceSchema],
 
   summary: SummarySchema,
 });

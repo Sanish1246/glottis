@@ -1,21 +1,24 @@
 const lesson = {
   language: "italian",
+  voice_language:"it-IT",
   level: "A1",
   lessonNumber: 1,
   title: "Greetings and Introductions",
-  estimatedTime: "45-60 min",
 
   objectives: [
     "Greet people formally and informally",
     "Introduce yourself",
-    "Ask someone's name and origin",
-    "Learn verbs: essere (to be) and chiamarsi (to be called)",
-    "Understand personal pronouns",
+    "Ask someone's name",
+    "Learn verbs: essere (to be), and chiamarsi (to be called)"
   ],
 
   introduction: {
+    dialogues:[
+{
+  title: "Informal Meeting",
     scene: "Marco and Sofia meet for the first time at a café",
-    dialogue: [
+    type: "informal",
+    lines: [
       {
         speaker: "Marco",
         text: "Ciao! Come ti chiami?",
@@ -47,6 +50,46 @@ const lesson = {
         audio: "Microsoft Elsa - Italian (Italy)",
       },
     ],
+},
+    {
+      title: "Formal Meeting",
+      scene: "A job interview",
+      type: "formal",
+      lines: [
+        {
+          speaker: "Mr. Bianchi",
+          text: "Buongiorno, come si chiama?",
+          audio: "Microsoft Cosimo - Italian (Italy)",
+        },
+        {
+          speaker: "Candidate",
+          text: "Mi chiamo Giuseppe Verdi. E Lei?",
+          audio: "Google italiano",
+        },
+        {
+          speaker: "Mr. Bianchi",
+          text: "Sono il signor Bianchi. Piacere.",
+          audio: "Microsoft Cosimo - Italian (Italy)",
+        },
+        {
+          speaker: "Candidate",
+          text: "Molto lieto, signor Bianchi.",
+          audio: "Google italiano",
+        },
+        {
+          speaker: "Mr. Bianchi",
+          text: "Di dov'è, signor Verdi?",
+          audio: "Microsoft Cosimo - Italian (Italy)",
+        },
+        {
+          speaker: "Candidate",
+          text: "Sono di Bologna.",
+          audio: "Google italiano",
+        },
+      ]
+    }
+    ],
+
   },
 
   vocabulary: [
@@ -63,6 +106,21 @@ const lesson = {
           english: "Good morning",
           audio: "Microsoft Cosimo - Italian (Italy)",
         },
+                {
+          word: "Buon pomeriggio",
+          english: "Good afternoon",
+          audio: "Microsoft Cosimo - Italian (Italy)",
+        },
+                {
+          word: "Buona sera",
+          english: "Good evening",
+          audio: "Microsoft Cosimo - Italian (Italy)",
+        },
+                {
+          word: "Buona notte",
+          english: "Good night",
+          audio: "Microsoft Cosimo - Italian (Italy)",
+        },
         {
           word: "Arrivederci",
           english: "Goodbye",
@@ -71,30 +129,133 @@ const lesson = {
       ],
     },
     {
-      category: "Introductions",
-      items: [
-        {
-          word: "Come ti chiami?",
-          english: "What's your name? (informal)",
-          audio: "Microsoft Cosimo - Italian (Italy)",
-        },
-        {
-          word: "Mi chiamo...",
-          english: "My name is...",
-          audio: "Microsoft Cosimo - Italian (Italy)",
-        },
-        {
-          word: "Piacere",
-          english: "Nice to meet you",
-          audio: "Microsoft Cosimo - Italian (Italy)",
-        },
-      ],
+  category: "Introductions",
+  items: [
+    {
+      word: "Come ti chiami?",
+      english: "What's your name? (informal)",
+      audio: "Microsoft Cosimo - Italian (Italy)",
     },
+    {
+      word: "Come si chiama?", 
+      english: "What's your name? (formal)",
+      audio: "Microsoft Cosimo - Italian (Italy)",
+    },
+    {
+      word: "Mi chiamo...",
+      english: "My name is...",
+      audio: "Microsoft Cosimo - Italian (Italy)",
+    },
+    {
+      word: "Sono...", 
+      english: "I am...",
+      audio: "Microsoft Cosimo - Italian (Italy)",
+    },
+    {
+      word: "Piacere",
+      english: "Nice to meet you",
+      audio: "Microsoft Cosimo - Italian (Italy)",
+    },
+    {
+      word: "Piacere mio", 
+      english: "Nice to meet you too",
+      audio: "Microsoft Cosimo - Italian (Italy)",
+    },
+    {
+      word: "E tu?", 
+      english: "And you? (informal)",
+      audio: "Microsoft Cosimo - Italian (Italy)",
+    },
+    {
+      word: "E Lei?", 
+      english: "And you? (formal)",
+      audio: "Microsoft Cosimo - Italian (Italy)",
+    },
+    {
+      word: "Di dove sei?", 
+      english: "Where are you from? (informal)",
+      audio: "Microsoft Cosimo - Italian (Italy)",
+    },
+    {
+      word: "Di dov'è?", 
+      english: "Where are you from? (formal)",
+      audio: "Microsoft Cosimo - Italian (Italy)",
+    },
+    {
+      word: "Io sono di...",
+      english: "I am from...",
+      audio: "Microsoft Cosimo - Italian (Italy)",
+    },
+  ],
+},
+{
+  category: "Question Words",
+  items: [
+    {
+      word: "Come",
+      english: "How",
+      audio: "Microsoft Cosimo - Italian (Italy)",
+    },
+    {
+      word: "Di dove",
+      english: "From where",
+      audio: "Microsoft Cosimo - Italian (Italy)",
+    },
+  ],
+}
+        
   ],
 
   grammar: [
+    {
+  title: "Personal Pronouns",
+  type: "list",
+  content: [
+    {
+      point: "Io",
+      english: "I",
+      audio: "Microsoft Cosimo - Italian (Italy)",
+    },
+    {
+      point: "Tu",
+      english: "You (informal singular)",
+      audio: "Microsoft Cosimo - Italian (Italy)",
+    },
+    {
+      point: "Lui",
+      english: "He",
+      audio: "Microsoft Cosimo - Italian (Italy)",
+    },
 {
-  title: "Verb ESSERE (to be)",
+  point: "Lei",
+  english: "She / You (formal singular)",
+  audio: "Microsoft Cosimo - Italian (Italy)",
+},
+    {
+      point: "Noi",
+      english: "We",
+      audio: "Microsoft Cosimo - Italian (Italy)",
+    },
+    {
+      point: "Voi",
+      english: "You (plural)",
+      audio: "Microsoft Cosimo - Italian (Italy)",
+    },
+    {
+      point: "Loro",
+      english: "They",
+      audio: "Microsoft Cosimo - Italian (Italy)",
+    }
+  ],
+  notes: [
+    "Tu is used manily with  friends, family, peers",
+    "Lei is mainly used with strangers, elders, professional settings. It is always capitalized.",
+    "In Italian, subject pronouns are often omitted because the verb ending shows who is doing the action.",
+    "Example: 'Sono Marco' (I am Marco) - no need to say 'Io sono Marco'."
+  ]
+},
+{
+  title: "Verb ESSERE (to be) in the Present tense",
   type: "table",
   content: [
     {
@@ -111,16 +272,11 @@ const lesson = {
     },
     {
       point: "Lui/Lei è",
-      english: "He/She is",
+      english: "He/She is/You are (formal)",
       example: "Lui è italiano / Lei è italiana",
       audio: "Microsoft Cosimo - Italian (Italy)"
     },
-    {
-      point: "Lei è",
-      english: "you are (formal)",
-      example: "Lei è il signor Rossi",
-      audio: "Microsoft Cosimo - Italian (Italy)"
-    },
+
     {
       point: "Noi siamo",
       english: "We are",
@@ -146,43 +302,44 @@ const lesson = {
     "Formal 'you' (Lei) always takes the third person singular form 'è'."
   ]
 },
+
     {
-      title: "Verb CHIAMARSI (to be called)",
+      title: "Verb CHIAMARSI (to be called) in the Present tense",
       type: "table",
       content:  [
   { 
-    point: "io mi chiamo", 
+    point: "Io mi chiamo", 
     english: "I am called",
     example: "Io mi chiamo Marco.",
     audio: "Microsoft Cosimo - Italian (Italy)" 
   },
   { 
-    point: "tu ti chiami", 
-    english: "you are called",
+    point: "Tu ti chiami", 
+    english: "You are called",
     example: "Tu ti chiami Luca?",
     audio: "Microsoft Cosimo - Italian (Italy)" 
   },
   { 
-    point: "lui/lei si chiama", 
-    english: "he/she is called",
+    point: "Lui/Lei si chiama", 
+    english: "He/She is called/You are called (formal)",
     example: "Lei si chiama Anna.",
     audio: "Microsoft Cosimo - Italian (Italy)" 
   },
   { 
-    point: "noi ci chiamiamo", 
-    english: "we are called",
+    point: "Noi ci chiamiamo", 
+    english: "We are called",
     example: "Noi ci chiamiamo Rossi.",
     audio: "Microsoft Cosimo - Italian (Italy)" 
   },
   { 
-    point: "voi vi chiamate", 
-    english: "you (plural) are called",
+    point: "Voi vi chiamate", 
+    english: "You (plural) are called",
     example: "Voi vi chiamate Bianchi?",
     audio: "Microsoft Cosimo - Italian (Italy)" 
   },
   { 
-    point: "loro si chiamano", 
-    english: "they are called",
+    point: "Loro si chiamano", 
+    english: "They are called",
     example: "Loro si chiamano Paolo e Chiara.",
     audio: "Microsoft Cosimo - Italian (Italy)" 
   }
@@ -221,6 +378,31 @@ const lesson = {
           options: ["tu", "io", "voi"],
           answer: "tu",
         },
+          {
+    text: "Lei ___ di Roma?",
+    options: ["sei", "sono", "è"],
+    answer: "è",
+  },
+  {
+    text: "Loro ___ italiani.",
+    options: ["sono", "siamo", "è"],
+    answer: "sono",
+  },
+  {
+    text: "Come ___ chiama? (formal)",
+    options: ["ti", "si", "mi"],
+    answer: "si",
+  },
+  {
+    text: "___ sono studenti.",
+    options: ["Noi", "Tu", "Lui"],
+    answer: "Noi",
+  },
+  {
+    text: "Piacere! ___ sono Marco.",
+    options: ["Io", "Tu", "Lei"],
+    answer: "Io",
+  },
         
       ],
 
@@ -251,9 +433,40 @@ const lesson = {
           options: ["Noi siamo studenti", "Noi sono studenti", "Loro siamo studenti"],
           answer: "Noi siamo studenti",
         },
+          {
+    question: "What is the formal way to say 'What's your name?'",
+    options: ["Come ti chiami?", "Come si chiama?", "Chi sei?"],
+    answer: "Come si chiama?",
+  },
+  {
+    question: "Choose the correct form: 'Voi ___ di Milano'",
+    options: ["sono", "siete", "siamo"],
+    answer: "siete",
+  },
+  {
+    question: "What does 'E tu?' mean?",
+    options: ["And me?", "And you?", "And him?"],
+    answer: "And you?",
+  },
+  {
+    question: "When should you use 'Lei' instead of 'tu'?",
+    options: [
+      "With friends",
+      "In formal situations",
+      "With children"
+    ],
+    answer: "In formal situations",
+  },
+  {
+    question: "What does 'Piacere mio' mean?",
+    options: [
+      "My name",
+      "Nice to meet you too",
+      "My pleasure"
+    ],
+    answer: "Nice to meet you too",
+  },
       ],
-
-
 
 
   cultural_note: {
@@ -265,14 +478,36 @@ const lesson = {
     ],
   },
 
-  summary: {
-    grammarPoints: ["Essere", "Chiamarsi", "Pronouns", "Formal vs Informal"],
-    skills: [
-      "Greet and introduce yourself",
-      "Ask and answer about names and origins",
-      "Use verbs essere and chiamarsi correctly",
-    ],
-  },
+
+  additional_resources: [
+    {
+      type:"video",
+      title: "Complete Guide To Italian Greetings (Formal and Informal) ",
+      url: "https://www.youtube.com/watch?v=w89QV6akOeY",
+    },
+
+        {
+      type:"blog",
+      title: "Essere and avere - To be and to have in Italian ",
+      url: "https://italiano-bello.com/en/italian-course/italian-essere-and-avere-to-be-and-to-have/",
+    },{
+
+          type:"blog",
+      title: "Converse in Italian like a native: choosing 'tu' or 'Lei' ",
+      url: "https://coffeebreaklanguages.com/2023/10/converse-in-italian-like-a-native-choosing-tu-or-lei/",
+    }
+  ],
+
+summary: {
+  grammarPoints: ["Essere", "Chiamarsi", "Personal Pronouns", "Formal vs Informal"], 
+  skills: [
+    "Greet people formally and informally",
+    "Introduce yourself",
+    "Ask someone's name and origin",
+    "Use verbs essere and chiamarsi correctly",
+    "Understand when to use tu vs Lei",
+  ],
+}
 };
 
 export default lesson;

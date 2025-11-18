@@ -53,7 +53,7 @@ const SpeechButton: React.FC<SpeechButtonProps> = ({
     const utter = new SpeechSynthesisUtterance(text);
     utter.lang = lang;
     if (voice) utter.voice = voice;
-    utter.rate = 1;
+    utter.rate = 0.7;
     utter.pitch = 1;
     utter.volume = 1;
 

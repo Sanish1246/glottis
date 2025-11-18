@@ -22,6 +22,7 @@ const addToDeck = (card: FlashCardProps) => {
 const Lesson = () => {
   const [correctFib, setCorrectFib] = useState(0);
   const [correctMcq, setCorrectMcq] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const { lessonId } = useParams<{ lessonId: string }>();
   const location = useLocation();
@@ -31,7 +32,11 @@ const Lesson = () => {
   const [lesson, setLesson] = useState<LessonData | null>(initialLesson);
 
   useEffect(() => {
-    if (lesson || !lessonId) return;
+    if (initialLesson) {
+      setLoading(false);
+      return;
+    }
+    if (!lessonId) return;
     const fetchLesson = async () => {
       try {
         const res = await fetch(
@@ -48,16 +53,21 @@ const Lesson = () => {
             },
           },
         });
+      } finally {
+        setLoading(false);
       }
     };
     fetchLesson();
-  }, [lessonId, lesson]);
+  }, [lessonId, initialLesson]);
 
-  const totalFib = lesson.fib.length;
-  const totalMcq = lesson.mcq.length;
+  if (loading) return <div>Loading lesson...</div>;
+  if (!lesson) return <div>Lesson not found</div>;
 
-  const allExercisesCompleted =
-    correctFib >= totalFib && correctMcq >= totalMcq;
+  const totalFib = lesson.fib?.length ?? 0;
+  const totalMcq = lesson.mcq?.length ?? 0;
+
+  const allExercisesCompleted = true;
+  // correctFib >= totalFib && correctMcq >= totalMcq;
 
   return (
     <div>
@@ -66,42 +76,57 @@ const Lesson = () => {
       </h1>
 
       <ul className="list-disc">
-        {lesson.objectives.map((objective: string, index: number) => (
+        {(lesson.objectives ?? []).map((objective: string, index: number) => (
           <li key={index}>{objective}</li>
         ))}
       </ul>
 
       <div className="mt-5">
-        <h2>{lesson.introduction.scene}</h2>
-        <ul className="mt-5 list-disc">
-          {lesson.introduction.dialogue.map((d, index: number) => (
-            <li key={index}>
-              <span className="font-semibold">{d.speaker}:</span> {d.text}
-              <SpeechButton text={d.text} lang="it-IT" voiceName={d.audio} />
-            </li>
-          ))}
-        </ul>
+        {(lesson.introduction?.dialogues ?? []).map((d: any, i: number) => (
+          <div key={i}>
+            <h2>{d.scene}</h2>
+            <ul className="mt-5 list-disc">
+              {(d.lines ?? []).map((l: any, j: number) => (
+                <li key={j}>
+                  <span className="font-semibold">{l.speaker}:</span> {l.text}
+                  <SpeechButton
+                    text={l.text}
+                    lang={lesson.voice_language}
+                    voiceName={l.audio}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
 
       <div>
         <h2>Vocabulary</h2>
-        {lesson.vocabulary.map((l, index: number) => (
+        {(lesson.vocabulary ?? []).map((l: any, index: number) => (
           <div key={index} className="mx-auto">
             <h3>{l.category}</h3>
-            <FlashcardList cardList={l.items} addToDeck={addToDeck} />
+            <FlashcardList
+              cardList={l.items}
+              lang={lesson.voice_language}
+              addToDeck={addToDeck}
+            />
           </div>
         ))}
       </div>
 
       <div>
         <h2>Grammar</h2>
-        {lesson.grammar.map((g, index: number) => (
+        {(lesson.grammar ?? []).map((g: any, index: number) => (
           <div key={index} className="mx-auto">
             <h3>{g.title}</h3>
-            <GrammarTable grammarPoint={g.content} />
+            <GrammarTable
+              grammarPoint={g.content}
+              lang={lesson.voice_language}
+            />
             <h3>Notes</h3>
             <ul>
-              {g.notes.map((n, idx) => (
+              {(g.notes ?? []).map((n: string, idx: number) => (
                 <li key={idx}>{n}</li>
               ))}
             </ul>
@@ -115,7 +140,7 @@ const Lesson = () => {
         {correctFib < totalFib && (
           <>
             <h3>Fill in the blanks</h3>
-            {lesson.fib.map((q, index: number) => (
+            {lesson.fib.map((q: any, index: number) => (
               <div
                 key={index}
                 className={`mx-auto ${
@@ -146,7 +171,7 @@ const Lesson = () => {
         {correctFib >= totalFib && correctMcq < totalMcq && (
           <>
             <h3 className="mt-5">Multiple Choice Questions</h3>
-            {lesson.mcq.map((q, index: number) => (
+            {lesson.mcq.map((q: any, index: number) => (
               <div
                 key={index}
                 className={`mx-auto ${
@@ -179,9 +204,28 @@ const Lesson = () => {
           <h2>Cultural note</h2>
           <h3>{lesson.cultural_note.title}</h3>
           <ul className="list-disc">
-            {lesson.cultural_note.content.map((note: string, index: number) => (
-              <li key={index}>{note}</li>
-            ))}
+            {(lesson.cultural_note?.content ?? []).map(
+              (note: string, index: number) => (
+                <li key={index}>{note}</li>
+              )
+            )}
+          </ul>
+        </div>
+      )}
+
+      {allExercisesCompleted && (
+        <div className="mt-8">
+          <h2>Additional Resources</h2>
+          <ul className="list-disc">
+            {(lesson.additional_resources ?? []).map(
+              (r: any, index: number) => (
+                <li key={index}>
+                  <a href={r.url} target="_blank" className="underline">
+                    {r.title}
+                  </a>
+                </li>
+              )
+            )}
           </ul>
         </div>
       )}
@@ -191,7 +235,7 @@ const Lesson = () => {
           <h2>Wrapping up</h2>
           <h3>Grammar points learned in this lesson:</h3>
           <ul className="list-disc">
-            {lesson.summary.grammarPoints.map(
+            {(lesson.summary?.grammarPoints ?? []).map(
               (point: string, index: number) => (
                 <li key={index}>{point}</li>
               )
@@ -200,9 +244,11 @@ const Lesson = () => {
 
           <h3>Skills learned in this lesson:</h3>
           <ul className="list-disc">
-            {lesson.summary.skills.map((skill: string, index: number) => (
-              <li key={index}>{skill}</li>
-            ))}
+            {(lesson.summary?.skills ?? []).map(
+              (skill: string, index: number) => (
+                <li key={index}>{skill}</li>
+              )
+            )}
           </ul>
         </div>
       )}

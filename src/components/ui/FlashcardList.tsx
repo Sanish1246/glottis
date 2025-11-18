@@ -2,7 +2,6 @@ import Flashcard from "./Flashcard";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { useRef } from "react";
-const lang = "it-IT";
 
 interface CardProp {
   word: string;
@@ -12,6 +11,7 @@ interface CardProp {
 
 interface FlashcardListProps {
   cardList: CardProp[];
+  lang: string;
   addToDeck: ({
     front,
     back,
@@ -23,7 +23,7 @@ interface FlashcardListProps {
   }) => void;
 }
 
-const FlashcardList = ({ cardList, addToDeck }: FlashcardListProps) => {
+const FlashcardList = ({ cardList, lang, addToDeck }: FlashcardListProps) => {
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useGSAP(() => {
