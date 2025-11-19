@@ -43,6 +43,7 @@ const Lesson = () => {
           `http://localhost:8000/lessons/content/${lessonId}`
         );
         const data = await res.json();
+        console.log(data);
         setLesson(data);
       } catch (error) {
         toast.error(String(error), {
@@ -199,7 +200,7 @@ const Lesson = () => {
         )}
       </div>
 
-      {allExercisesCompleted && (
+      {allExercisesCompleted && lesson.cultural_note && (
         <div className="mt-8">
           <h2>Cultural note</h2>
           <h3>{lesson.cultural_note.title}</h3>

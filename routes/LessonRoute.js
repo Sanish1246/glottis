@@ -21,6 +21,7 @@ router.get("/content/:id", async (req, res) => {
     if (!lesson) {
       return res.status(404).json({ error: "Lesson not found" });
     }
+    console.log(lesson);
     res.json(lesson);
   } catch (err) {
     console.error("Unable to get lesson:", err);

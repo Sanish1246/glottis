@@ -31,11 +31,18 @@ const LessonsList = () => {
 
   return (
     <div>
-      {lessonArray.map((lesson: any, index) => (
-        <Link to={`/lessons/${lesson._id}`} state={{ lesson }} key={lesson._id}>
-          Lesson {lesson.lessonNumber} - {lesson.title}
-        </Link>
-      ))}
+      {lessonArray.map((lesson: any) => {
+        const showLevelHeader = lesson.lessonNumber == 1;
+
+        return (
+          <div key={lesson._id}>
+            {showLevelHeader && <h2>{lesson.level}</h2>}
+            <Link to={`/lessons/${lesson._id}`} state={{ lesson }}>
+              Lesson {lesson.lessonNumber} - {lesson.title}
+            </Link>
+          </div>
+        );
+      })}
     </div>
   );
 };
