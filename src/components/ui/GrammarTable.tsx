@@ -26,7 +26,7 @@ const GrammarTable = ({ lang, grammarPoint }: GrammarTableProps) => {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Verb</TableHead>
+          <TableHead className="w-[100px]">Italian</TableHead>
           <TableHead>English</TableHead>
           <TableHead>Example</TableHead>
           <TableHead>Audio</TableHead>
@@ -38,9 +38,15 @@ const GrammarTable = ({ lang, grammarPoint }: GrammarTableProps) => {
             <TableCell className="font-medium">{g.point}</TableCell>
             <TableCell>{g.english}</TableCell>
             <TableCell>{g.example}</TableCell>
-            <TableCell>
-              <SpeechButton text={g.example} lang={lang} voiceName={g.audio} />
-            </TableCell>
+            {g.audio && (
+              <TableCell>
+                <SpeechButton
+                  text={g.example}
+                  lang={lang}
+                  voiceName={g.audio}
+                />
+              </TableCell>
+            )}
           </TableRow>
         ))}
       </TableBody>
