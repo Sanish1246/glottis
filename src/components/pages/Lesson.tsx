@@ -126,7 +126,7 @@ const Lesson = () => {
               lang={lesson.voice_language}
             />
             <h3>Notes</h3>
-            <ul>
+            <ul className="list-disc">
               {(g.notes ?? []).map((n: string, idx: number) => (
                 <li key={idx}>{n}</li>
               ))}

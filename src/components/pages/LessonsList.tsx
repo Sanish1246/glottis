@@ -32,7 +32,7 @@ const LessonsList = () => {
   return (
     <div>
       {lessonArray.map((lesson: any) => {
-        const showLevelHeader = lesson.lessonNumber == 1;
+        const showLevelHeader = lesson.lessonNumber_level == 1;
 
         return (
           <div key={lesson._id}>

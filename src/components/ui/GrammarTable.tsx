@@ -36,6 +36,7 @@ const GrammarTable = ({ lang, grammarPoint }: GrammarTableProps) => {
         {grammarPoint.map((g, index) => (
           <TableRow key={index}>
             <TableCell className="font-medium">{g.point}</TableCell>
+
             <TableCell>{g.english}</TableCell>
             <TableCell>{g.example}</TableCell>
 

@@ -74,6 +74,7 @@ const LessonSchema = new mongoose.Schema({
 
   level: { type: String, required: true },
   lessonNumber: { type: Number, required: true },
+  lessonNumber_level: { type: Number, required: true },
   title: { type: String, required: true },
 
   objectives: [String],
