@@ -86,6 +86,12 @@ const Lesson = () => {
         {(lesson.introduction?.dialogues ?? []).map((d: any, i: number) => (
           <div key={i}>
             <h2>{d.scene}</h2>
+            {d.media && (
+              <img
+                src={d.media}
+                className="w-[80rem] max-h-[30rem] object-cover"
+              />
+            )}
             <ul className="mt-5 list-disc">
               {(d.lines ?? []).map((l: any, j: number) => (
                 <li key={j}>
@@ -95,6 +101,7 @@ const Lesson = () => {
                     lang={lesson.voice_language}
                     voiceName={l.audio}
                   />
+                  {l.english && <p>({l.english})</p>}
                 </li>
               ))}
             </ul>

@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const DialogueLineSchema = new mongoose.Schema({
   speaker: { type: String, required: true },
   text: { type: String, required: true },
+  english: { type: String },
   audio: { type: String },
 });
 
@@ -10,6 +11,7 @@ const DialogueBlockSchema = new mongoose.Schema({
   title: { type: String, required: true },
   scene: { type: String, required: true },
   type: { type: String, required: true },
+  media: { type: String, required: true },
   lines: [DialogueLineSchema],
 });
 
