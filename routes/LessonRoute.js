@@ -15,13 +15,30 @@ router.get("/:lang", async (req, res) => {
   }
 });
 
+router.get("/content/:lang/:no", async (req, res) => {
+  try {
+    const lesson = await Lesson.findOne({
+      lessonNumber: req.params.no,
+      language: req.params.lang,
+    });
+
+    if (!lesson) {
+      return res.status(404).json({ error: "Lesson not found" });
+    }
+
+    res.json(lesson);
+  } catch (err) {
+    console.error("Unable to get lesson:", err);
+    res.status(500).json({ error: "Server error while fetching lesson" });
+  }
+});
+
 router.get("/content/:id", async (req, res) => {
   try {
     const lesson = await Lesson.findById(req.params.id);
     if (!lesson) {
       return res.status(404).json({ error: "Lesson not found" });
     }
-    console.log(lesson);
     res.json(lesson);
   } catch (err) {
     console.error("Unable to get lesson:", err);

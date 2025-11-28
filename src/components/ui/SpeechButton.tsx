@@ -28,11 +28,11 @@ const SpeechButton: React.FC<SpeechButtonProps> = ({
 
       setVoice(selected || null);
 
-      if (selected) {
-        console.log("Selected voice:", selected.name);
-      } else {
-        console.warn("No suitable voice found, fallback failed");
-      }
+      // if (selected) {
+      //   console.log("Selected voice:", selected.name);
+      // } else {
+      //   console.warn("No suitable voice found, fallback failed");
+      // }
     };
 
     loadVoices();

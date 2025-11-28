@@ -113,11 +113,8 @@ function App() {
             <Link to="/lessons" className="hover:underline">
               Lessons
             </Link>
-            <Link to="/" className="hover:underline">
+            <Link to="decks" className="hover:underline">
               Biblíon
-            </Link>
-            <Link to="/" className="hover:underline">
-              Deck
             </Link>
             <Link to="athena" className="hover:underline">
               Athena

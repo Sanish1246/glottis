@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { toast } from "sonner";
+import { Button } from "../ui/button";
+import { useNavigate } from "react-router-dom";
 import SpeechButton from "../ui/SpeechButton";
 import FlashcardList from "../ui/FlashcardList";
 import GrammarTable from "../ui/GrammarTable";
@@ -20,6 +22,7 @@ const addToDeck = (card: FlashCardProps) => {
 };
 
 const Lesson = () => {
+  const navigate = useNavigate();
   const [correctFib, setCorrectFib] = useState(0);
   const [correctMcq, setCorrectMcq] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -67,12 +70,19 @@ const Lesson = () => {
   const totalFib = lesson.fib?.length ?? 0;
   const totalMcq = lesson.mcq?.length ?? 0;
 
-  const allExercisesCompleted = true;
-  // correctFib >= totalFib && correctMcq >= totalMcq;
+  const allExercisesCompleted =
+    correctFib >= totalFib && correctMcq >= totalMcq;
 
   return (
     <div>
       <h1>
+        <Button
+          onClick={() => {
+            navigate("/lessons");
+          }}
+        >
+          Back
+        </Button>
         Lesson {lesson.lessonNumber} - {lesson.title}
       </h1>
 

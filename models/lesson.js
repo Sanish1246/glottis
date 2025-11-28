@@ -71,7 +71,6 @@ const SummarySchema = new mongoose.Schema({
 const LessonSchema = new mongoose.Schema({
   language: { type: String, required: true },
 
-  // AGGIUNTO: Campo language
   voice_language: { type: String, required: true },
 
   level: { type: String, required: true },
