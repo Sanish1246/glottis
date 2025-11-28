@@ -84,11 +84,6 @@ const Flashcard = ({ front, back, onAdd, lang }: FlashCardProps) => {
             >
               ➕
             </button>
-            <SpeechButton
-              text={back}
-              lang="en-EN"
-              voiceName="Google US English"
-            />
           </div>
         </div>
       </div>
