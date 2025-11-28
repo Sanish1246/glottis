@@ -3,6 +3,24 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useLanguage } from "../context/LanguageContext";
 
+interface FlashCardProps {
+  word: string;
+  english: string;
+  audio?: string;
+}
+
+interface DeckProp {
+  _id?: string;
+  level?: string;
+  category: string;
+  language: string;
+  number?: string;
+  noOfCards?: string;
+  author?: string;
+  likes?: string;
+  items: FlashCardProps[];
+}
+
 const FlashCardDeckList = () => {
   const [level, setLevel] = useState("A1");
   const { languagePath } = useLanguage();
@@ -32,11 +50,11 @@ const FlashCardDeckList = () => {
 
   return (
     <div>
-      {decksArray.map((deck: any) => {
+      {decksArray.map((deck: DeckProp) => {
         return (
           <div key={deck._id}>
-            <Link to={`/lessons/${deck._id}`} state={{ deck }}>
-              {deck.category} -
+            <Link to={`/deck/${deck._id}`} state={{ deck }} className="block">
+              {deck.category} -{" "}
               {deck.noOfCards && <span>{deck.noOfCards} cards</span>}
             </Link>
           </div>

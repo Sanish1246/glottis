@@ -12,13 +12,20 @@ import Mcq from "../ui/Mcq";
 type LessonData = any;
 
 interface FlashCardProps {
-  front: string;
-  back: string;
-  lang: string;
+  word: string;
+  english: string;
+  audio?: string;
 }
 
 const addToDeck = (card: FlashCardProps) => {
-  console.log(card, " Added");
+  toast.success("Card added to your deck!", {
+    action: {
+      label: "Close",
+      onClick: () => {
+        toast.dismiss();
+      },
+    },
+  });
 };
 
 const Lesson = () => {

@@ -12,6 +12,7 @@ import LessonsList from "./components/pages/LessonsList.tsx";
 import Athena from "./components/pages/Athena.tsx";
 import PathToggle from "./components/pages/PathToggle.tsx";
 import FlashCardDeckList from "./components/pages/FlashcardDeckList.tsx";
+import Deck from "./components/pages/Deck.tsx";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,7 @@ const router = createBrowserRouter([
       { path: "athena", element: <Athena /> },
       { path: "path", element: <PathToggle /> },
       { path: "decks", element: <FlashCardDeckList /> },
+      { path: "deck/:deckId", element: <Deck /> },
     ],
   },
 ]);

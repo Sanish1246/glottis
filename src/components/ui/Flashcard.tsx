@@ -3,22 +3,22 @@ import SpeechButton from "./SpeechButton";
 import gsap from "gsap";
 
 interface FlashCardProps {
-  front: string;
-  back: string;
+  word: string;
+  english: string;
   onAdd: ({
-    front,
-    back,
+    word,
+    english,
     lang,
   }: {
-    front: string;
-    back: string;
+    word: string;
+    english: string;
     lang: string;
   }) => void;
   lang: string;
   onClick?: () => void;
 }
 
-const Flashcard = ({ front, back, onAdd, lang }: FlashCardProps) => {
+const Flashcard = ({ word, english, onAdd, lang }: FlashCardProps) => {
   const [flipped, setFlipped] = useState(false);
   const cardRef = useRef(null);
 
@@ -47,20 +47,20 @@ const Flashcard = ({ front, back, onAdd, lang }: FlashCardProps) => {
           className="absolute inset-0 w-full h-full flex flex-col items-center justify-center border rounded-xl shadow-lg bg-white dark:bg-gray-800"
           style={{ backfaceVisibility: "hidden" }}
         >
-          <p className="text-center mt-8 text-lg font-semibold px-4">{front}</p>
+          <p className="text-center mt-8 text-lg font-semibold px-4">{word}</p>
           <div className="flex flex-row justify-between w-[80%] mt-5">
             <button
               title="Add to Deck"
               onClick={(e) => {
                 e.stopPropagation();
-                onAdd({ front, back, lang });
+                onAdd({ word, english, lang });
               }}
               className=" bg-blue-500 text-white px-2  rounded-md text-sm hover:bg-blue-600 transition-colors hover:cursor-pointer"
             >
               ➕
             </button>
             <SpeechButton
-              text={front}
+              text={word}
               lang={lang}
               voiceName="Microsoft Elsa - Italian (Italy)"
             />
@@ -72,13 +72,15 @@ const Flashcard = ({ front, back, onAdd, lang }: FlashCardProps) => {
           className="absolute inset-0 w-full h-full flex flex-col items-center justify-center border rounded-xl shadow-lg bg-gray-50 dark:bg-gray-700"
           style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
         >
-          <p className="text-center mt-8 text-lg font-semibold px-4">{back}</p>
+          <p className="text-center mt-8 text-lg font-semibold px-4">
+            {english}
+          </p>
           <div className="flex flex-row justify-between w-[80%] mt-5">
             <button
               title="Add to Deck"
               onClick={(e) => {
                 e.stopPropagation();
-                onAdd({ front, back, lang });
+                onAdd({ word, english, lang });
               }}
               className=" bg-blue-500 text-white px-2 py-1 rounded-md text-sm hover:bg-blue-600 transition-colors hover:cursor-pointer"
             >

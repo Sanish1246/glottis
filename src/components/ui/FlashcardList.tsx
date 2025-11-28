@@ -6,19 +6,19 @@ import { useRef } from "react";
 interface CardProp {
   word: string;
   english: string;
-  audio: string;
+  audio?: string;
 }
 
 interface FlashcardListProps {
   cardList: CardProp[];
   lang: string;
   addToDeck: ({
-    front,
-    back,
+    word,
+    english,
     lang,
   }: {
-    front: string;
-    back: string;
+    word: string;
+    english: string;
     lang: string;
   }) => void;
 }
@@ -45,8 +45,8 @@ const FlashcardList = ({ cardList, lang, addToDeck }: FlashcardListProps) => {
         >
           <Flashcard
             key={i}
-            front={card.word}
-            back={card.english}
+            word={card.word}
+            english={card.english}
             onAdd={addToDeck}
             lang={lang}
             onClick={() => {
