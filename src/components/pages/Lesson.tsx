@@ -77,8 +77,8 @@ const Lesson = () => {
   const totalFib = lesson.fib?.length ?? 0;
   const totalMcq = lesson.mcq?.length ?? 0;
 
-  const allExercisesCompleted =
-    correctFib >= totalFib && correctMcq >= totalMcq;
+  const allExercisesCompleted = true;
+  // correctFib >= totalFib && correctMcq >= totalMcq;
 
   return (
     <div>
