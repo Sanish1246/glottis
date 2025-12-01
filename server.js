@@ -20,6 +20,7 @@ app.use(
   cors({
     origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
   })
 );
 app.use(express.json());
@@ -34,12 +35,6 @@ const __dirname = path.dirname(__filename);
 // Static files
 app.use(express.static(path.join(__dirname)));
 
-app.use("/", userRoutes);
-app.use("/chatbot", chatbotRoutes);
-app.use("/webhook", whatsappRoutes);
-app.use("/lessons", lessonRoutes);
-app.use("/flashcards", flashcardRoutes);
-
 app.use(
   session({
     secret: "Sanish12",
@@ -48,6 +43,12 @@ app.use(
     cookie: { secure: false },
   })
 );
+
+app.use("/", userRoutes);
+app.use("/chatbot", chatbotRoutes);
+app.use("/webhook", whatsappRoutes);
+app.use("/lessons", lessonRoutes);
+app.use("/flashcards", flashcardRoutes);
 
 // //serving the main html file
 app.get("/", (req, res) => {

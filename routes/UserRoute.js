@@ -68,13 +68,116 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ error: "Invalid password" });
     }
 
+    req.session.user = {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      decks: user.decks,
+    };
+
     res.json({
       message: "Login successful",
-      user: { id: user._id, username: user.username, email: user.email },
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        decks: user.decks,
+      },
     });
   } catch (err) {
     console.error("Login failed:", err);
     res.status(500).json({ error: "Server error during login" });
+  }
+});
+
+router.post("/remove_card/:language", async (req, res) => {
+  try {
+    const card = req.body;
+    const language = req.params.language;
+
+    let updatedUser;
+
+    updatedUser = await User.findOneAndUpdate(
+      {
+        username: req.session.user.username,
+        "decks.language": language,
+      },
+      {
+        $pull: {
+          "decks.$.items": {
+            word: card.word,
+            english: card.english,
+          },
+        },
+      },
+      { new: true }
+    );
+
+    res.status(201).json({
+      message: "Card removed successfully",
+      user: {
+        username: updatedUser.username,
+        email: updatedUser.email,
+        decks: updatedUser.decks,
+      },
+    });
+  } catch (err) {
+    console.error("Failed to remove card", err);
+    res.status(500).json({ error: "Server error during removal" });
+  }
+});
+
+router.post("/add_card/:language", async (req, res) => {
+  try {
+    const card = req.body;
+    const language = req.params.language;
+
+    let updatedUser;
+
+    const userWithDeck = await User.findOne({
+      username: req.session.user.username,
+      "decks.language": language,
+    });
+
+    if (userWithDeck) {
+      updatedUser = await User.findOneAndUpdate(
+        {
+          username: req.session.user.username,
+          "decks.language": language,
+        },
+        {
+          $push: {
+            "decks.$.items": card,
+          },
+        },
+        { new: true }
+      );
+    } else {
+      updatedUser = await User.findOneAndUpdate(
+        { username: req.session.user.username },
+        {
+          $push: {
+            decks: {
+              language: language,
+              items: [card],
+            },
+          },
+        },
+        { new: true }
+      );
+    }
+
+    res.status(201).json({
+      message: "Card added successfully",
+      user: {
+        username: updatedUser.username,
+        email: updatedUser.email,
+        decks: updatedUser.decks,
+      },
+    });
+  } catch (err) {
+    console.error("Failed to add card", err);
+    res.status(500).json({ error: "Server error during addition" });
   }
 });
 

@@ -15,15 +15,29 @@ interface FlashcardListProps {
   addToDeck: ({
     word,
     english,
-    lang,
+    audio,
   }: {
     word: string;
     english: string;
-    lang: string;
+    audio?: string;
+  }) => void;
+  removeFromDeck: ({
+    word,
+    english,
+    audio,
+  }: {
+    word: string;
+    english: string;
+    audio?: string;
   }) => void;
 }
 
-const FlashcardList = ({ cardList, lang, addToDeck }: FlashcardListProps) => {
+const FlashcardList = ({
+  cardList,
+  lang,
+  addToDeck,
+  removeFromDeck,
+}: FlashcardListProps) => {
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useGSAP(() => {
@@ -47,7 +61,9 @@ const FlashcardList = ({ cardList, lang, addToDeck }: FlashcardListProps) => {
             key={i}
             word={card.word}
             english={card.english}
-            onAdd={addToDeck}
+            audio={card.audio}
+            addToDeck={addToDeck}
+            removeFromDeck={removeFromDeck}
             lang={lang}
             onClick={() => {
               gsap.to(".card", {

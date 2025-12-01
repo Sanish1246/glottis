@@ -8,6 +8,7 @@ import FlashcardList from "../ui/FlashcardList";
 import GrammarTable from "../ui/GrammarTable";
 import FillInTheBlanks from "../ui/FillInTheBlanks";
 import Mcq from "../ui/Mcq";
+import { useUser } from "@/components/context/UserContext";
 
 type LessonData = any;
 
@@ -17,19 +18,10 @@ interface FlashCardProps {
   audio?: string;
 }
 
-const addToDeck = (card: FlashCardProps) => {
-  toast.success("Card added to your deck!", {
-    action: {
-      label: "Close",
-      onClick: () => {
-        toast.dismiss();
-      },
-    },
-  });
-};
-
 const Lesson = () => {
+  const language = "italian";
   const navigate = useNavigate();
+  const { setUser, user } = useUser();
   const [correctFib, setCorrectFib] = useState(0);
   const [correctMcq, setCorrectMcq] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -40,6 +32,81 @@ const Lesson = () => {
     (location.state as { lesson?: LessonData } | null)?.lesson || null;
 
   const [lesson, setLesson] = useState<LessonData | null>(initialLesson);
+
+  const addToDeck = async (card: FlashCardProps) => {
+    try {
+      console.log(card);
+      const res = await fetch(`http://localhost:8000/add_card/${language}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(card),
+      });
+      const data = await res.json();
+      setUser({
+        username: data.user.username,
+        email: data.user.email,
+        decks: data.user.decks,
+      });
+      toast.success(data.message, {
+        action: {
+          label: "Close",
+          onClick: () => {
+            toast.dismiss();
+          },
+        },
+      });
+    } catch (error) {
+      toast.error(String(error), {
+        action: {
+          label: "Close",
+          onClick: () => {
+            toast.dismiss();
+          },
+        },
+      });
+    }
+  };
+
+  const removeFromDeck = async (card: FlashCardProps) => {
+    try {
+      console.log(card);
+      const res = await fetch(`http://localhost:8000/remove_card/${language}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(card),
+      });
+      const data = await res.json();
+      console.log(data);
+      setUser({
+        username: data.user.username,
+        email: data.user.email,
+        decks: data.user.decks,
+      });
+      toast.success(data.message, {
+        action: {
+          label: "Close",
+          onClick: () => {
+            toast.dismiss();
+          },
+        },
+      });
+    } catch (error) {
+      toast.error(String(error), {
+        action: {
+          label: "Close",
+          onClick: () => {
+            toast.dismiss();
+          },
+        },
+      });
+    }
+  };
 
   useEffect(() => {
     if (initialLesson) {
@@ -133,8 +200,9 @@ const Lesson = () => {
             <h3>{l.category}</h3>
             <FlashcardList
               cardList={l.items}
-              lang={lesson.voice_language}
+              lang={lesson.language}
               addToDeck={addToDeck}
+              removeFromDeck={removeFromDeck}
             />
           </div>
         ))}
@@ -246,6 +314,7 @@ const Lesson = () => {
               (r: any, index: number) => (
                 <li key={index}>
                   <a href={r.url} target="_blank" className="underline">
+                    <span>[{r.type}] </span>
                     {r.title}
                   </a>
                 </li>

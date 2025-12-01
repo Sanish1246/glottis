@@ -53,13 +53,18 @@ const LoginForm = ({
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify(values),
     })
       .then((response) => response.json())
       .then((data) => {
         if (data.user) {
           setIsLoggedIn(true);
-          setUser({ username: values.username });
+          setUser({
+            username: data.user.username,
+            email: data.user.email,
+            decks: data.user.decks,
+          });
           if (onClose) onClose();
           toast.success("User Logged in!", {
             action: {

@@ -1,26 +1,52 @@
 import { useState, useRef } from "react";
 import SpeechButton from "./SpeechButton";
 import gsap from "gsap";
+import { useUser } from "@/components/context/UserContext";
 
 interface FlashCardProps {
   word: string;
   english: string;
-  onAdd: ({
+  audio?: string;
+  addToDeck: ({
     word,
     english,
-    lang,
+    audio,
   }: {
     word: string;
     english: string;
-    lang: string;
+    audio?: string;
+  }) => void;
+  removeFromDeck: ({
+    word,
+    english,
+    audio,
+  }: {
+    word: string;
+    english: string;
+    audio?: string;
   }) => void;
   lang: string;
   onClick?: () => void;
 }
 
-const Flashcard = ({ word, english, onAdd, lang }: FlashCardProps) => {
+const Flashcard = ({
+  word,
+  english,
+  addToDeck,
+  removeFromDeck,
+  lang,
+  audio,
+}: FlashCardProps) => {
+  const { user } = useUser();
   const [flipped, setFlipped] = useState(false);
   const cardRef = useRef(null);
+  const decks = user?.decks ?? [];
+
+  const currentDeck = decks.find((d) => d.language === lang);
+
+  const alreadyExists =
+    currentDeck?.items.some((i) => i.word === word && i.english === english) ??
+    false;
 
   // Flip animation
   const handleFlip = () => {
@@ -52,18 +78,21 @@ const Flashcard = ({ word, english, onAdd, lang }: FlashCardProps) => {
             <button
               title="Add to Deck"
               onClick={(e) => {
-                e.stopPropagation();
-                onAdd({ word, english, lang });
+                if (alreadyExists) {
+                  e.stopPropagation();
+                  removeFromDeck({ word, english, audio });
+                } else {
+                  e.stopPropagation();
+                  addToDeck({ word, english, audio });
+                }
               }}
               className=" bg-blue-500 text-white px-2  rounded-md text-sm hover:bg-blue-600 transition-colors hover:cursor-pointer"
             >
-              ➕
+              {alreadyExists ? "➖" : "➕"}
             </button>
-            <SpeechButton
-              text={word}
-              lang={lang}
-              voiceName="Microsoft Elsa - Italian (Italy)"
-            />
+            {audio && (
+              <SpeechButton text={word} lang={lang} voiceName={audio} />
+            )}
           </div>
         </div>
 
@@ -79,12 +108,17 @@ const Flashcard = ({ word, english, onAdd, lang }: FlashCardProps) => {
             <button
               title="Add to Deck"
               onClick={(e) => {
-                e.stopPropagation();
-                onAdd({ word, english, lang });
+                if (alreadyExists) {
+                  e.stopPropagation();
+                  removeFromDeck({ word, english, audio });
+                } else {
+                  e.stopPropagation();
+                  addToDeck({ word, english, audio });
+                }
               }}
               className=" bg-blue-500 text-white px-2 py-1 rounded-md text-sm hover:bg-blue-600 transition-colors hover:cursor-pointer"
             >
-              ➕
+              {alreadyExists ? "➖" : "➕"}
             </button>
           </div>
         </div>
