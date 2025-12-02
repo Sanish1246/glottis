@@ -181,6 +181,21 @@ router.post("/add_card/:language", async (req, res) => {
   }
 });
 
+router.get("/user_decks", async (req, res) => {
+  const currentUserName = req.session.user.username;
+  console.log(req.session.user.username);
+  try {
+    const user = await User.findOne({ username: currentUserName });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.json(user.decks);
+  } catch (err) {
+    console.error("Failed to fetch user decks", err);
+    res.status(500).json({ error: "Server error during fetch" });
+  }
+});
+
 router.delete("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) return res.status(500).json({ error: "Logout failed" });

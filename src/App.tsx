@@ -113,9 +113,25 @@ function App() {
             <Link to="/lessons" className="hover:underline">
               Lessons
             </Link>
-            <Link to="decks" className="hover:underline">
-              Biblíon
-            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <a className="hover:cursor-pointer hover:underline">Biblíon</a>
+              </DropdownMenuTrigger>
+              <span className="sr-only">Biblíon</span>
+
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem>
+                  <Link to="decks" className="hover:underline">
+                    Decks
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to="review" className="hover:underline">
+                    Review
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Link to="athena" className="hover:underline">
               Athena
             </Link>
