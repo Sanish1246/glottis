@@ -14,6 +14,7 @@ import PathToggle from "./components/pages/PathToggle.tsx";
 import FlashCardDeckList from "./components/pages/FlashcardDeckList.tsx";
 import Deck from "./components/pages/Deck.tsx";
 import UserDeckList from "./components/pages/UserDeckList.tsx";
+import DeckReview from "./components/pages/DeckReview.tsx";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
       { path: "decks", element: <FlashCardDeckList /> },
       { path: "deck/:deckId", element: <Deck /> },
       { path: "review", element: <UserDeckList /> },
+      { path: "review/:language", element: <DeckReview /> },
     ],
   },
 ]);

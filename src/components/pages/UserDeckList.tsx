@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useUser } from "../context/UserContext";
+import { Link } from "react-router-dom";
 
 const UserDeckList = () => {
   const [userDecks, setUserDecks] = useState([]);
@@ -32,9 +33,13 @@ const UserDeckList = () => {
       <h2>Review</h2>
       {userDecks.length == 0 ? <p>No decks present yet</p> : null}
       {userDecks.map((deck: any) => (
-        <p>
+        <Link
+          to={`/review/${deck.language}`}
+          state={{ deck }}
+          className="block"
+        >
           {user.username}'s {deck.language} deck
-        </p>
+        </Link>
       ))}
     </div>
   );

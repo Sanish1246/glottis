@@ -196,6 +196,31 @@ router.get("/user_decks", async (req, res) => {
   }
 });
 
+router.get("/user_decks/:language", async (req, res) => {
+  const currentUserName = req.session.user.username;
+  const language = req.params.language;
+
+  try {
+    const user = await User.findOne({ username: currentUserName });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const deck = user.decks.find((d) => d.language === language);
+
+    if (!deck) {
+      return res
+        .status(404)
+        .json({ error: "Deck not found for this language" });
+    }
+
+    res.json(deck);
+  } catch (err) {
+    console.error("Failed to fetch user deck", err);
+    res.status(500).json({ error: "Server error during fetch" });
+  }
+});
+
 router.delete("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) return res.status(500).json({ error: "Logout failed" });
