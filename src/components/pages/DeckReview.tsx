@@ -14,6 +14,7 @@ import {
   DialogTitle,
   DialogClose,
 } from "@/components/ui/dialog";
+import ReviewCard from "../ui/ReviewCard";
 
 interface FlashCardProps {
   word: string;
@@ -27,7 +28,9 @@ interface DeckProp {
 }
 
 const DeckReview = () => {
+  const [index, setIndex] = useState(0);
   const { deckLang } = useParams<{ deckLang: string }>();
+  const [reviewing, setReviewing] = useState(false);
   const location = useLocation();
   const initialDeck =
     (location.state as { deck?: DeckProp } | null)?.deck || null;
@@ -57,24 +60,56 @@ const DeckReview = () => {
     fetchDeck();
   }, [deckLang]);
 
+  const nextCard = () => {
+    if (index < deck.items.length - 1) {
+      setIndex(index + 1);
+    } else {
+      /* deck finished – go back to summary or anywhere you like */
+      setReviewing(false);
+      toast.success("Deck finished!");
+    }
+  };
+
+  const current = deck.items[index];
+
   if (loading) return <div>Loading deck...</div>;
   if (!deck) return <div>Deck not found</div>;
 
   return (
     <div>
-      <h3>Cards to review today: {deck.items.length}</h3>
-      <Button>Start now</Button>
-      <Dialog>
-        <DialogTrigger>
-          <Button>Edit Deck</Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Your deck</DialogTitle>
-          </DialogHeader>
-          <EditDeck deck={deck} />
-        </DialogContent>
-      </Dialog>
+      {!reviewing ? (
+        <div>
+          <h3>Cards to review today: {deck.items.length}</h3>
+          <Button
+            onClick={() => {
+              setReviewing(true);
+            }}
+            disabled={deck.items.length == 0}
+          >
+            Start now
+          </Button>
+          <Dialog>
+            <DialogTrigger>
+              <Button disabled={deck.items.length == 0}>Edit Deck</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Your deck</DialogTitle>
+              </DialogHeader>
+              <EditDeck deck={deck} />
+            </DialogContent>
+          </Dialog>
+        </div>
+      ) : (
+        <ReviewCard
+          key={index}
+          word={current.word}
+          english={current.english}
+          audio={current.audio}
+          lang={deckLang}
+          onReviewed={nextCard}
+        />
+      )}
     </div>
   );
 };
