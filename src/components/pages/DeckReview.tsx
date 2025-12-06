@@ -13,15 +13,16 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import ReviewCard from "../ui/ReviewCard";
+import { supermemo, type SuperMemoItem, type SuperMemoGrade } from "supermemo";
 
 interface FlashCardProps {
   word: string;
   english: string;
   audio?: string;
-  interval?: number;
-  repetition?: number;
-  efactor?: number;
-  dueDate?: string;
+  interval: number;
+  repetition: number;
+  efactor: number;
+  dueDate: string;
 }
 
 interface DeckProp {
@@ -31,7 +32,8 @@ interface DeckProp {
 
 const DeckReview = () => {
   const [index, setIndex] = useState(0);
-  const { deckLang } = useParams<{ deckLang: string }>();
+  const [remaining, setRemaining] = useState(999);
+  const { language } = useParams<{ language: string }>();
   const [reviewing, setReviewing] = useState(false);
   const location = useLocation();
   const initialDeck =
@@ -45,7 +47,7 @@ const DeckReview = () => {
       setLoading(true);
       try {
         const res = await fetch(
-          `http://localhost:8000/user_decks/${deckLang}`,
+          `http://localhost:8000/user_decks/${language}`,
           {
             method: "GET",
             credentials: "include",
@@ -56,6 +58,7 @@ const DeckReview = () => {
         const reviewDeck = data.items.filter(
           (c) => c.dueDate === dayjs(Date.now()).format("DD-MM-YYYY")
         );
+        setRemaining(reviewDeck.length);
         setDeck({ language: data.language, items: reviewDeck });
         setFullDeck(data);
       } catch (err) {
@@ -65,9 +68,10 @@ const DeckReview = () => {
       }
     };
     fetchDeck();
-  }, [deckLang]);
+  }, [language]);
 
   const nextCard = () => {
+    setRemaining(remaining - 1);
     if (index < deck.items.length - 1) {
       setIndex(index + 1);
     } else {
@@ -76,7 +80,45 @@ const DeckReview = () => {
     }
   };
 
-  const current = deck.items[index];
+  const currentCard = deck.items[index];
+
+  const reviewCard = async (grade: SuperMemoGrade) => {
+    try {
+      const { interval, repetition, efactor } = supermemo(currentCard, grade);
+
+      const dueDate = dayjs(Date.now())
+        .add(interval, "day")
+        .format("DD-MM-YYYY");
+
+      const updatedCard = {
+        ...currentCard,
+        interval,
+        repetition,
+        efactor,
+        dueDate,
+      };
+
+      console.log(updatedCard);
+      const res = await fetch(`http://localhost:8000/user_decks/${language}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(updatedCard),
+      });
+      nextCard();
+    } catch (error) {
+      toast.error(String(error), {
+        action: {
+          label: "Close",
+          onClick: () => {
+            toast.dismiss();
+          },
+        },
+      });
+    }
+  };
 
   if (loading) return <div>Loading deck...</div>;
   if (!deck) return <div>Deck not found</div>;
@@ -85,18 +127,22 @@ const DeckReview = () => {
     <div>
       {!reviewing ? (
         <div>
-          <h3>Cards to review today: {deck.items.length}</h3>
+          <h3>
+            {remaining != 0
+              ? `Cards to review today: ${deck.items.length}`
+              : `No cards to review today`}
+          </h3>
           <Button
             onClick={() => {
               setReviewing(true);
             }}
-            disabled={deck.items.length == 0}
+            disabled={deck.items.length == 0 || remaining == 0}
           >
             Start now
           </Button>
           <Dialog>
             <DialogTrigger>
-              <Button disabled={deck.items.length == 0}>Edit Deck</Button>
+              <Button disabled={fullDeck.items.length == 0}>Edit Deck</Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
@@ -109,11 +155,11 @@ const DeckReview = () => {
       ) : (
         <ReviewCard
           key={index}
-          word={current.word}
-          english={current.english}
-          audio={current.audio}
-          lang={deckLang}
-          onReviewed={nextCard}
+          word={currentCard.word}
+          english={currentCard.english}
+          audio={currentCard.audio}
+          lang={language}
+          onReviewed={reviewCard}
         />
       )}
     </div>

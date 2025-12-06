@@ -4,14 +4,14 @@ import gsap from "gsap";
 import { Button } from "./button";
 import { useUser } from "@/components/context/UserContext";
 import dayjs from "dayjs";
-import { supermemo, type SuperMemoItem, type SuperMemoGrade } from "supermemo";
+import type { SuperMemoGrade } from "supermemo";
 
 interface FlashCardProps {
   word: string;
   english: string;
   audio?: string;
   lang: string | undefined;
-  onReviewed: () => void;
+  onReviewed: (grade: SuperMemoGrade) => void;
 }
 
 const ReviewCard = ({
@@ -36,9 +36,9 @@ const ReviewCard = ({
     });
   };
 
-  const finish = () => {
+  const finish = (grade: SuperMemoGrade) => {
     setReviewed(true);
-    setTimeout(onReviewed, 300);
+    onReviewed(grade);
   };
 
   return (
@@ -94,11 +94,41 @@ const ReviewCard = ({
           </Button>
         ) : (
           <div className="mx-auto flex gap-2">
-            <Button onClick={finish}>Forgotten</Button>
-            <Button onClick={finish}>Hard</Button>
-            <Button onClick={finish}>Medium</Button>
-            <Button onClick={finish}>Easy</Button>
-            <Button onClick={finish}>Very Easy</Button>
+            <Button
+              onClick={() => {
+                finish(0);
+              }}
+            >
+              Forgotten
+            </Button>
+            <Button
+              onClick={() => {
+                finish(2);
+              }}
+            >
+              Hard
+            </Button>
+            <Button
+              onClick={() => {
+                finish(3);
+              }}
+            >
+              Medium
+            </Button>
+            <Button
+              onClick={() => {
+                finish(4);
+              }}
+            >
+              Easy
+            </Button>
+            <Button
+              onClick={() => {
+                finish(5);
+              }}
+            >
+              Very Easy
+            </Button>
           </div>
         )}
       </div>

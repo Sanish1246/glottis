@@ -183,7 +183,6 @@ router.post("/add_card/:language", async (req, res) => {
 
 router.get("/user_decks", async (req, res) => {
   const currentUserName = req.session.user.username;
-  console.log(req.session.user.username);
   try {
     const user = await User.findOne({ username: currentUserName });
     if (!user) {
@@ -199,6 +198,7 @@ router.get("/user_decks", async (req, res) => {
 router.get("/user_decks/:language", async (req, res) => {
   const currentUserName = req.session.user.username;
   const language = req.params.language;
+  console.log(language);
 
   try {
     const user = await User.findOne({ username: currentUserName });
@@ -222,42 +222,34 @@ router.get("/user_decks/:language", async (req, res) => {
 });
 
 router.put("/user_decks/:language", async (req, res) => {
-  const currentUserName = req.session.user.username;
+  const { username } = req.session.user;
   const card = req.body;
   const language = req.params.language;
 
   try {
-    const user = await User.findOne({ username: currentUserName });
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    const deck = user.decks.find((d) => d.language === language);
-
-    if (!deck) {
-      return res
-        .status(404)
-        .json({ error: "Deck not found for this language" });
-    }
-
-    const updateCard = await User.findOneAndUpdate(
+    const user = await User.findOneAndUpdate(
       {
-        username: currentUserName,
+        username,
         "decks.language": language,
-        "decks.$.items": {
-          word: card.word,
-          english: card.english,
-        },
+        "decks.items.word": card.word,
+        "decks.items.english": card.english,
       },
-      { $set: card }
+      { $set: { "decks.$.items.$[item]": card } },
+      {
+        arrayFilters: [
+          { "item.word": card.word, "item.english": card.english },
+        ],
+        new: true,
+      }
     );
 
-    res.status(200).json({
-      message: "Card updated successfully",
-    });
-  } catch (err) {
-    console.error("Failed to update card", err);
-    res.status(500).json({ error: "Server error during update" });
+    if (!user) {
+      return res.status(404).json({ error: "Card not found" });
+    }
+    res.json({ message: "Card updated" });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
