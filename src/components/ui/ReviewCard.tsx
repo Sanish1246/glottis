@@ -3,6 +3,8 @@ import SpeechButton from "./SpeechButton";
 import gsap from "gsap";
 import { Button } from "./button";
 import { useUser } from "@/components/context/UserContext";
+import dayjs from "dayjs";
+import { supermemo, type SuperMemoItem, type SuperMemoGrade } from "supermemo";
 
 interface FlashCardProps {
   word: string;
@@ -88,13 +90,15 @@ const ReviewCard = ({
       <div className="flex gap-2 bottom-1">
         {!flipped ? (
           <Button className="mx-auto" onClick={handleFlip}>
-            Flip
+            See answer
           </Button>
         ) : (
           <div className="mx-auto flex gap-2">
-            <Button onClick={finish}>Easy</Button>
-            <Button onClick={finish}>Medium</Button>
+            <Button onClick={finish}>Forgotten</Button>
             <Button onClick={finish}>Hard</Button>
+            <Button onClick={finish}>Medium</Button>
+            <Button onClick={finish}>Easy</Button>
+            <Button onClick={finish}>Very Easy</Button>
           </div>
         )}
       </div>

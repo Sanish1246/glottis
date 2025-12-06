@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import dayjs from "dayjs";
 import { useParams, useLocation } from "react-router-dom";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
@@ -16,6 +17,10 @@ interface FlashCardProps {
   word: string;
   english: string;
   audio?: string;
+  interval?: number;
+  repetition?: number;
+  efactor?: number;
+  dueDate?: string;
 }
 
 const Lesson = () => {
@@ -35,6 +40,13 @@ const Lesson = () => {
 
   const addToDeck = async (card: FlashCardProps) => {
     try {
+      card = {
+        ...card,
+        interval: 0,
+        repetition: 0,
+        efactor: 2.5,
+        dueDate: dayjs(Date.now()).format("DD-MM-YYYY"),
+      };
       console.log(card);
       const res = await fetch(`http://localhost:8000/add_card/${language}`, {
         method: "POST",

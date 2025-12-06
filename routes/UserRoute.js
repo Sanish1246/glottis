@@ -221,6 +221,46 @@ router.get("/user_decks/:language", async (req, res) => {
   }
 });
 
+router.put("/user_decks/:language", async (req, res) => {
+  const currentUserName = req.session.user.username;
+  const card = req.body;
+  const language = req.params.language;
+
+  try {
+    const user = await User.findOne({ username: currentUserName });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const deck = user.decks.find((d) => d.language === language);
+
+    if (!deck) {
+      return res
+        .status(404)
+        .json({ error: "Deck not found for this language" });
+    }
+
+    const updateCard = await User.findOneAndUpdate(
+      {
+        username: currentUserName,
+        "decks.language": language,
+        "decks.$.items": {
+          word: card.word,
+          english: card.english,
+        },
+      },
+      { $set: card }
+    );
+
+    res.status(200).json({
+      message: "Card updated successfully",
+    });
+  } catch (err) {
+    console.error("Failed to update card", err);
+    res.status(500).json({ error: "Server error during update" });
+  }
+});
+
 router.delete("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) return res.status(500).json({ error: "Logout failed" });

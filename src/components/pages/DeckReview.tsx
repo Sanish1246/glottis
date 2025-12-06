@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
-import FlashcardList from "../ui/FlashcardList";
+import dayjs from "dayjs";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import EditDeck from "../ui/EditDeck";
@@ -9,8 +9,6 @@ import {
   DialogContent,
   DialogTrigger,
   DialogHeader,
-  DialogFooter,
-  DialogDescription,
   DialogTitle,
   DialogClose,
 } from "@/components/ui/dialog";
@@ -20,6 +18,10 @@ interface FlashCardProps {
   word: string;
   english: string;
   audio?: string;
+  interval?: number;
+  repetition?: number;
+  efactor?: number;
+  dueDate?: string;
 }
 
 interface DeckProp {
@@ -36,6 +38,7 @@ const DeckReview = () => {
     (location.state as { deck?: DeckProp } | null)?.deck || null;
 
   const [deck, setDeck] = useState<DeckProp | null>(initialDeck);
+  const [fullDeck, setFullDeck] = useState<DeckProp | null>(initialDeck);
   const [loading, setLoading] = useState(!initialDeck);
   useEffect(() => {
     const fetchDeck = async () => {
@@ -50,7 +53,11 @@ const DeckReview = () => {
         );
         if (!res.ok) throw new Error("Deck not found");
         const data: DeckProp = await res.json();
-        setDeck(data);
+        const reviewDeck = data.items.filter(
+          (c) => c.dueDate === dayjs(Date.now()).format("DD-MM-YYYY")
+        );
+        setDeck({ language: data.language, items: reviewDeck });
+        setFullDeck(data);
       } catch (err) {
         console.error(err);
       } finally {
@@ -64,7 +71,6 @@ const DeckReview = () => {
     if (index < deck.items.length - 1) {
       setIndex(index + 1);
     } else {
-      /* deck finished – go back to summary or anywhere you like */
       setReviewing(false);
       toast.success("Deck finished!");
     }
@@ -96,7 +102,7 @@ const DeckReview = () => {
               <DialogHeader>
                 <DialogTitle>Your deck</DialogTitle>
               </DialogHeader>
-              <EditDeck deck={deck} />
+              <EditDeck deck={fullDeck} />
             </DialogContent>
           </Dialog>
         </div>
