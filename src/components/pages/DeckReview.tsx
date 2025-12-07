@@ -204,7 +204,12 @@ const DeckReview = () => {
               <DialogHeader>
                 <DialogTitle>Your deck</DialogTitle>
               </DialogHeader>
-              <EditDeck deck={fullDeck} />
+              <EditDeck
+                deck={fullDeck}
+                setFullDeck={setFullDeck}
+                setDeck={setDeck}
+                setRemaining={setRemaining}
+              />
             </DialogContent>
           </Dialog>
 

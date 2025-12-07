@@ -113,6 +113,8 @@ router.post("/remove_card/:language", async (req, res) => {
       { new: true }
     );
 
+    const updatedDeck = updatedUser.decks.find((d) => d.language === language);
+
     res.status(201).json({
       message: "Card removed successfully",
       user: {
@@ -120,6 +122,7 @@ router.post("/remove_card/:language", async (req, res) => {
         email: updatedUser.email,
         decks: updatedUser.decks,
       },
+      newDeck: updatedDeck,
     });
   } catch (err) {
     console.error("Failed to remove card", err);

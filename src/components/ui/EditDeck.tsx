@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "./button";
 import { toast } from "sonner";
 import { useUser } from "@/components/context/UserContext";
+import dayjs from "dayjs";
 import {
   Table,
   TableBody,
@@ -15,6 +16,10 @@ interface FlashCardProps {
   word: string;
   english: string;
   audio?: string;
+  interval: number;
+  repetition: number;
+  efactor: number;
+  dueDate: string;
 }
 
 interface DeckProp {
@@ -22,7 +27,14 @@ interface DeckProp {
   items: FlashCardProps[];
 }
 
-const EditDeck = ({ deck }: { deck: DeckProp }) => {
+interface EditProps {
+  deck: DeckProp;
+  setFullDeck: React.Dispatch<React.SetStateAction<DeckProp>>;
+  setDeck: React.Dispatch<React.SetStateAction<DeckProp>>;
+  setRemaining: React.Dispatch<React.SetStateAction<number>>;
+}
+
+const EditDeck = ({ deck, setFullDeck, setDeck, setRemaining }: EditProps) => {
   const { setUser, user } = useUser();
   const removeFromDeck = async (card: FlashCardProps) => {
     try {
@@ -43,6 +55,13 @@ const EditDeck = ({ deck }: { deck: DeckProp }) => {
         email: data.user.email,
         decks: data.user.decks,
       });
+      setFullDeck(data.newDeck);
+      const reviewDeck = data.newDeck.items.filter(
+        (c: FlashCardProps) =>
+          c.dueDate <= dayjs(Date.now()).format("DD-MM-YYYY")
+      );
+      setRemaining(reviewDeck.length);
+      setDeck({ language: data.newDeck.language, items: reviewDeck });
       toast.success(data.message, {
         action: {
           label: "Close",
