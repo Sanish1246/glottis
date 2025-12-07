@@ -3,7 +3,6 @@ import SpeechButton from "./SpeechButton";
 import gsap from "gsap";
 import { Button } from "./button";
 import { useUser } from "@/components/context/UserContext";
-import dayjs from "dayjs";
 import type { SuperMemoGrade } from "supermemo";
 
 interface FlashCardProps {

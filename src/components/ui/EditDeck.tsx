@@ -38,7 +38,6 @@ const EditDeck = ({ deck }: { deck: DeckProp }) => {
         }
       );
       const data = await res.json();
-      console.log(data);
       setUser({
         username: data.user.username,
         email: data.user.email,
