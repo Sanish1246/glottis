@@ -31,7 +31,9 @@ const Athena = () => {
             <DialogHeader>
               <DialogTitle>Chat on Whatsapp</DialogTitle>
             </DialogHeader>
-            <QrCode />
+            <div className="mx-auto">
+              <QrCode />
+            </div>
           </DialogContent>
         </Dialog>
       </div>
