@@ -5,6 +5,7 @@ import express from "express";
 import ngrok from "ngrok";
 import path from "path";
 import cors from "cors";
+import { Server } from "socket.io";
 import { fileURLToPath } from "url";
 import { connectToDb } from "./db.js";
 import whatsappRoutes from "./routes/WhatsappRoute.js";
@@ -16,6 +17,17 @@ import flashcardRoutes from "./routes/FlashcardRoute.js";
 dotenv.config();
 
 const app = express();
+
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
+
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -53,6 +65,24 @@ app.use("/flashcards", flashcardRoutes);
 // //serving the main html file
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
+});
+
+// Socket.io configuration
+io.on("connection", (socket) => {
+  console.log(`User connected: ${socket.id}`);
+
+  socket.on("join_room", (data) => {
+    socket.join(data);
+    console.log(`User with ID ${socket.id} joined room ${data}`);
+  });
+
+  socket.on("send_message", (data) => {
+    socket.to(data.room).emit("receive_message", data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("User disconnected", socket.id);
+  });
 });
 
 async function startServer() {

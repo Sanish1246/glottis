@@ -16,6 +16,7 @@ import Deck from "./components/pages/Deck.tsx";
 import UserDeckList from "./components/pages/UserDeckList.tsx";
 import DeckReview from "./components/pages/DeckReview.tsx";
 import UserListPage from "./components/pages/UserListPage.tsx";
+import ChatPage from "./components/pages/ChatPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,7 @@ const router = createBrowserRouter([
       { path: "review", element: <UserDeckList /> },
       { path: "review/:language", element: <DeckReview /> },
       { path: "users", element: <UserListPage /> },
+      { path: "chat", element: <ChatPage /> },
     ],
   },
 ]);
