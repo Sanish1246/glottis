@@ -135,7 +135,7 @@ function App() {
             <Link to="athena" className="hover:underline">
               Athena
             </Link>
-            <Link to="chat" className="hover:underline">
+            <Link to="users" className="hover:underline">
               Agorà
             </Link>
             <Link to="/" className="hover:underline">

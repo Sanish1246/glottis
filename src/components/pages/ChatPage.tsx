@@ -1,6 +1,9 @@
 import { useState } from "react";
 import Inputs from "../ui/Inputs";
 import { Button } from "../ui/button";
+import io from "socket.io-client";
+
+const socket = io.socket("http://localhost:3000");
 
 const ChatPage = () => {
   const [messages, setMessages] = useState([

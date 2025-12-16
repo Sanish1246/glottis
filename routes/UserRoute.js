@@ -91,6 +91,9 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/remove_card/:language", async (req, res) => {
+  if (!req.session?.user) {
+    return res.status(401).json({ error: "Not authenticated" });
+  }
   try {
     const card = req.body;
     const language = req.params.language;
@@ -131,6 +134,9 @@ router.post("/remove_card/:language", async (req, res) => {
 });
 
 router.post("/add_card/:language", async (req, res) => {
+  if (!req.session?.user) {
+    return res.status(401).json({ error: "Not authenticated" });
+  }
   try {
     const card = req.body;
     const language = req.params.language;
@@ -185,8 +191,12 @@ router.post("/add_card/:language", async (req, res) => {
 });
 
 router.get("/user_decks", async (req, res) => {
-  const currentUserName = req.session.user.username;
+  if (!req.session?.user) {
+    return res.status(401).json({ error: "Not authenticated" });
+  }
+
   try {
+    const currentUserName = req.session.user.username;
     const user = await User.findOne({ username: currentUserName });
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -199,11 +209,14 @@ router.get("/user_decks", async (req, res) => {
 });
 
 router.get("/user_decks/:language", async (req, res) => {
-  const currentUserName = req.session.user.username;
+  if (!req.session?.user) {
+    return res.status(401).json({ error: "Not authenticated" });
+  }
+
   const language = req.params.language;
-  console.log(language);
 
   try {
+    const currentUserName = req.session.user.username;
     const user = await User.findOne({ username: currentUserName });
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -225,11 +238,14 @@ router.get("/user_decks/:language", async (req, res) => {
 });
 
 router.put("/user_decks/:language", async (req, res) => {
-  const { username } = req.session.user;
+  if (!req.session?.user) {
+    return res.status(401).json({ error: "Not authenticated" });
+  }
   const card = req.body;
   const language = req.params.language;
 
   try {
+    const { username } = req.session.user;
     const user = await User.findOneAndUpdate(
       {
         username,
@@ -261,6 +277,25 @@ router.delete("/logout", (req, res) => {
     if (err) return res.status(500).json({ error: "Logout failed" });
     res.status(200).json({ message: "User logged out successfully" });
   });
+});
+
+router.get("/users", async (req, res) => {
+  try {
+    if (!req.session?.user) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+
+    const { username } = req.session.user;
+
+    const users = await User.find({
+      username: { $ne: username },
+    });
+
+    res.json(users);
+  } catch (err) {
+    console.error("Unable to get users:", err);
+    res.status(500).json({ error: "Server error while fetching users" });
+  }
 });
 
 export default router;

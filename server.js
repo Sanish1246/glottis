@@ -5,6 +5,7 @@ import express from "express";
 import ngrok from "ngrok";
 import path from "path";
 import cors from "cors";
+import http from "http";
 import { Server } from "socket.io";
 import { fileURLToPath } from "url";
 import { connectToDb } from "./db.js";
@@ -88,7 +89,7 @@ io.on("connection", (socket) => {
 async function startServer() {
   await connectToDb();
   // Starting server + ngrok
-  app.listen(PORT, async () => {
+  server.listen(PORT, async () => {
     console.log(`🚀 Server listening on http://localhost:${PORT}`);
 
     try {

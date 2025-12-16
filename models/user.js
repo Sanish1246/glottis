@@ -10,6 +10,23 @@ const VocabularyItemSchema = new mongoose.Schema({
   dueDate: { type: String },
 });
 
+const MessageSchema = new mongoose.Schema({
+  author: { type: String, required: true },
+  message: { type: String, required: true },
+  date: { type: String },
+  time: { type: Number },
+});
+
+const ChatSchema = new mongoose.Schema({
+  word: { type: String, required: true },
+  english: { type: String, required: true },
+  audio: { type: String },
+  interval: { type: Number },
+  repetition: { type: Number },
+  efactor: { type: Number },
+  dueDate: { type: String },
+});
+
 const flashcardDeckSchema = new mongoose.Schema({
   language: { type: String, required: true },
   items: [VocabularyItemSchema],
