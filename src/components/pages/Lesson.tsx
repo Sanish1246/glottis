@@ -47,7 +47,6 @@ const Lesson = () => {
         efactor: 2.5,
         dueDate: dayjs(Date.now()).format("DD-MM-YYYY"),
       };
-      console.log(card);
       const res = await fetch(`http://localhost:8000/add_card/${language}`, {
         method: "POST",
         headers: {

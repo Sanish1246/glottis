@@ -78,7 +78,12 @@ io.on("connection", (socket) => {
   });
 
   socket.on("send_message", (data) => {
-    socket.to(data.room).emit("receive_message", data);
+    // Emit to everyone in the room (including sender)
+    io.to(data.room).emit("receive_message", data);
+    console.log(
+      `Message from ${data.sender} in room ${data.room}:`,
+      data.content
+    );
   });
 
   socket.on("disconnect", () => {
