@@ -14,6 +14,7 @@ import chatbotRoutes from "./routes/ChatbotRoute.js";
 import userRoutes from "./routes/UserRoute.js";
 import lessonRoutes from "./routes/LessonRoute.js";
 import flashcardRoutes from "./routes/FlashcardRoute.js";
+import authRoutes from "./routes/AuthRoute.js";
 
 dotenv.config();
 
@@ -58,6 +59,7 @@ app.use(
 );
 
 app.use("/", userRoutes);
+app.use("/", authRoutes);
 app.use("/chatbot", chatbotRoutes);
 app.use("/webhook", whatsappRoutes);
 app.use("/lessons", lessonRoutes);

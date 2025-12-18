@@ -29,15 +29,79 @@ const UserListPage = () => {
   const { user } = useUser();
   const [usersArray, setUsersArray] = useState([]);
   const [filter, setFilter] = useState("none");
+
+  const fetchUsers = async () => {
+    try {
+      const res = await fetch(`http://localhost:8000/users`, {
+        method: "GET",
+        credentials: "include",
+      });
+      const data = await res.json();
+      setUsersArray(data);
+    } catch (error) {
+      toast.error(String(error), {
+        action: {
+          label: "Close",
+          onClick: () => {
+            toast.dismiss();
+          },
+        },
+      });
+    }
+  };
   useEffect(() => {
-    const fetchLessons = async () => {
+    fetchUsers();
+  }, []);
+
+  // useEffect(() => {
+  //   return () => {
+  //     if (filter == "none") {
+  //       fetchUsers();
+  //     } else {
+  //       const filterUsers = async () => {
+  //         try {
+  //           const res = await fetch(`http://localhost:8000/users/${filter}`, {
+  //             method: "GET",
+  //             credentials: "include",
+  //           });
+  //           const data = await res.json();
+  //           setUsersArray(data);
+  //         } catch (error) {
+  //           toast.error(String(error), {
+  //             action: {
+  //               label: "Close",
+  //               onClick: () => {
+  //                 toast.dismiss();
+  //               },
+  //             },
+  //           });
+  //         }
+  //       };
+  //       filterUsers();
+  //     }
+  //   };
+  // }, [filter]);
+
+  useEffect(() => {
+    const filterUsers = async () => {
       try {
-        const res = await fetch(`http://localhost:8000/users`, {
-          method: "GET",
-          credentials: "include",
-        });
-        const data = await res.json();
-        setUsersArray(data);
+        if (filter === "none") {
+          // Fetch all users
+          const res = await fetch(`http://localhost:8000/users`, {
+            method: "GET",
+            credentials: "include",
+          });
+          const data = await res.json();
+          setUsersArray(data);
+        } else {
+          // Fetch filtered users
+          const res = await fetch(`http://localhost:8000/users/${filter}`, {
+            method: "GET",
+            credentials: "include",
+          });
+          const data = await res.json();
+          setUsersArray(data);
+        }
       } catch (error) {
         toast.error(String(error), {
           action: {
@@ -49,8 +113,10 @@ const UserListPage = () => {
         });
       }
     };
-    fetchLessons();
-  }, []);
+
+    filterUsers();
+  }, [filter]);
+
   return (
     <div>
       <h1>Users</h1>

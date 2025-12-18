@@ -1,5 +1,5 @@
 "use client";
-
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -16,12 +16,29 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useUser } from "@/components/context/UserContext";
+import Combobox from "../ui/Combobox";
 
 interface RegisterFormProps {
   setIsLoggedIn: (value: boolean) => void;
   setIsLoginOpen: (value: boolean) => void;
   onClose?: () => void;
 }
+
+type Options = {
+  value: string;
+  label: string;
+};
+
+const roles: Options[] = [
+  {
+    value: "student",
+    label: "Student",
+  },
+  {
+    value: "teacher",
+    label: "Teacher",
+  },
+];
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -41,6 +58,7 @@ const RegisterForm = ({
   onClose,
 }: RegisterFormProps) => {
   const { setUser } = useUser();
+  const [currentRole, setCurrentRole] = useState("student");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -52,18 +70,24 @@ const RegisterForm = ({
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    const userData = { ...values, role: currentRole };
+    console.log(currentRole);
     fetch("http://localhost:8000/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(values),
+      body: JSON.stringify(userData),
     })
       .then((response) => response.json())
       .then((data) => {
         if (data.user) {
           setIsLoggedIn(true);
-          setUser({ username: values.username, email: values.email });
+          setUser({
+            username: values.username,
+            email: values.email,
+            role: currentRole,
+          });
 
           if (onClose) onClose();
           toast.success("User Logged in!", {
@@ -166,6 +190,15 @@ const RegisterForm = ({
             </FormItem>
           )}
         />
+        <div className="flex flex-row gap-1 mx-auto items-center justify-center">
+          <p>Role:</p>
+          <Combobox
+            choices={roles}
+            filter={currentRole}
+            setFilter={setCurrentRole}
+          ></Combobox>
+        </div>
+
         <div className="flex flex-col gap-3">
           <Button type="submit" className="w-[50%] mx-auto">
             Submit
