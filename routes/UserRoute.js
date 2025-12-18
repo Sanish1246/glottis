@@ -224,4 +224,26 @@ router.get("/users/:role", async (req, res) => {
   }
 });
 
+router.get("/userSearch", async (req, res) => {
+  const searchName = req.query.u;
+  try {
+    if (!req.session?.user) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+
+    const { username } = req.session.user;
+
+    const users = await User.find({
+      username: { $ne: username, $regex: searchName, $options: "i" },
+    });
+
+    console.log(users.length);
+
+    res.json(users);
+  } catch (err) {
+    console.error("Unable to get users:", err);
+    res.status(500).json({ error: "Server error while fetching users" });
+  }
+});
+
 export default router;

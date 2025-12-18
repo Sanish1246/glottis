@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
-import { MessageSquareMore } from "lucide-react";
+import { MessageSquareMore, Search } from "lucide-react";
 import { useUser } from "../context/UserContext";
 import Combobox from "../ui/Combobox";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 
 type Options = {
   value: string;
@@ -29,6 +31,9 @@ const UserListPage = () => {
   const { user } = useUser();
   const [usersArray, setUsersArray] = useState([]);
   const [filter, setFilter] = useState("none");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResult, setSearchResult] = useState([]);
+  const [searching, setSearching] = useState(false);
 
   const fetchUsers = async () => {
     try {
@@ -49,9 +54,40 @@ const UserListPage = () => {
       });
     }
   };
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+
+  const searchUsers = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:8000/userSearch?u=${searchTerm}`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+      const data = await res.json();
+      setSearching(true);
+      setSearchResult(data);
+    } catch (error) {
+      toast.error(String(error), {
+        action: {
+          label: "Close",
+          onClick: () => {
+            toast.dismiss();
+          },
+        },
+      });
+    }
+  };
+
+  const clearSearch = () => {
+    setSearchResult([]);
+    setSearchTerm("");
+    setSearching(false);
+  };
+
+  // useEffect(() => {
+  //   fetchUsers();
+  // }, []);
 
   // useEffect(() => {
   //   return () => {
@@ -87,12 +123,7 @@ const UserListPage = () => {
       try {
         if (filter === "none") {
           // Fetch all users
-          const res = await fetch(`http://localhost:8000/users`, {
-            method: "GET",
-            credentials: "include",
-          });
-          const data = await res.json();
-          setUsersArray(data);
+          fetchUsers();
         } else {
           // Fetch filtered users
           const res = await fetch(`http://localhost:8000/users/${filter}`, {
@@ -119,33 +150,82 @@ const UserListPage = () => {
 
   return (
     <div>
-      <h1>Users</h1>
-      <div className="flex flex-row items-center gap-1">
-        <p>Filter by:</p>
-        <Combobox
-          choices={userFilters}
-          filter={filter}
-          setFilter={setFilter}
-        ></Combobox>
+      <div className="flex flex-row gap-2 max-w-[50%] mx-auto">
+        <Input
+          id="search"
+          placeholder="Search for a user..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <Button
+          onClick={() => {
+            searchUsers();
+          }}
+        >
+          <Search />
+          Search
+        </Button>
+        <Button
+          variant="destructive"
+          onClick={() => {
+            clearSearch();
+          }}
+        >
+          Clear
+        </Button>
       </div>
 
       <div>
-        {usersArray.map((nextUser: any, index: number) => {
-          return (
-            <div key={index} className="flex flex-row">
-              {nextUser.username}
-              <Link
-                to={`/chat`}
-                state={{
-                  username: nextUser.username,
-                  currentUser: user.username,
-                }}
-              >
-                <MessageSquareMore />
-              </Link>
+        {!searching ? (
+          <>
+            <h1>List of users</h1>
+            <div className="flex flex-row items-center gap-1">
+              <p>Filter by:</p>
+              <Combobox
+                choices={userFilters}
+                filter={filter}
+                setFilter={setFilter}
+              ></Combobox>
             </div>
-          );
-        })}
+            {usersArray.map((nextUser: any, index: number) => {
+              return (
+                <div key={index} className="flex flex-row">
+                  {nextUser.username}
+                  <Link
+                    to={`/chat`}
+                    state={{
+                      username: nextUser.username,
+                      currentUser: user.username,
+                    }}
+                  >
+                    <MessageSquareMore />
+                  </Link>
+                </div>
+              );
+            })}
+          </>
+        ) : (
+          <>
+            <h1>Search results</h1>
+            {searchResult.length == 0 ? <p>No result found!</p> : null}
+            {searchResult.map((nextUser: any, index: number) => {
+              return (
+                <div key={index} className="flex flex-row">
+                  {nextUser.username}
+                  <Link
+                    to={`/chat`}
+                    state={{
+                      username: nextUser.username,
+                      currentUser: user.username,
+                    }}
+                  >
+                    <MessageSquareMore />
+                  </Link>
+                </div>
+              );
+            })}
+          </>
+        )}
       </div>
     </div>
   );
