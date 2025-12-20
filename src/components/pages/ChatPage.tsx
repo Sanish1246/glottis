@@ -23,6 +23,11 @@ const ChatPage = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
 
   useEffect(() => {
+    if (username.localeCompare(currentUser) < 0) {
+      setRoom(username + "&" + currentUser);
+    } else {
+      setRoom(currentUser + "&" + username);
+    }
     if (!room) return;
 
     // Join the room
@@ -41,7 +46,7 @@ const ChatPage = () => {
     return () => {
       socket.off("receive_message", handleReceiveMessage);
     };
-  }, [room]);
+  }, [room, currentUser, username]);
 
   const sendMessage = async () => {
     if (currentMessage.trim() === "") return;
@@ -70,7 +75,7 @@ const ChatPage = () => {
 
   return (
     <div>
-      <div>
+      <div className="flex flex-row items-center">
         <Button
           onClick={() => {
             navigate("/users");
@@ -87,13 +92,14 @@ const ChatPage = () => {
           {messages.map((msg, index: number) => (
             <div
               key={index}
-              className={`mt-2 rounded-md border-2 max-w-[80%] w-fit ${
+              className={`mt-2 rounded-md border-2 w-fit ${
                 msg.sender === currentUser
                   ? "self-end mr-5 bg-user-msg"
                   : "self-start bg-bot-msg text-msg-text text-left ml-5"
               }`}
             >
-              {msg.content}
+              <p>{msg.content}</p>
+              <p>{msg.time}</p>
             </div>
           ))}
         </div>

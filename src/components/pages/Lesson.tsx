@@ -10,6 +10,7 @@ import GrammarTable from "../ui/GrammarTable";
 import FillInTheBlanks from "../ui/FillInTheBlanks";
 import Mcq from "../ui/Mcq";
 import { useUser } from "@/components/context/UserContext";
+import Combobox from "../ui/Combobox";
 
 type LessonData = any;
 
@@ -25,8 +26,8 @@ interface FlashCardProps {
 
 const Lesson = () => {
   const language = "italian";
+  const { setUser } = useUser();
   const navigate = useNavigate();
-  const { setUser, user } = useUser();
   const [correctFib, setCorrectFib] = useState(0);
   const [correctMcq, setCorrectMcq] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -98,6 +99,7 @@ const Lesson = () => {
         username: data.user.username,
         email: data.user.email,
         decks: data.user.decks,
+        role: data.user.role,
       });
       toast.success(data.message, {
         action: {

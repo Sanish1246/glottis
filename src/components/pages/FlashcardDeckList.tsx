@@ -2,6 +2,23 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useLanguage } from "../context/LanguageContext";
+import Combobox from "../ui/Combobox";
+
+type Options = {
+  value: string;
+  label: string;
+};
+
+const languagePaths: Options[] = [
+  {
+    value: "italian",
+    label: "Italian",
+  },
+  {
+    value: "french",
+    label: "French",
+  },
+];
 
 interface FlashCardProps {
   word: string;
@@ -23,7 +40,7 @@ interface DeckProp {
 
 const FlashCardDeckList = () => {
   const [level, setLevel] = useState("A1");
-  const { languagePath } = useLanguage();
+  const { languagePath, setLanguagePath } = useLanguage();
   const [decksArray, setDecksArray] = useState([]);
 
   useEffect(() => {
@@ -50,6 +67,14 @@ const FlashCardDeckList = () => {
 
   return (
     <div>
+      <div className="flex flex-row items-center gap-1">
+        <p>Language path:</p>
+        <Combobox
+          choices={languagePaths}
+          filter={languagePath}
+          setFilter={setLanguagePath}
+        ></Combobox>
+      </div>
       {decksArray.map((deck: DeckProp) => {
         return (
           <div key={deck._id}>

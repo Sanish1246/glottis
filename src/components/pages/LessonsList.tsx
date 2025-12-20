@@ -2,9 +2,26 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useLanguage } from "../context/LanguageContext";
+import Combobox from "../ui/Combobox";
+
+type Options = {
+  value: string;
+  label: string;
+};
+
+const languagePaths: Options[] = [
+  {
+    value: "italian",
+    label: "Italian",
+  },
+  {
+    value: "french",
+    label: "French",
+  },
+];
 
 const LessonsList = () => {
-  const { languagePath } = useLanguage();
+  const { languagePath, setLanguagePath } = useLanguage();
   const [lessonArray, setLessonArray] = useState([]);
 
   useEffect(() => {
@@ -31,6 +48,14 @@ const LessonsList = () => {
 
   return (
     <div>
+      <div className="flex flex-row items-center gap-1">
+        <p>Language path:</p>
+        <Combobox
+          choices={languagePaths}
+          filter={languagePath}
+          setFilter={setLanguagePath}
+        ></Combobox>
+      </div>
       {lessonArray.map((lesson: any) => {
         const showLevelHeader = lesson.lessonNumber_level == 1;
 

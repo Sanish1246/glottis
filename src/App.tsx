@@ -56,9 +56,6 @@ function App() {
                 <DropdownMenuContent align="end">
                   {isLoggedIn ? (
                     <>
-                      <Link to="/path">
-                        <DropdownMenuItem>Language path</DropdownMenuItem>
-                      </Link>
                       <Link to="/">
                         <DropdownMenuItem>Dashboard</DropdownMenuItem>
                       </Link>
@@ -118,7 +115,7 @@ function App() {
                 <a className="hover:cursor-pointer hover:underline">Biblíon</a>
               </DropdownMenuTrigger>
               <span className="sr-only">Biblíon</span>
-
+              <DropdownMenu></DropdownMenu>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem>
                   <Link to="decks" className="hover:underline">
