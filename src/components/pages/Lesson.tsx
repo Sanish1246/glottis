@@ -10,7 +10,7 @@ import GrammarTable from "../ui/GrammarTable";
 import FillInTheBlanks from "../ui/FillInTheBlanks";
 import Mcq from "../ui/Mcq";
 import { useUser } from "@/components/context/UserContext";
-import Combobox from "../ui/Combobox";
+import { useLanguage } from "../context/LanguageContext";
 
 type LessonData = any;
 
@@ -25,7 +25,7 @@ interface FlashCardProps {
 }
 
 const Lesson = () => {
-  const language = "italian";
+  const { languagePath } = useLanguage();
   const { setUser } = useUser();
   const navigate = useNavigate();
   const [correctFib, setCorrectFib] = useState(0);
@@ -48,14 +48,17 @@ const Lesson = () => {
         efactor: 2.5,
         dueDate: dayjs(Date.now()).format("DD-MM-YYYY"),
       };
-      const res = await fetch(`http://localhost:8000/add_card/${language}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(card),
-      });
+      const res = await fetch(
+        `http://localhost:8000/add_card/${languagePath}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(card),
+        }
+      );
       const data = await res.json();
       setUser({
         username: data.user.username,
@@ -85,14 +88,17 @@ const Lesson = () => {
   const removeFromDeck = async (card: FlashCardProps) => {
     try {
       console.log(card);
-      const res = await fetch(`http://localhost:8000/remove_card/${language}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(card),
-      });
+      const res = await fetch(
+        `http://localhost:8000/remove_card/${languagePath}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(card),
+        }
+      );
       const data = await res.json();
       console.log(data);
       setUser({
@@ -195,7 +201,7 @@ const Lesson = () => {
                   <span className="font-semibold">{l.speaker}:</span> {l.text}
                   <SpeechButton
                     text={l.text}
-                    lang={lesson.voice_language}
+                    lang={lesson.voice_languagePath}
                     voiceName={l.audio}
                   />
                   {l.english && <p>({l.english})</p>}
@@ -213,7 +219,7 @@ const Lesson = () => {
             <h3>{l.category}</h3>
             <FlashcardList
               cardList={l.items}
-              lang={lesson.language}
+              lang={lesson.languagePath}
               addToDeck={addToDeck}
               removeFromDeck={removeFromDeck}
             />
@@ -228,7 +234,7 @@ const Lesson = () => {
             <h3>{g.title}</h3>
             <GrammarTable
               grammarPoint={g.content}
-              lang={lesson.voice_language}
+              lang={lesson.voice_languagePath}
             />
             <h3>Notes</h3>
             <ul className="list-disc">
