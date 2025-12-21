@@ -15,6 +15,7 @@ import userRoutes from "./routes/UserRoute.js";
 import lessonRoutes from "./routes/LessonRoute.js";
 import flashcardRoutes from "./routes/FlashcardRoute.js";
 import authRoutes from "./routes/AuthRoute.js";
+import immersionRoutes from "./routes/ImmersionRoute.js";
 
 dotenv.config();
 
@@ -64,6 +65,7 @@ app.use("/chatbot", chatbotRoutes);
 app.use("/webhook", whatsappRoutes);
 app.use("/lessons", lessonRoutes);
 app.use("/flashcards", flashcardRoutes);
+app.use("/immersion", immersionRoutes);
 
 // //serving the main html file
 app.get("/", (req, res) => {

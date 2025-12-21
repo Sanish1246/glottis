@@ -135,7 +135,7 @@ function App() {
             <Link to="users" className="hover:underline">
               Agorà
             </Link>
-            <Link to="/" className="hover:underline">
+            <Link to="/immersion" className="hover:underline">
               Immersion
             </Link>
           </div>

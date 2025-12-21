@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useUser } from "../context/UserContext";
 import { Link } from "react-router-dom";

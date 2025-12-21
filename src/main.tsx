@@ -16,6 +16,7 @@ import UserDeckList from "./components/pages/UserDeckList.tsx";
 import DeckReview from "./components/pages/DeckReview.tsx";
 import UserListPage from "./components/pages/UserListPage.tsx";
 import ChatPage from "./components/pages/ChatPage.tsx";
+import Immersion from "./components/pages/Immersion.tsx";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,7 @@ const router = createBrowserRouter([
       { path: "review/:language", element: <DeckReview /> },
       { path: "users", element: <UserListPage /> },
       { path: "chat", element: <ChatPage /> },
+      { path: "immersion", element: <Immersion /> },
     ],
   },
 ]);
