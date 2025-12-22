@@ -17,6 +17,7 @@ import DeckReview from "./components/pages/DeckReview.tsx";
 import UserListPage from "./components/pages/UserListPage.tsx";
 import ChatPage from "./components/pages/ChatPage.tsx";
 import Immersion from "./components/pages/Immersion.tsx";
+import MediaInfo from "./components/pages/MediaInfo.tsx";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,7 @@ const router = createBrowserRouter([
       { path: "users", element: <UserListPage /> },
       { path: "chat", element: <ChatPage /> },
       { path: "immersion", element: <Immersion /> },
+      { path: "media", element: <MediaInfo /> },
     ],
   },
 ]);

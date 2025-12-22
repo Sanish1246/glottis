@@ -5,6 +5,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import Combobox from "../ui/Combobox";
 import { useLanguage } from "../context/LanguageContext";
+import MediaCard from "../ui/MediaCard";
 
 type Options = {
   value: string;
@@ -87,29 +88,6 @@ const Immersion = () => {
     setSearching(false);
   };
 
-  // const fetchMedia = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       `http://localhost:8000/immersion/${languagePath}/${level}`,
-  //       {
-  //         method: "GET",
-  //         credentials: "include",
-  //       }
-  //     );
-  //     const data = await response.json();
-  //     setMedias(data);
-  //   } catch (error) {
-  //     toast.error(String(error), {
-  //       action: {
-  //         label: "Close",
-  //         onClick: () => {
-  //           toast.dismiss();
-  //         },
-  //       },
-  //     });
-  //   }
-  // };
-
   useEffect(() => {
     const filterMedia = async () => {
       try {
@@ -162,6 +140,7 @@ const Immersion = () => {
         >
           Clear
         </Button>
+        {medias.length}
       </div>
       <div className="flex flex-row items-center gap-1">
         <p>Language:</p>
@@ -176,6 +155,17 @@ const Immersion = () => {
           filter={levelFilter}
           setFilter={setLevelFilter}
         ></Combobox>
+      </div>
+      <div className="grid md:grid-cols-3 grid-cols-1 gap-3 mx-auto mt-5 items-center justify-items-center">
+        {medias.map((m, index) => (
+          <MediaCard
+            key={index}
+            likes={m.likes}
+            title={m.title}
+            description={m.description}
+            img_path={m.img_path}
+          />
+        ))}
       </div>
     </div>
   );
