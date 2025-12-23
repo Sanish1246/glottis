@@ -4,7 +4,6 @@ import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { useUser } from "@/components/context/UserContext";
 import { Badge } from "./badge";
-import { nullable } from "zod/v3";
 
 interface MediaCardProps {
   title: string;
@@ -14,6 +13,8 @@ interface MediaCardProps {
   genres: [];
   level: string;
   img_path: string;
+  uploader: string;
+  onLikeChange?: () => void;
 }
 
 const MediaCard = ({
@@ -24,10 +25,12 @@ const MediaCard = ({
   genres,
   level,
   img_path,
+  uploader,
+  onLikeChange,
 }: MediaCardProps) => {
   const { user, setUser } = useUser();
 
-  const liked = user.likes.some(
+  const liked = (user?.likes ?? []).some(
     (media: MediaCardProps) => media.title === title
   );
 
@@ -41,6 +44,7 @@ const MediaCard = ({
         genres,
         level,
         img_path,
+        uploader,
       };
       const res = await fetch(`http://localhost:8000/like`, {
         method: "PUT",
@@ -51,7 +55,68 @@ const MediaCard = ({
         body: JSON.stringify(media),
       });
       const data = await res.json();
+      if (!res.ok) {
+        toast.error(data?.error || "Failed to like media");
+        return;
+      }
+      if (!data?.newUser) {
+        toast.error("Server did not return updated user");
+        return;
+      }
+
       setUser(data.newUser);
+
+      onLikeChange?.();
+      toast.success(data.message, {
+        action: {
+          label: "Close",
+          onClick: () => {
+            toast.dismiss();
+          },
+        },
+      });
+    } catch (error) {
+      toast.error(String(error), {
+        action: {
+          label: "Close",
+          onClick: () => {
+            toast.dismiss();
+          },
+        },
+      });
+    }
+  };
+
+  const removeLike = async () => {
+    try {
+      const media = {
+        title,
+        description,
+        language,
+        likes,
+        genres,
+        level,
+        img_path,
+      };
+      const res = await fetch(`http://localhost:8000/removeLike`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(media),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data?.error || "Failed to remove like");
+        return;
+      }
+      if (!data?.newUser) {
+        toast.error("Server did not return updated user");
+        return;
+      }
+      setUser(data.newUser);
+      onLikeChange?.();
       toast.success(data.message, {
         action: {
           label: "Close",
@@ -75,7 +140,16 @@ const MediaCard = ({
   return (
     <Link
       to="/media"
-      state={{ title, description, language, likes, genres, level, img_path }}
+      state={{
+        title,
+        description,
+        language,
+        likes,
+        genres,
+        level,
+        img_path,
+        uploader,
+      }}
     >
       <div className="text-center  rounded-tl-xl rounded-tr-xl rounded-bl-xl rounded-br-xl shadow-md border-black dark:border-white dark:shadow-white dark:shadow-sm w-75 h-75">
         <div>
@@ -102,10 +176,10 @@ const MediaCard = ({
               e.stopPropagation();
               e.preventDefault();
               if (liked) {
-                toast.info("Media already liked!");
-                return;
+                removeLike();
+              } else {
+                likeMedia();
               }
-              likeMedia();
             }}
           >
             <Heart />

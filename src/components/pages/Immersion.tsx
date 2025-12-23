@@ -99,6 +99,29 @@ const Immersion = () => {
     setSearching(false);
   };
 
+  const filterMedia = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/immersion/${languagePath}/${levelFilter}`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+      const data = await response.json();
+      setMedias(data);
+    } catch (error) {
+      toast.error(String(error), {
+        action: {
+          label: "Close",
+          onClick: () => {
+            toast.dismiss();
+          },
+        },
+      });
+    }
+  };
+
   useEffect(() => {
     const filterMedia = async () => {
       try {
@@ -178,6 +201,8 @@ const Immersion = () => {
             language={m.language}
             genres={m.genres}
             level={m.level}
+            uploader={m.uploader}
+            onLikeChange={filterMedia}
           />
         ))}
       </div>

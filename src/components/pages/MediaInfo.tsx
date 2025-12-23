@@ -6,8 +6,16 @@ import { Badge } from "../ui/badge";
 
 const MediaInfo = () => {
   const location = useLocation();
-  const { title, description, language, likes, genres, level, img_path } =
-    location.state || {};
+  const {
+    title,
+    description,
+    language,
+    likes,
+    genres,
+    level,
+    img_path,
+    uploader,
+  } = location.state || {};
   const navigate = useNavigate();
   console.log({ genres });
   return (

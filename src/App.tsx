@@ -47,9 +47,7 @@ function App() {
             <Dialog>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <a className="hover:cursor-pointer hover:underline">
-                    {isLoggedIn ? user.username : "User"}
-                  </a>
+                  <a className="hover:cursor-pointer hover:underline">User</a>
                 </DropdownMenuTrigger>
                 <span className="sr-only">User</span>
 

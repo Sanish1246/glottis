@@ -1,5 +1,7 @@
 import express from "express";
 import User from "../models/user.js";
+import Immersion from "../models/immersion.js";
+
 const router = express.Router();
 
 router.post("/remove_card/:language", async (req, res) => {
@@ -267,6 +269,16 @@ router.put("/like", async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
+
+    const updatedMedia = await Immersion.findOneAndUpdate(
+      { title: newMedia.title },
+      { $inc: { likes: 1 } },
+      { new: true }
+    );
+
+    if (!updatedMedia) {
+      return res.status(404).json({ error: "Media not found" });
+    }
     res.json({ message: "Item liked", newUser: user });
   } catch (e) {
     console.error(e);
@@ -286,7 +298,18 @@ router.put("/removeLike", async (req, res) => {
       {
         username,
       },
-      { $pull: { likes: newMedia } },
+      {
+        $pull: {
+          likes: {
+            title: newMedia.title,
+            description: newMedia.description,
+            language: newMedia.language,
+            genres: newMedia.genres,
+            level: newMedia.level,
+            img_path: newMedia.img_path,
+          },
+        },
+      },
       {
         new: true,
       }
@@ -294,6 +317,16 @@ router.put("/removeLike", async (req, res) => {
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
+    }
+
+    const updatedMedia = await Immersion.findOneAndUpdate(
+      { title: newMedia.title },
+      { $inc: { likes: -1 } },
+      { new: true }
+    );
+
+    if (!updatedMedia) {
+      return res.status(404).json({ error: "Media not found" });
     }
     res.json({ message: "Like removed", newUser: user });
   } catch (e) {
