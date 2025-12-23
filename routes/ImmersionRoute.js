@@ -10,10 +10,8 @@ router.get("/:lang/:level", async (req, res) => {
     let medias;
     if (level == "none") {
       medias = await Immersion.find({ language: lang });
-      console.log("Level is none");
     } else {
       medias = await Immersion.find({ language: lang, level: level });
-      console.log("Level is not none");
     }
 
     console.log(medias);

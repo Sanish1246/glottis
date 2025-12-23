@@ -5,8 +5,10 @@ import { toast } from "sonner";
 
 const MediaInfo = () => {
   const location = useLocation();
-  const { title, level, likes, description, img_path } = location.state || {};
+  const { title, description, language, likes, genres, level, img_path } =
+    location.state || {};
   const navigate = useNavigate();
+  console.log({ genres });
   return (
     <div>
       <div className="mt-5 ml-5">
@@ -24,9 +26,24 @@ const MediaInfo = () => {
           <h1 className="text-xl font-bold text-center">{title}</h1>
           <hr className="h-2 mt-5 justify-center"></hr>
           <p className="text-center text-lg">{description}</p>
+          <p></p>
           <div className="flex flex-row justify-center mt-10 gap-5 items-center">
-            <p>Level: {level}</p>
+            <p>
+              <b>Level: </b>
+              {level}
+            </p>
             <p>❤️{likes}</p>
+            <p>Language: {language}</p>
+          </div>
+          <div>
+            Genres:
+            {genres.map((g: string, index: number) => {
+              return (
+                <span className="text-black" key={index}>
+                  {g},
+                </span>
+              );
+            })}
           </div>
         </div>
       </div>

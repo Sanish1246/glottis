@@ -164,6 +164,9 @@ const Immersion = () => {
             title={m.title}
             description={m.description}
             img_path={m.img_path}
+            language={m.language}
+            genres={m.genres}
+            level={m.level}
           />
         ))}
       </div>

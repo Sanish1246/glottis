@@ -7,7 +7,7 @@ const immersionSchema = new mongoose.Schema(
     language: { type: String, required: true },
     likes: { type: Number, default: 0, required: true },
     uploader: { type: String, required: true },
-    genre: [String],
+    genres: [String],
     level: { type: String, required: true },
     img_path: { type: String, required: true },
   },
