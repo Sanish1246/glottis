@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { Badge } from "../ui/badge";
 
 const MediaInfo = () => {
   const location = useLocation();
@@ -35,14 +36,10 @@ const MediaInfo = () => {
             <p>❤️{likes}</p>
             <p>Language: {language}</p>
           </div>
-          <div>
+          <div className="flex flex-row gap-2 mt-5 items-center justify-center">
             Genres:
             {genres.map((g: string, index: number) => {
-              return (
-                <span className="text-black" key={index}>
-                  {g},
-                </span>
-              );
+              return <Badge key={index}>{g}</Badge>;
             })}
           </div>
         </div>

@@ -20,8 +20,8 @@ export const useUser = () => {
 export const UserProvider = ({ children }: { children: any }) => {
   const [user, setUser] = useState({
     username: "",
-    favourites: [],
-    invoices: [],
+    decks: [],
+    likes: [],
   });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 

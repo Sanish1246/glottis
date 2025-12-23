@@ -246,4 +246,60 @@ router.get("/userSearch", async (req, res) => {
   }
 });
 
+router.put("/like", async (req, res) => {
+  if (!req.session?.user) {
+    return res.status(401).json({ error: "Not authenticated" });
+  }
+  const newMedia = req.body;
+
+  try {
+    const { username } = req.session.user;
+    const user = await User.findOneAndUpdate(
+      {
+        username,
+      },
+      { $push: { likes: newMedia } },
+      {
+        new: true,
+      }
+    );
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.json({ message: "Item liked", newUser: user });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+router.put("/removeLike", async (req, res) => {
+  if (!req.session?.user) {
+    return res.status(401).json({ error: "Not authenticated" });
+  }
+  const newMedia = req.body;
+
+  try {
+    const { username } = req.session.user;
+    const user = await User.findOneAndUpdate(
+      {
+        username,
+      },
+      { $pull: { likes: newMedia } },
+      {
+        new: true,
+      }
+    );
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.json({ message: "Like removed", newUser: user });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 export default router;

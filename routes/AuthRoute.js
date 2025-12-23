@@ -36,11 +36,7 @@ router.post("/register", async (req, res) => {
 
     res.status(201).json({
       message: "User registered successfully",
-      user: {
-        id: newUser._id,
-        username: newUser.username,
-        email: newUser.email,
-      },
+      user: newUser,
     });
   } catch (err) {
     console.error("Registration failed:", err);
@@ -58,34 +54,28 @@ router.post("/login", async (req, res) => {
         .json({ error: "Username and password are required" });
     }
 
-    const user = await User.findOne({ username });
-    if (!user) {
+    const newUser = await User.findOne({ username });
+    if (!newUser) {
       return res.status(404).json({ error: "User not found" });
     }
 
     // compare password with hash stored in the database
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, newUser.password);
     if (!isMatch) {
       return res.status(401).json({ error: "Invalid password" });
     }
 
     req.session.user = {
-      id: user._id,
-      username: user.username,
-      email: user.email,
-      decks: user.decks,
-      role: user.role,
+      id: newUser._id,
+      username: newUser.username,
+      email: newUser.email,
+      decks: newUser.decks,
+      role: newUser.role,
     };
 
     res.json({
       message: "Login successful",
-      user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-        decks: user.decks,
-        role: user.role,
-      },
+      user: newUser,
     });
   } catch (err) {
     console.error("Login failed:", err);

@@ -54,7 +54,18 @@ const Immersion = () => {
   const { languagePath, setLanguagePath } = useLanguage();
   const [searchTerm, setSearchTerm] = useState("");
   const [levelFilter, setLevelFilter] = useState("none");
-  const [medias, setMedias] = useState([]);
+  const [medias, setMedias] = useState([
+    {
+      title: "",
+      description: "",
+      language: "",
+      likes: 0,
+      uploader: "",
+      genres: ["1", "2"],
+      level: "",
+      img_path: "",
+    },
+  ]);
   const [searchResult, setSearchResult] = useState([]);
   const [searching, setSearching] = useState(false);
 
@@ -142,7 +153,7 @@ const Immersion = () => {
         </Button>
         {medias.length}
       </div>
-      <div className="flex flex-row items-center gap-1">
+      <div className="flex flex-row items-center gap-1 mt-3">
         <p>Language:</p>
         <Combobox
           choices={languages}

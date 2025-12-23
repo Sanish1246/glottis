@@ -83,11 +83,7 @@ const RegisterForm = ({
       .then((data) => {
         if (data.user) {
           setIsLoggedIn(true);
-          setUser({
-            username: values.username,
-            email: values.email,
-            role: currentRole,
-          });
+          setUser(data.user);
 
           if (onClose) onClose();
           toast.success("User Logged in!", {

@@ -60,11 +60,7 @@ const LoginForm = ({
       .then((data) => {
         if (data.user) {
           setIsLoggedIn(true);
-          setUser({
-            username: data.user.username,
-            email: data.user.email,
-            decks: data.user.decks,
-          });
+          setUser(data.user);
           if (onClose) onClose();
           toast.success("User Logged in!", {
             action: {
