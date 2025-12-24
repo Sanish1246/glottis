@@ -54,25 +54,14 @@ const Immersion = () => {
   const { languagePath, setLanguagePath } = useLanguage();
   const [searchTerm, setSearchTerm] = useState("");
   const [levelFilter, setLevelFilter] = useState("none");
-  const [medias, setMedias] = useState([
-    {
-      title: "",
-      description: "",
-      language: "",
-      likes: 0,
-      uploader: "",
-      genres: ["1", "2"],
-      level: "",
-      img_path: "",
-    },
-  ]);
+  const [medias, setMedias] = useState([]);
   const [searchResult, setSearchResult] = useState([]);
   const [searching, setSearching] = useState(false);
 
-  const searchUsers = async () => {
+  const searchMedia = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8000/searchMedia?m=${searchTerm}`,
+        `http://localhost:8000/immersion/searchMedia?m=${searchTerm}`,
         {
           method: "GET",
           credentials: "include",
@@ -151,7 +140,7 @@ const Immersion = () => {
 
   return (
     <div>
-      <div className="flex flex-row gap-2 max-w-[50%] mx-auto">
+      <div className="flex flex-row gap-2 max-w-[50%] mx-auto mt-3">
         <Input
           id="search"
           placeholder="Search for a user..."
@@ -160,7 +149,7 @@ const Immersion = () => {
         />
         <Button
           onClick={() => {
-            searchUsers();
+            searchMedia();
           }}
         >
           <Search />
@@ -174,27 +163,41 @@ const Immersion = () => {
         >
           Clear
         </Button>
-        {medias.length}
       </div>
-      <div className="flex flex-row items-center gap-1 mt-3">
-        <p>Language:</p>
-        <Combobox
-          choices={languages}
-          filter={languagePath}
-          setFilter={setLanguagePath}
-        ></Combobox>
-        <p>Level:</p>
-        <Combobox
-          choices={levels}
-          filter={levelFilter}
-          setFilter={setLevelFilter}
-        ></Combobox>
-      </div>
-      <div className="grid md:grid-cols-3 grid-cols-1 gap-3 mx-auto mt-5 items-center justify-items-center">
-        {medias.map((m, index) => (
-          <MediaCard key={index} media={m} onLikeChange={filterMedia} />
-        ))}
-      </div>
+      {searching ? (
+        <div className="mt-5">
+          <h3 className="text-center text-xl font-bold">
+            {searchResult.length == 0 ? "No media found!" : "Search Results"}
+          </h3>
+          <div className="grid md:grid-cols-3 grid-cols-1 gap-3 mx-auto mt-5 items-center justify-items-center">
+            {searchResult.map((m, index) => (
+              <MediaCard key={index} media={m} onLikeChange={filterMedia} />
+            ))}
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className="flex flex-row items-center gap-1 mt-5">
+            <p>Language:</p>
+            <Combobox
+              choices={languages}
+              filter={languagePath}
+              setFilter={setLanguagePath}
+            ></Combobox>
+            <p>Level:</p>
+            <Combobox
+              choices={levels}
+              filter={levelFilter}
+              setFilter={setLevelFilter}
+            ></Combobox>
+          </div>
+          <div className="grid md:grid-cols-3 grid-cols-1 gap-3 mx-auto mt-5 items-center justify-items-center">
+            {medias.map((m, index) => (
+              <MediaCard key={index} media={m} onLikeChange={filterMedia} />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };

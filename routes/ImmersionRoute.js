@@ -6,7 +6,7 @@ router.get("/:lang/:level", async (req, res) => {
   try {
     const lang = req.params.lang;
     const level = req.params.level;
-    console.log(lang, +"  " + level);
+
     let medias;
     if (level == "none") {
       medias = await Immersion.find({ language: lang });
@@ -24,17 +24,18 @@ router.get("/:lang/:level", async (req, res) => {
 router.get("/searchMedia", async (req, res) => {
   const searchTitle = req.query.m;
   try {
-    if (!req.session?.user) {
-      return res.status(401).json({ error: "Not authenticated" });
-    }
+    // if (!req.session?.user) {
+    //   return res.status(401).json({ error: "Not authenticated" });
+    // }
 
-    const { username } = req.session.user;
-
-    medias = await Immersion.find({
-      $regex: searchTitle,
-      $options: "i",
+    const medias = await Immersion.find({
+      title: {
+        $regex: searchTitle,
+        $options: "i",
+      },
     });
 
+    console.log(medias);
     res.json(medias);
   } catch (err) {
     console.error("Unable to get users:", err);

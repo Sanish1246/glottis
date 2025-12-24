@@ -239,8 +239,6 @@ router.get("/userSearch", async (req, res) => {
       username: { $ne: username, $regex: searchName, $options: "i" },
     });
 
-    console.log(users.length);
-
     res.json(users);
   } catch (err) {
     console.error("Unable to get users:", err);
