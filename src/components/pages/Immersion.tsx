@@ -72,7 +72,7 @@ const Immersion = () => {
   const searchUsers = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8000/userSearch?u=${searchTerm}`,
+        `http://localhost:8000/searchMedia?m=${searchTerm}`,
         {
           method: "GET",
           credentials: "include",
@@ -192,18 +192,7 @@ const Immersion = () => {
       </div>
       <div className="grid md:grid-cols-3 grid-cols-1 gap-3 mx-auto mt-5 items-center justify-items-center">
         {medias.map((m, index) => (
-          <MediaCard
-            key={index}
-            likes={m.likes}
-            title={m.title}
-            description={m.description}
-            img_path={m.img_path}
-            language={m.language}
-            genres={m.genres}
-            level={m.level}
-            uploader={m.uploader}
-            onLikeChange={filterMedia}
-          />
+          <MediaCard key={index} media={m} onLikeChange={filterMedia} />
         ))}
       </div>
     </div>

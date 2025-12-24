@@ -1,11 +1,10 @@
-import React from "react";
-import { Heart } from "lucide-react";
+import { Heart, HeartMinus } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { useUser } from "@/components/context/UserContext";
 import { Badge } from "./badge";
 
-interface MediaCardProps {
+interface MediaProps {
   title: string;
   description: string;
   language: string;
@@ -14,38 +13,22 @@ interface MediaCardProps {
   level: string;
   img_path: string;
   uploader: string;
+}
+
+interface MediaCardProps {
+  media: MediaProps;
   onLikeChange?: () => void;
 }
 
-const MediaCard = ({
-  title,
-  description,
-  language,
-  likes,
-  genres,
-  level,
-  img_path,
-  uploader,
-  onLikeChange,
-}: MediaCardProps) => {
+const MediaCard = ({ media, onLikeChange }: MediaCardProps) => {
   const { user, setUser } = useUser();
 
   const liked = (user?.likes ?? []).some(
-    (media: MediaCardProps) => media.title === title
+    (userMedia: MediaProps) => userMedia.title === media.title
   );
 
   const likeMedia = async () => {
     try {
-      const media = {
-        title,
-        description,
-        language,
-        likes,
-        genres,
-        level,
-        img_path,
-        uploader,
-      };
       const res = await fetch(`http://localhost:8000/like`, {
         method: "PUT",
         headers: {
@@ -89,15 +72,6 @@ const MediaCard = ({
 
   const removeLike = async () => {
     try {
-      const media = {
-        title,
-        description,
-        language,
-        likes,
-        genres,
-        level,
-        img_path,
-      };
       const res = await fetch(`http://localhost:8000/removeLike`, {
         method: "PUT",
         headers: {
@@ -141,31 +115,24 @@ const MediaCard = ({
     <Link
       to="/media"
       state={{
-        title,
-        description,
-        language,
-        likes,
-        genres,
-        level,
-        img_path,
-        uploader,
+        media,
       }}
     >
       <div className="text-center  rounded-tl-xl rounded-tr-xl rounded-bl-xl rounded-br-xl shadow-md border-black dark:border-white dark:shadow-white dark:shadow-sm w-75 h-75">
         <div>
           <img
-            src={img_path}
+            src={media.img_path}
             alt="Media image"
             className="rounded-tl-xl rounded-tr-xl"
           />
         </div>
         <div className="flex flex-row justify-around border-b border-t border p-3 border-black dark:border-white">
-          <p className="font-bold"> {title}</p>
-          <p className="text-md">❤️{likes}</p>
+          <p className="font-bold"> {media.title}</p>
+          <p className="text-md">❤️{media.likes}</p>
         </div>
         <div className="flex flex-row justify-around border-b border-t border p-3 border-black dark:border-white">
-          <Badge variant="default">{language}</Badge>
-          <Badge variant="default">{level}</Badge>
+          <Badge variant="default">{media.language}</Badge>
+          <Badge variant="default">{media.level}</Badge>
         </div>
         <div className="w-full">
           <div
@@ -182,7 +149,7 @@ const MediaCard = ({
               }
             }}
           >
-            <Heart />
+            {liked ? <HeartMinus /> : <Heart />}
           </div>
         </div>
       </div>

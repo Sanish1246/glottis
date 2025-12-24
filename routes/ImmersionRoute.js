@@ -14,11 +14,31 @@ router.get("/:lang/:level", async (req, res) => {
       medias = await Immersion.find({ language: lang, level: level });
     }
 
-    console.log(medias);
     res.json(medias);
   } catch (err) {
     console.error("Unable to get medias:", err);
     res.status(500).json({ error: "Server while fetching medias" });
+  }
+});
+
+router.get("/searchMedia", async (req, res) => {
+  const searchTitle = req.query.m;
+  try {
+    if (!req.session?.user) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+
+    const { username } = req.session.user;
+
+    medias = await Immersion.find({
+      $regex: searchTitle,
+      $options: "i",
+    });
+
+    res.json(medias);
+  } catch (err) {
+    console.error("Unable to get users:", err);
+    res.status(500).json({ error: "Server error while fetching users" });
   }
 });
 
