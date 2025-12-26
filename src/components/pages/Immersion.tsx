@@ -14,7 +14,7 @@ type Options = {
 
 const languages: Options[] = [
   {
-    value: "italian",
+    value: "Italian",
     label: "Italian",
   },
   {
@@ -25,23 +25,23 @@ const languages: Options[] = [
 
 const levels: Options[] = [
   {
-    value: "beginner",
+    value: "Beginner",
     label: "Beginner",
   },
   {
-    value: "lower intermediate",
+    value: "Lower intermediate",
     label: "Lower intermediate",
   },
   {
-    value: "intermediate",
+    value: "Intermediate",
     label: "Intermediate",
   },
   {
-    value: "upper intermediate",
+    value: "Upper intermediate",
     label: "Upper Intermediate",
   },
   {
-    value: "advanced",
+    value: "Advanced",
     label: "Advanced",
   },
   {

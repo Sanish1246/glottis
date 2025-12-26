@@ -47,9 +47,9 @@ const Combobox = ({ choices, filter, setFilter }: ComboboxProps) => {
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder="Search choice..." className="h-9" />
+          <CommandInput placeholder="Search option..." className="h-9" />
           <CommandList>
-            <CommandEmpty>No choice found.</CommandEmpty>
+            <CommandEmpty>No option found</CommandEmpty>
             <CommandGroup>
               {choices.map((choice) => (
                 <CommandItem

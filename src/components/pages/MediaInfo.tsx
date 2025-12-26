@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useUser } from "@/components/context/UserContext";
 import { Badge } from "../ui/badge";
-import { Heart, HeartMinus } from "lucide-react";
+import { Heart, HeartMinus, ExternalLink } from "lucide-react";
 
 interface MediaProps {
   title: string;
@@ -15,6 +15,9 @@ interface MediaProps {
   level: string;
   img_path: string;
   uploader: string;
+  author: string;
+  link: string;
+  type: string;
 }
 
 const MediaInfo = () => {
@@ -123,8 +126,7 @@ const MediaInfo = () => {
         <div className="w-full p-1 ml-2">
           <h1 className="text-xl font-bold text-center">{media.title}</h1>
           <hr className="h-2 mt-5 justify-center"></hr>
-          <p className="text-center text-lg">{media.description}</p>
-          <p></p>
+          <p className="text-center text-md">{media.description}</p>
           <div className="flex flex-row justify-center mt-10 gap-5 items-center">
             <p>
               <b>Level: </b>
@@ -150,6 +152,12 @@ const MediaInfo = () => {
                 {liked ? <HeartMinus /> : <Heart />}
               </Button>
               <p>{media.likes}</p>
+            </div>
+            <div className="p-2 border rounded-lg bg-black text-white flex flex-row gap-1 hover:cursor-pointer hover:bg-transparent">
+              <a href={media.link} target="_blank">
+                Buy/Read Now
+              </a>
+              <ExternalLink />
             </div>
           </div>
           <div className="flex flex-row gap-2 mt-5 items-center justify-center">

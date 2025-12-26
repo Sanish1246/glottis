@@ -35,10 +35,13 @@ function App() {
   return (
     <div>
       <header>
-        <nav className="flex flex-row justify-between mt-1 rounded-lg">
-          <h1 className="self-center text-md md:text-2xl font-extrabold">
-            Glottis
-          </h1>
+        <nav className="flex flex-row justify-between mb-1">
+          <div className="flex flex-row items-center">
+            <img src="/glottis.svg" alt="Glottis" className="w-6 h-6" />
+            <h1 className="self-center text-md md:text-2xl font-extrabold">
+              Glottis
+            </h1>
+          </div>
 
           <div className="flex flex-row gap-4 items-center">
             <Link to="/" className="hover:underline">
