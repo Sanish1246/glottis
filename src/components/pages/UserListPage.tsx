@@ -189,7 +189,10 @@ const UserListPage = () => {
             </div>
             {usersArray.map((nextUser: any, index: number) => {
               return (
-                <div key={index} className="flex flex-row">
+                <div
+                  key={index}
+                  className="border-2 rounded-lg p-3 mb-5 mt-1 shadow-sm  hover:translate-1 flex flex-row"
+                >
                   {nextUser.username}
                   <Link
                     to={`/chat`}

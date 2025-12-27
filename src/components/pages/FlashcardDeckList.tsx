@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useLanguage } from "../context/LanguageContext";
 import Combobox from "../ui/Combobox";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 type Options = {
   value: string;
@@ -43,6 +45,14 @@ const FlashCardDeckList = () => {
   const { languagePath, setLanguagePath } = useLanguage();
   const [decksArray, setDecksArray] = useState([]);
 
+  useGSAP(() => {
+    gsap.fromTo(
+      ".deck",
+      { x: -50000, duration: 0.2 },
+      { x: 0, stagger: 0.09, ease: "power1.inOut" }
+    );
+  }, [decksArray]);
+
   useEffect(() => {
     const fetchLessons = async () => {
       try {
@@ -77,9 +87,12 @@ const FlashCardDeckList = () => {
       </div>
       {decksArray.map((deck: DeckProp) => {
         return (
-          <div key={deck._id}>
+          <div
+            key={deck._id}
+            className="border-2 rounded-lg p-3 mb-4 mt-2 shadow-sm hover:cursor-pointer hover:translate-1 deck"
+          >
             <Link to={`/deck/${deck._id}`} state={{ deck }} className="block">
-              {deck.category} -{" "}
+              <b>{deck.category}</b> -
               {deck.noOfCards && <span>{deck.noOfCards} cards</span>}
             </Link>
           </div>

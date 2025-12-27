@@ -193,6 +193,7 @@ const DeckReview = () => {
               setReviewing(true);
             }}
             disabled={deck.items.length == 0 || remaining == 0}
+            className="mr-5"
           >
             Start now
           </Button>

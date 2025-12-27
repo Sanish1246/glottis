@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useLanguage } from "../context/LanguageContext";
 import Combobox from "../ui/Combobox";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 
 type Options = {
   value: string;
@@ -23,6 +25,14 @@ const languagePaths: Options[] = [
 const LessonsList = () => {
   const { languagePath, setLanguagePath } = useLanguage();
   const [lessonArray, setLessonArray] = useState([]);
+
+  useGSAP(() => {
+    gsap.fromTo(
+      ".lesson",
+      { x: -50000, duration: 0.2 },
+      { x: 0, stagger: 0.09, ease: "power1.inOut" }
+    );
+  }, [lessonArray]);
 
   useEffect(() => {
     const fetchLessons = async () => {
@@ -61,9 +71,13 @@ const LessonsList = () => {
 
         return (
           <div key={lesson._id}>
-            {showLevelHeader && <h2>{lesson.level}</h2>}
+            {showLevelHeader && (
+              <h2 className="font-semibold text-lg">{lesson.level}</h2>
+            )}
             <Link to={`/lessons/${lesson._id}`} state={{ lesson }}>
-              Lesson {lesson.lessonNumber} - {lesson.title}
+              <div className="border-2 rounded-lg p-3 mb-5 mt-1 shadow-sm hover:cursor-pointer hover:translate-1 lesson">
+                <b>Lesson {lesson.lessonNumber}</b> - {lesson.title}
+              </div>
             </Link>
           </div>
         );
