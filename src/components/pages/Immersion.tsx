@@ -14,7 +14,7 @@ type Options = {
 
 const languages: Options[] = [
   {
-    value: "Italian",
+    value: "italian",
     label: "Italian",
   },
   {
@@ -191,7 +191,7 @@ const Immersion = () => {
               setFilter={setLevelFilter}
             ></Combobox>
           </div>
-          <div className="grid md:grid-cols-3 grid-cols-1 gap-3 mx-auto mt-5 items-center justify-items-center">
+          <div className="grid md:grid-cols-3 grid-cols-1 mx-auto mt-5 items-center justify-items-center">
             {medias.map((m, index) => (
               <MediaCard key={index} media={m} onLikeChange={filterMedia} />
             ))}

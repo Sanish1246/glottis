@@ -121,12 +121,12 @@ const MediaCard = ({ media, onLikeChange }: MediaCardProps) => {
         media,
       }}
     >
-      <div className="text-center rounded-tl-xl rounded-tr-xl rounded-bl-xl rounded-br-xl shadow-md border-black dark:border-white dark:shadow-white dark:shadow-sm w-75 h-75">
+      <div className="text-center mb-50 rounded-tl-xl rounded-tr-xl rounded-bl-xl rounded-br-xl shadow-md border-black dark:border-white dark:shadow-white dark:shadow-sm w-95 h-75">
         <div>
           <img
             src={media.img_path}
             alt="Media image"
-            className="rounded-tl-xl rounded-tr-xl w-[300px] h-[300px] object-fill"
+            className="rounded-tl-xl rounded-tr-xl w-100 h-[300px]"
           />
         </div>
         <div className="flex flex-row justify-around border-b border-t border p-3 border-black dark:border-white">
