@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import axios from "axios";
 import session from "express-session";
 import express from "express";
+import fileUpload from "express-fileupload";
 import ngrok from "ngrok";
 import path from "path";
 import cors from "cors";
@@ -39,6 +40,8 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(fileUpload());
 
 const PORT = process.env.PORT || 8000;
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN || "my_verify_token";

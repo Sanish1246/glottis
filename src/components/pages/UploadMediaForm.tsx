@@ -34,7 +34,9 @@ const formSchema = z.object({
   language: z.string().min(1, {
     message: "Language cannot be empty!.",
   }),
+  link: z.string().optional(),
   genres: z.array(z.string()).optional(),
+  coverImage: z.instanceof(File).optional(),
 });
 
 type UploadProps = {
@@ -100,6 +102,8 @@ const genresOptions: Options[] = [
 const UploadMediaForm = ({ onClose }: UploadProps) => {
   const [level, setLevel] = useState("Beginner");
   const [mediaType, setMediaType] = useState("Book");
+  const [fileName, setFileName] = useState("");
+  const [file, setFile] = useState<File | null>(null);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -111,21 +115,43 @@ const UploadMediaForm = ({ onClose }: UploadProps) => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    const media = {
-      ...values,
-      likes: 0,
-    };
-    console.log(values.genres);
-    if (onClose) onClose();
-    toast.success("Media uploaded!", {
-      action: {
-        label: "Close",
-        onClick: () => {
-          toast.dismiss();
-        },
-      },
-    });
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const uploadedFile = e.target.files?.[0];
+    if (uploadedFile) {
+      setFileName(uploadedFile.name);
+      setFile(uploadedFile);
+    }
+  };
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const formData = new FormData();
+      const metadata = {
+        ...values,
+        likes: 0,
+        level: level,
+        type: mediaType,
+      };
+      formData.append("media", JSON.stringify(metadata));
+      if (file) formData.append("coverImage", file, file.name);
+
+      const res = await fetch("http://localhost:8000/immersion/submitMedia", {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        toast.error("Upload failed");
+        return;
+      }
+
+      if (onClose) onClose();
+      toast.success("Media uploaded!");
+    } catch (err) {
+      console.error(err);
+      toast.error("Upload error");
+    }
   }
   return (
     <Form {...form}>
@@ -163,7 +189,7 @@ const UploadMediaForm = ({ onClose }: UploadProps) => {
                   <FormLabel className=" mx-auto mt-5">Description</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Enter your description..."
+                      placeholder="Enter your description (Min. 8 characters)..."
                       {...field}
                       className="w-[80%] mx-auto"
                     />
@@ -228,9 +254,32 @@ const UploadMediaForm = ({ onClose }: UploadProps) => {
               ></Combobox>
             </div>
 
+            <FormField
+              control={form.control}
+              name="link"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className=" mx-auto mt-5">Link</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Copy and paste the link to access the media..."
+                      {...field}
+                      className="w-[80%] mx-auto"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <div className="grid w-full max-w-sm items-center gap-3 mx-auto">
               <Label htmlFor="picture">Cover</Label>
-              <Input id="picture" type="file" />
+              <Input
+                id="picture"
+                accept="image/*"
+                type="file"
+                onChange={handleFileChange}
+              />
             </div>
           </div>
         </div>
@@ -266,7 +315,7 @@ const UploadMediaForm = ({ onClose }: UploadProps) => {
                     </label>
                   ))}
                 </div>
-              </FormControl>{" "}
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
