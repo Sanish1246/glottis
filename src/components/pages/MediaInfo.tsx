@@ -151,6 +151,7 @@ const MediaInfo = () => {
               >
                 {liked ? <HeartMinus /> : <Heart />}
               </Button>
+
               <p>{media.likes}</p>
             </div>
             <div className="p-2 border rounded-lg bg-black text-white flex flex-row gap-1 hover:cursor-pointer hover:bg-transparent">

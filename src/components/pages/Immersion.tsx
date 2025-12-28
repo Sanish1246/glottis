@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Search } from "lucide-react";
+import { Search, Upload } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import Combobox from "../ui/Combobox";
 import { useLanguage } from "../context/LanguageContext";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import MediaCard from "../ui/MediaCard";
+import UploadMediaForm from "./UploadMediaForm";
 
 type Options = {
   value: string;
@@ -51,6 +53,7 @@ const levels: Options[] = [
 ];
 
 const Immersion = () => {
+  const [uploadOpen, setUploadOpen] = useState(false);
   const { languagePath, setLanguagePath } = useLanguage();
   const [searchTerm, setSearchTerm] = useState("");
   const [levelFilter, setLevelFilter] = useState("none");
@@ -163,6 +166,17 @@ const Immersion = () => {
         >
           Clear
         </Button>
+        <Dialog open={uploadOpen} onOpenChange={setUploadOpen}>
+          <DialogTrigger asChild>
+            <Button variant="secondary" onClick={() => {}}>
+              <Upload />
+              Upload
+            </Button>
+          </DialogTrigger>
+          <DialogContent className=" max-w-4xl">
+            <UploadMediaForm onClose={() => setUploadOpen(false)} />
+          </DialogContent>
+        </Dialog>
       </div>
       {searching ? (
         <div className="mt-5">

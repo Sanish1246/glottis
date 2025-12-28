@@ -71,7 +71,6 @@ const RegisterForm = ({
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     const userData = { ...values, role: currentRole };
-    console.log(currentRole);
     fetch("http://localhost:8000/register", {
       method: "POST",
       headers: {

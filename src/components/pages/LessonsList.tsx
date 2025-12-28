@@ -29,7 +29,7 @@ const LessonsList = () => {
   useGSAP(() => {
     gsap.fromTo(
       ".lesson",
-      { x: -50000, duration: 0.2 },
+      { x: -50000 },
       { x: 0, stagger: 0.09, ease: "power1.inOut" }
     );
   }, [lessonArray]);
@@ -76,7 +76,7 @@ const LessonsList = () => {
             )}
             <Link to={`/lessons/${lesson._id}`} state={{ lesson }}>
               <div className="border-2 rounded-lg p-3 mb-5 mt-1 shadow-sm hover:cursor-pointer hover:translate-1 lesson">
-                <b>Lesson {lesson.lessonNumber}</b> - {lesson.title}
+                <b>Lesson {lesson.lessonNumber}</b>: {lesson.title}
               </div>
             </Link>
           </div>
