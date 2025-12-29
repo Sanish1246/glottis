@@ -26,7 +26,7 @@ import { toast } from "sonner";
 import "./App.css";
 
 function App() {
-  const { isLoggedIn, setIsLoggedIn, user, setUser } = useUser();
+  const { isLoggedIn, setIsLoggedIn, setUser } = useUser();
 
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
@@ -108,37 +108,78 @@ function App() {
                 </DialogFooter>
               </DialogContent>
             </Dialog>
-            <Link to="/lessons" className="hover:underline">
-              Lessons
-            </Link>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <a className="hover:cursor-pointer hover:underline">Biblíon</a>
-              </DropdownMenuTrigger>
-              <span className="sr-only">Biblíon</span>
-              <DropdownMenu></DropdownMenu>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem>
-                  <Link to="decks" className="hover:underline">
-                    Decks
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link to="review" className="hover:underline">
-                    Review
-                  </Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+
+            {isLoggedIn ? (
+              <Link to="/lessons" className="hover:underline">
+                Lessons
+              </Link>
+            ) : (
+              <a
+                className="hover:cursor-pointer hover:underline"
+                onClick={() => setIsLoginOpen(true)}
+              >
+                Lessons
+              </a>
+            )}
+            {isLoggedIn ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <a className="hover:cursor-pointer hover:underline">
+                    Biblíon
+                  </a>
+                </DropdownMenuTrigger>
+                <span className="sr-only">Biblíon</span>
+                <DropdownMenu></DropdownMenu>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem>
+                    <Link to="decks" className="hover:underline">
+                      Decks
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link to="review" className="hover:underline">
+                      Review
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <a
+                className="hover:cursor-pointer hover:underline"
+                onClick={() => setIsLoginOpen(true)}
+              >
+                Biblíon
+              </a>
+            )}
+
             <Link to="athena" className="hover:underline">
               Athena
             </Link>
-            <Link to="users" className="hover:underline">
-              Agorà
-            </Link>
-            <Link to="/immersion" className="hover:underline">
-              Immersion
-            </Link>
+            {isLoggedIn ? (
+              <Link to="users" className="hover:underline">
+                Agorà
+              </Link>
+            ) : (
+              <a
+                className="hover:cursor-pointer hover:underline"
+                onClick={() => setIsLoginOpen(true)}
+              >
+                Agorà
+              </a>
+            )}
+
+            {isLoggedIn ? (
+              <Link to="/immersion" className="hover:underline">
+                Immersion
+              </Link>
+            ) : (
+              <a
+                className="hover:cursor-pointer hover:underline"
+                onClick={() => setIsLoginOpen(true)}
+              >
+                Immersion
+              </a>
+            )}
           </div>
         </nav>
       </header>

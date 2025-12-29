@@ -74,8 +74,12 @@ const LessonsList = () => {
             {showLevelHeader && (
               <h2 className="font-semibold text-lg">{lesson.level}</h2>
             )}
-            <Link to={`/lessons/${lesson._id}`} state={{ lesson }}>
-              <div className="border-2 rounded-lg p-3 mb-5 mt-1 shadow-sm hover:cursor-pointer hover:translate-1 lesson">
+            <Link
+              to={`/lessons/${lesson._id}`}
+              state={{ lesson }}
+              className="hover:translate-1"
+            >
+              <div className="border-2 rounded-lg p-3 mb-5 mt-1 shadow-sm hover:cursor-pointer hover:translate-1  lesson">
                 <b>Lesson {lesson.lessonNumber}</b>: {lesson.title}
               </div>
             </Link>

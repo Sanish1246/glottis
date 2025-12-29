@@ -121,15 +121,15 @@ const FlashCardDeckList = () => {
       </div>
       {decksArray.map((deck: DeckProp) => {
         return (
-          <div
-            key={deck._id}
-            className="border-2 rounded-lg p-3 mb-4 mt-2 shadow-sm hover:cursor-pointer hover:translate-1 deck"
-          >
-            <Link to={`/deck/${deck._id}`} state={{ deck }} className="block">
+          <Link to={`/deck/${deck._id}`} state={{ deck }} className="block">
+            <div
+              key={deck._id}
+              className="border-2 rounded-lg p-3 mb-4 mt-2 shadow-sm hover:cursor-pointer deck hover:translate-1"
+            >
               <b>{deck.category}</b> -
               {deck.noOfCards && <span>{deck.noOfCards} cards</span>}
-            </Link>
-          </div>
+            </div>
+          </Link>
         );
       })}
     </div>
