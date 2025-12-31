@@ -14,8 +14,8 @@ const flashcardDeckSchema = new mongoose.Schema({
   noOfCards: { type: Number },
   author: { type: String },
   likes: { type: Number },
-
   items: [VocabularyItemSchema],
+  status: { type: String },
 });
 
 export default mongoose.model("flashcards", flashcardDeckSchema);

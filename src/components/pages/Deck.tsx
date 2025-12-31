@@ -115,7 +115,7 @@ const Deck = () => {
       <div className="flex flex-row">
         <Button
           onClick={() => {
-            navigate("/decks");
+            navigate(-1);
           }}
         >
           Back

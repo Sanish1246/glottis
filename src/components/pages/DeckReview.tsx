@@ -18,10 +18,9 @@ import {
   DialogTrigger,
   DialogHeader,
   DialogTitle,
-  DialogClose,
 } from "@/components/ui/dialog";
 import ReviewCard from "../ui/ReviewCard";
-import { supermemo, type SuperMemoItem, type SuperMemoGrade } from "supermemo";
+import { supermemo, type SuperMemoGrade } from "supermemo";
 
 interface FlashCardProps {
   word: string;
@@ -81,8 +80,9 @@ const DeckReview = () => {
         if (!res.ok) throw new Error("Deck not found");
         const data: DeckProp = await res.json();
         const reviewDeck = data.items.filter(
-          (c) => c.dueDate <= dayjs(Date.now()).format("DD-MM-YYYY")
+          (c) => c.dueDate >= dayjs(Date.now()).format("DD-MM-YYYY")
         );
+        console.log(reviewDeck);
         setRemaining(reviewDeck.length);
         setDeck({ language: data.language, items: reviewDeck });
         setFullDeck(data);
@@ -136,7 +136,8 @@ const DeckReview = () => {
       }
     }
   };
-
+  if (loading) return <div>Loading deck...</div>;
+  if (!deck) return <div>Deck not found</div>;
   const currentCard = deck.items[index];
 
   const reviewCard = async (grade: SuperMemoGrade) => {
@@ -185,7 +186,7 @@ const DeckReview = () => {
         <div>
           <h3>
             {remaining != 0
-              ? `Cards to review today: ${deck.items.length}`
+              ? `Cards to review today: ${remaining}`
               : `No cards to review today`}
           </h3>
           <Button
@@ -199,7 +200,7 @@ const DeckReview = () => {
           </Button>
           <Dialog>
             <DialogTrigger>
-              <Button disabled={fullDeck.items.length == 0}>Edit Deck</Button>
+              <Button disabled={fullDeck?.items.length == 0}>Edit Deck</Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>

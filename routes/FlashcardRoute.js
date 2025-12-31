@@ -28,4 +28,43 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.post("/submit", async (req, res) => {
+  const deck = req.body;
+  console.log(req.body);
+  try {
+    if (!req.session?.user) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+
+    const newDeck = {
+      ...deck,
+      author: req.session.user.username,
+      status: "Pending",
+    };
+
+    const created = await FlashcardDeck.create(newDeck);
+    res.json({ message: "Deck submitted successfully!", created });
+  } catch (err) {
+    console.error("Unable to submit deck:", err);
+    res.status(500).json({ error: "Server error while submitting" });
+  }
+});
+
+router.get("/customDecks/:lang/:level", async (req, res) => {
+  try {
+    const lang = req.params.lang;
+    const level = req.params.level;
+    const defaultAuthor = "Glottis";
+    let decks = await FlashcardDeck.find({
+      language: lang,
+      level: level,
+      author: { $ne: defaultAuthor },
+    });
+    res.json(decks);
+  } catch (err) {
+    console.error("Unable to get flashcard decks:", err);
+    res.status(500).json({ error: "Server while fetching decks" });
+  }
+});
+
 export default router;

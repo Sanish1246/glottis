@@ -78,7 +78,7 @@ const ChatPage = () => {
       <div className="flex flex-row items-center">
         <Button
           onClick={() => {
-            navigate("/users");
+            navigate(-1);
           }}
         >
           Back

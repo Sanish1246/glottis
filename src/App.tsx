@@ -141,6 +141,16 @@ function App() {
                       Review
                     </Link>
                   </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link to="createDeck" className="hover:underline">
+                      Create Deck
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link to="customDecks" className="hover:underline">
+                      Custom decks
+                    </Link>
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (

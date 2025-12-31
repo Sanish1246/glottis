@@ -24,28 +24,28 @@ const languagePaths: Options[] = [
 
 const levels: Options[] = [
   {
-    value: "A1",
-    label: "A1",
+    value: "Beginner",
+    label: "Beginner",
   },
   {
-    value: "A2",
-    label: "A2",
+    value: "Lower intermediate",
+    label: "Lower intermediate",
   },
   {
-    value: "B1",
-    label: "B1",
+    value: "Intermediate",
+    label: "Intermediate",
   },
   {
-    value: "B2",
-    label: "B2",
+    value: "Upper intermediate",
+    label: "Upper Intermediate",
   },
   {
-    value: "C1",
-    label: "C1",
+    value: "Advanced",
+    label: "Advanced",
   },
   {
-    value: "C2",
-    label: "C2",
+    value: "none",
+    label: "None",
   },
 ];
 
@@ -67,9 +67,9 @@ interface DeckProp {
   items: FlashCardProps[];
 }
 
-const FlashCardDeckList = () => {
-  const [level, setLevel] = useState("A1");
-  const { languagePath, setLanguagePath } = useLanguage();
+const UploadedDecks = () => {
+  const [level, setLevel] = useState("Beginner");
+  const [language, setLanguage] = useState("italian");
   const [decksArray, setDecksArray] = useState([]);
 
   useGSAP(() => {
@@ -84,7 +84,7 @@ const FlashCardDeckList = () => {
     const fetchLessons = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8000/flashcards/${languagePath}/${level}`
+          `http://localhost:8000/flashcards/customDecks/${language}/${level}`
         );
         const data = await response.json();
         setDecksArray(data);
@@ -100,7 +100,7 @@ const FlashCardDeckList = () => {
       }
     };
     fetchLessons();
-  }, [languagePath, level]);
+  }, [language, level]);
 
   return (
     <div>
@@ -108,8 +108,8 @@ const FlashCardDeckList = () => {
         <p>Language path:</p>
         <Combobox
           choices={languagePaths}
-          filter={languagePath}
-          setFilter={setLanguagePath}
+          filter={language}
+          setFilter={setLanguage}
         ></Combobox>
 
         <p>Level:</p>
@@ -128,10 +128,14 @@ const FlashCardDeckList = () => {
           >
             <div
               key={deck._id}
-              className="border-2 rounded-lg p-3 mb-4 mt-2 shadow-sm hover:cursor-pointer deck hover:translate-1"
+              className="border-2 rounded-lg p-3 mb-4 mt-2 shadow-sm hover:cursor-pointer deck hover:translate-1 flex justify-between"
             >
-              <b>{deck.category}</b> -
-              {deck.noOfCards && <span>{deck.noOfCards} cards</span>}
+              <p>
+                <b>{deck.category}</b> -
+                {deck.noOfCards && <span>{deck.noOfCards} cards</span>}
+              </p>
+
+              <span className="text-sm">Created by {deck.author}</span>
             </div>
           </Link>
         );
@@ -140,4 +144,4 @@ const FlashCardDeckList = () => {
   );
 };
 
-export default FlashCardDeckList;
+export default UploadedDecks;
