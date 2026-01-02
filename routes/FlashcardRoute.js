@@ -6,7 +6,11 @@ router.get("/:lang/:level", async (req, res) => {
   try {
     const lang = req.params.lang;
     const level = req.params.level;
-    let decks = await FlashcardDeck.find({ language: lang, level: level });
+    let decks = await FlashcardDeck.find({
+      language: lang,
+      level: level,
+      status: { $ne: "Pending" },
+    });
     decks = decks.sort((a, b) => a.number - b.number);
     res.json(decks);
   } catch (err) {

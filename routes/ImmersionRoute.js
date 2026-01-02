@@ -12,9 +12,16 @@ router.get("/:lang/:level", async (req, res) => {
 
     let medias;
     if (level == "none") {
-      medias = await Immersion.find({ language: lang });
+      medias = await Immersion.find({
+        language: lang,
+        status: { $ne: "Pending" },
+      });
     } else {
-      medias = await Immersion.find({ language: lang, level: level });
+      medias = await Immersion.find({
+        language: lang,
+        level: level,
+        status: { $ne: "Pending" },
+      });
     }
 
     res.json(medias);

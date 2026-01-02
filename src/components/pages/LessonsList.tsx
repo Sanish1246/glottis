@@ -25,14 +25,16 @@ const languagePaths: Options[] = [
 const LessonsList = () => {
   const { languagePath, setLanguagePath } = useLanguage();
   const [lessonArray, setLessonArray] = useState([]);
-
-  useGSAP(() => {
-    gsap.fromTo(
-      ".lesson",
-      { x: -50000 },
-      { x: 0, stagger: 0.09, ease: "power1.inOut" }
-    );
-  }, [lessonArray]);
+  useGSAP(
+    () => {
+      gsap.fromTo(
+        ".lesson",
+        { x: -50000 },
+        { x: 0, stagger: 0.09, ease: "power1.inOut" }
+      );
+    },
+    { dependencies: [lessonArray], overwrite: "auto" }
+  );
 
   useEffect(() => {
     const fetchLessons = async () => {

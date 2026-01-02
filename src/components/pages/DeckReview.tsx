@@ -80,7 +80,7 @@ const DeckReview = () => {
         if (!res.ok) throw new Error("Deck not found");
         const data: DeckProp = await res.json();
         const reviewDeck = data.items.filter(
-          (c) => c.dueDate >= dayjs(Date.now()).format("DD-MM-YYYY")
+          (c) => c.dueDate <= dayjs(Date.now()).format("DD-MM-YYYY")
         );
         console.log(reviewDeck);
         setRemaining(reviewDeck.length);

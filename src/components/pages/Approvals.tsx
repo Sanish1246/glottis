@@ -3,6 +3,16 @@ import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "../ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 // import gsap from "gsap";
 // import { useGSAP } from "@gsap/react";
 
@@ -42,7 +52,8 @@ interface MediaProps {
 const Approvals = () => {
   const [medias, setMedias] = useState([]);
   const [decksArray, setDecksArray] = useState([]);
-  const fetchLessons = async () => {
+  const [comment, setComment] = useState("");
+  const fetchDecks = async () => {
     try {
       const response = await fetch(`http://localhost:8000/flashcards/pending`, {
         method: "GET",
@@ -82,8 +93,10 @@ const Approvals = () => {
     }
   };
 
+  const approveDeck = () => {};
+
   useEffect(() => {
-    fetchLessons();
+    fetchDecks();
   }, []);
 
   return (
@@ -93,7 +106,7 @@ const Approvals = () => {
           <TabsTrigger
             value="decks"
             onClick={() => {
-              fetchLessons();
+              fetchDecks();
             }}
           >
             Decks
@@ -165,7 +178,7 @@ const Approvals = () => {
                   </div>
 
                   <span className="text-sm">
-                    Uploaded by <b>{deck.author}</b>
+                    Uploaded by <b>{media.uploader}</b>
                   </span>
                   <span className="flex gap-1">
                     <Button className="bg-green-600 hover:bg-green-400">

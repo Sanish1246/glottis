@@ -168,16 +168,18 @@ const Lesson = () => {
 
   return (
     <div>
-      <h1>
+      <div className="flex flex-row gap-2 items-center">
         <Button
           onClick={() => {
-            navigate("/lessons");
+            navigate(-1);
           }}
         >
           Back
         </Button>
-        Lesson {lesson.lessonNumber} - {lesson.title}
-      </h1>
+        <h1 className="font-black text-xl">
+          Lesson {lesson.lessonNumber} - {lesson.title}
+        </h1>
+      </div>
 
       <ul className="list-disc">
         {(lesson.objectives ?? []).map((objective: string, index: number) => (
@@ -188,7 +190,7 @@ const Lesson = () => {
       <div className="mt-5">
         {(lesson.introduction?.dialogues ?? []).map((d: any, i: number) => (
           <div key={i}>
-            <h2>{d.scene}</h2>
+            <h2 className="font-semibold">{d.scene}</h2>
             {d.media && (
               <img
                 src={d.media}
@@ -213,10 +215,10 @@ const Lesson = () => {
       </div>
 
       <div>
-        <h2>Vocabulary</h2>
+        <h2 className="font-bold">Vocabulary</h2>
         {(lesson.vocabulary ?? []).map((l: any, index: number) => (
           <div key={index} className="mx-auto">
-            <h3>{l.category}</h3>
+            <h3 className="font-semibold">{l.category}</h3>
             <FlashcardList
               cardList={l.items}
               lang={lesson.languagePath}
@@ -228,15 +230,15 @@ const Lesson = () => {
       </div>
 
       <div>
-        <h2>Grammar</h2>
+        <h2 className="font-bold">Grammar</h2>
         {(lesson.grammar ?? []).map((g: any, index: number) => (
           <div key={index} className="mx-auto">
-            <h3>{g.title}</h3>
+            <h3 className="font-semibold">{g.title}</h3>
             <GrammarTable
               grammarPoint={g.content}
               lang={lesson.voice_languagePath}
             />
-            <h3>Notes</h3>
+            <h3 className="font-medium">Notes</h3>
             <ul className="list-disc">
               {(g.notes ?? []).map((n: string, idx: number) => (
                 <li key={idx}>{n}</li>
@@ -248,10 +250,10 @@ const Lesson = () => {
 
       {/*  Exercises  */}
       <div>
-        <h2>Exercises - Test your knowledge</h2>
+        <h2 className="font-bold">Exercises - Test your knowledge</h2>
         {correctFib < totalFib && (
           <>
-            <h3>Fill in the blanks</h3>
+            <h3 className="font-semibold">Fill in the blanks</h3>
             {lesson.fib.map((q: any, index: number) => (
               <div
                 key={index}
@@ -259,7 +261,7 @@ const Lesson = () => {
                   index === correctFib ? "block" : "hidden"
                 }`}
               >
-                <h3>Question {index + 1}</h3>
+                <h3 className="font-medium">Question {index + 1}</h3>
                 <FillInTheBlanks question={q} setCorrectFib={setCorrectFib} />
               </div>
             ))}
@@ -282,7 +284,7 @@ const Lesson = () => {
         {/*  Multiple Choice Questions */}
         {correctFib >= totalFib && correctMcq < totalMcq && (
           <>
-            <h3 className="mt-5">Multiple Choice Questions</h3>
+            <h3 className="mt-5 font-semibold">Multiple Choice Questions</h3>
             {lesson.mcq.map((q: any, index: number) => (
               <div
                 key={index}
@@ -290,7 +292,7 @@ const Lesson = () => {
                   index === correctMcq ? "block" : "hidden"
                 }`}
               >
-                <h3>Question {index + 1}</h3>
+                <h3 className="font-medium">Question {index + 1}</h3>
                 <Mcq question={q} setCorrectMcq={setCorrectMcq} />
               </div>
             ))}
@@ -313,8 +315,8 @@ const Lesson = () => {
 
       {allExercisesCompleted && lesson.cultural_note && (
         <div className="mt-8">
-          <h2>Cultural note</h2>
-          <h3>{lesson.cultural_note.title}</h3>
+          <h2 className="font-bold">Cultural note</h2>
+          <h3 className="font-semibold">{lesson.cultural_note.title}</h3>
           <ul className="list-disc">
             {(lesson.cultural_note?.content ?? []).map(
               (note: string, index: number) => (
@@ -327,13 +329,13 @@ const Lesson = () => {
 
       {allExercisesCompleted && (
         <div className="mt-8">
-          <h2>Additional Resources</h2>
+          <h2 className="font-bold">Additional Resources</h2>
           <ul className="list-disc">
             {(lesson.additional_resources ?? []).map(
               (r: any, index: number) => (
                 <li key={index}>
                   <a href={r.url} target="_blank" className="underline">
-                    <span>[{r.type}] </span>
+                    <span className="font-semibold"> [{r.type}] </span>
                     {r.title}
                   </a>
                 </li>
@@ -345,8 +347,10 @@ const Lesson = () => {
 
       {allExercisesCompleted && (
         <div className="mt-8">
-          <h2>Wrapping up</h2>
-          <h3>Grammar points learned in this lesson:</h3>
+          <h2 className="font-bold">Wrapping up</h2>
+          <h3 className="font-semibold">
+            Grammar points learned in this lesson:
+          </h3>
           <ul className="list-disc">
             {(lesson.summary?.grammarPoints ?? []).map(
               (point: string, index: number) => (
@@ -355,7 +359,7 @@ const Lesson = () => {
             )}
           </ul>
 
-          <h3>Skills learned in this lesson:</h3>
+          <h3 className="font-semibold">Skills learned in this lesson:</h3>
           <ul className="list-disc">
             {(lesson.summary?.skills ?? []).map(
               (skill: string, index: number) => (
