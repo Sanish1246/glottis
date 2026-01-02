@@ -24,6 +24,21 @@ router.get("/:lang/:level", async (req, res) => {
   }
 });
 
+router.get("/pending", async (req, res) => {
+  try {
+    if (!req.session?.user.role == "admin") {
+      return res.status(401).json({ error: "You don't have permissions!" });
+    }
+
+    const medias = await Immersion.find({ status: "Pending" });
+
+    res.json(medias);
+  } catch (err) {
+    console.error("Unable to get medias:", err);
+    res.status(500).json({ error: "Server while fetching medias" });
+  }
+});
+
 router.get("/searchMedia", async (req, res) => {
   const searchTitle = req.query.m;
   try {

@@ -19,7 +19,8 @@ import ChatPage from "./components/pages/ChatPage.tsx";
 import Immersion from "./components/pages/Immersion.tsx";
 import MediaInfo from "./components/pages/MediaInfo.tsx";
 import CreateDeck from "./components/pages/CreateDeck.tsx";
-import UploadedDecks from "./components/pages/UploadedDecks.tsx";
+import CustomDecks from "./components/pages/CustomDecks.tsx";
+import Approvals from "./components/pages/Approvals.tsx";
 
 const router = createBrowserRouter([
   {
@@ -39,7 +40,8 @@ const router = createBrowserRouter([
       { path: "immersion", element: <Immersion /> },
       { path: "media", element: <MediaInfo /> },
       { path: "createDeck", element: <CreateDeck /> },
-      { path: "customDecks", element: <UploadedDecks /> },
+      { path: "customDecks", element: <CustomDecks /> },
+      { path: "approvals", element: <Approvals /> },
     ],
   },
 ]);

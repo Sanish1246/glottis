@@ -26,7 +26,7 @@ import { toast } from "sonner";
 import "./App.css";
 
 function App() {
-  const { isLoggedIn, setIsLoggedIn, setUser } = useUser();
+  const { isLoggedIn, setIsLoggedIn, user, setUser } = useUser();
 
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
@@ -60,6 +60,11 @@ function App() {
                       <Link to="/">
                         <DropdownMenuItem>Dashboard</DropdownMenuItem>
                       </Link>
+                      {user.role == "admin" ? (
+                        <Link to="approvals">
+                          <DropdownMenuItem>Pending approvals</DropdownMenuItem>
+                        </Link>
+                      ) : null}
                       <hr></hr>
                       <DialogTrigger asChild>
                         <DropdownMenuItem variant="destructive">
@@ -110,9 +115,31 @@ function App() {
             </Dialog>
 
             {isLoggedIn ? (
-              <Link to="/lessons" className="hover:underline">
-                Lessons
-              </Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <a className="hover:cursor-pointer hover:underline">
+                    Lessons
+                  </a>
+                </DropdownMenuTrigger>
+                <span className="sr-only">Lessons</span>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem>
+                    <Link to="/lessons" className="hover:underline">
+                      Lessons
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link to="/lessons" className="hover:underline">
+                      Custom Lessons
+                    </Link>
+                  </DropdownMenuItem>
+                  {user.role != "student" ? (
+                    <Link to="/">
+                      <DropdownMenuItem>Create Lesson</DropdownMenuItem>
+                    </Link>
+                  ) : null}
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
               <a
                 className="hover:cursor-pointer hover:underline"
@@ -129,7 +156,6 @@ function App() {
                   </a>
                 </DropdownMenuTrigger>
                 <span className="sr-only">Biblíon</span>
-                <DropdownMenu></DropdownMenu>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem>
                     <Link to="decks" className="hover:underline">

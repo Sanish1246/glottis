@@ -15,6 +15,22 @@ router.get("/:lang/:level", async (req, res) => {
   }
 });
 
+router.get("/pending", async (req, res) => {
+  try {
+    if (!req.session?.user.role == "admin") {
+      return res.status(401).json({ error: "You don't have permissions!" });
+    }
+    const targetStatus = "Pending";
+    let decks = await FlashcardDeck.find({
+      status: targetStatus,
+    });
+    res.json(decks);
+  } catch (err) {
+    console.error("Unable to get flashcard decks:", err);
+    res.status(500).json({ error: "Server while fetching decks" });
+  }
+});
+
 router.get("/:id", async (req, res) => {
   try {
     const deck = await FlashcardDeck.findById(req.params.id);

@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useLanguage } from "../context/LanguageContext";
 import Combobox from "../ui/Combobox";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -67,7 +66,7 @@ interface DeckProp {
   items: FlashCardProps[];
 }
 
-const UploadedDecks = () => {
+const CustomDecks = () => {
   const [level, setLevel] = useState("Beginner");
   const [language, setLanguage] = useState("italian");
   const [decksArray, setDecksArray] = useState([]);
@@ -135,7 +134,9 @@ const UploadedDecks = () => {
                 {deck.noOfCards && <span>{deck.noOfCards} cards</span>}
               </p>
 
-              <span className="text-sm">Created by {deck.author}</span>
+              <span className="text-sm">
+                Created by <b>{deck.author}</b>
+              </span>
             </div>
           </Link>
         );
@@ -144,4 +145,4 @@ const UploadedDecks = () => {
   );
 };
 
-export default UploadedDecks;
+export default CustomDecks;
