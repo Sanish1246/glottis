@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import { Input } from "../ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "../ui/button";
 import {
@@ -13,6 +14,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 // import gsap from "gsap";
 // import { useGSAP } from "@gsap/react";
 
@@ -52,6 +54,7 @@ interface MediaProps {
 const Approvals = () => {
   const [medias, setMedias] = useState([]);
   const [decksArray, setDecksArray] = useState([]);
+  const [action, setAction] = useState("");
   const [comment, setComment] = useState("");
   const fetchDecks = async () => {
     try {
@@ -93,7 +96,7 @@ const Approvals = () => {
     }
   };
 
-  const approveDeck = () => {};
+  const sendComment = async () => {};
 
   useEffect(() => {
     fetchDecks();
@@ -124,14 +127,14 @@ const Approvals = () => {
         <TabsContent value="decks">
           {decksArray.map((deck: DeckProp) => {
             return (
-              <Link
-                to={`/deck/${deck._id}`}
-                state={{ deck }}
-                className="block hover:translate-1"
+              <div
+                key={deck._id}
+                className="items-center border-2 rounded-lg p-3 mb-4 mt-2 shadow-sm hover:cursor-pointer deck hover:translate-1 flex flex-row justify-between"
               >
-                <div
-                  key={deck._id}
-                  className="items-center border-2 rounded-lg p-3 mb-4 mt-2 shadow-sm hover:cursor-pointer deck hover:translate-1 flex justify-between"
+                <Link
+                  to={`/deck/${deck._id}`}
+                  state={{ deck }}
+                  className="block hover:translate-1"
                 >
                   <p>
                     <b>{deck.category}</b> -
@@ -141,30 +144,70 @@ const Approvals = () => {
                   <span className="text-sm">
                     Created by <b>{deck.author}</b>
                   </span>
-                  <span className="flex gap-1">
-                    <Button className="bg-green-600 hover:bg-green-400">
-                      Approve
-                    </Button>
-                    <Button variant="destructive">Reject</Button>
-                  </span>
-                </div>
-              </Link>
+                </Link>
+                <span className="flex gap-1">
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        className="bg-green-600 hover:bg-green-400"
+                        onClick={() => {
+                          setAction("Approve Deck");
+                        }}
+                      >
+                        Approve
+                      </Button>
+                    </DialogTrigger>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="destructive"
+                        onClick={() => {
+                          setAction("Reject Deck");
+                        }}
+                      >
+                        Reject
+                      </Button>
+                    </DialogTrigger>
+
+                    <DialogContent className="sm:max-w-md">
+                      <DialogHeader>
+                        <DialogTitle>Add comment</DialogTitle>
+                        <DialogDescription>
+                          Add a comment (optional)
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="flex items-center gap-2">
+                        <div className="grid flex-1 gap-2">
+                          <Label htmlFor="link" className="sr-only">
+                            Comment
+                          </Label>
+                          <Input id="link" placeholder="Enter a comment..." />
+                        </div>
+                      </div>
+                      <DialogFooter className="sm:justify-start">
+                        <DialogClose asChild>
+                          <Button type="button">Done</Button>
+                        </DialogClose>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </span>
+              </div>
             );
           })}
         </TabsContent>
         <TabsContent value="medias">
           {medias.map((media: MediaProps) => {
             return (
-              <Link
-                to="/media"
-                state={{
-                  media,
-                }}
-                className="block hover:translate-1"
+              <div
+                key={media._id}
+                className="items-center border-2 rounded-lg p-3 mb-4 mt-2 shadow-sm hover:cursor-pointer deck hover:translate-1 flex justify-between"
               >
-                <div
-                  key={media._id}
-                  className="items-center border-2 rounded-lg p-3 mb-4 mt-2 shadow-sm hover:cursor-pointer deck hover:translate-1 flex justify-between"
+                <Link
+                  to="/media"
+                  state={{
+                    media,
+                  }}
+                  className="block hover:translate-1"
                 >
                   <div className="flex flex-row items-center">
                     <img
@@ -180,16 +223,61 @@ const Approvals = () => {
                   <span className="text-sm">
                     Uploaded by <b>{media.uploader}</b>
                   </span>
-                  <span className="flex gap-1">
-                    <Button className="bg-green-600 hover:bg-green-400">
-                      Approve
-                    </Button>
-                    <Button variant="destructive" className="hover:">
-                      Reject
-                    </Button>
-                  </span>
-                </div>
-              </Link>
+                </Link>
+                <span className="flex gap-1">
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        className="bg-green-600 hover:bg-green-400"
+                        onClick={() => {
+                          setAction("Approve Media");
+                        }}
+                      >
+                        Approve
+                      </Button>
+                    </DialogTrigger>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="destructive"
+                        onClick={() => {
+                          setAction("Reject Media");
+                        }}
+                      >
+                        Reject
+                      </Button>
+                    </DialogTrigger>
+
+                    <DialogContent className="sm:max-w-md">
+                      <DialogHeader>
+                        <DialogTitle>Add comment</DialogTitle>
+                        <DialogDescription>
+                          Add a comment (optional)
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="flex items-center gap-2">
+                        <div className="grid flex-1 gap-2">
+                          <Label htmlFor="link" className="sr-only">
+                            Comment
+                          </Label>
+                          <Input id="link" placeholder="Enter a comment..." />
+                        </div>
+                      </div>
+                      <DialogFooter className="sm:justify-start">
+                        <DialogClose asChild>
+                          <Button
+                            type="button"
+                            onClick={() => {
+                              sendComment();
+                            }}
+                          >
+                            Done
+                          </Button>
+                        </DialogClose>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </span>
+              </div>
             );
           })}
         </TabsContent>
