@@ -189,12 +189,12 @@ const Lesson = () => {
 
       <div className="mt-5">
         {(lesson.introduction?.dialogues ?? []).map((d: any, i: number) => (
-          <div key={i}>
+          <div key={i} className="mt-7">
             <h2 className="font-semibold">{d.scene}</h2>
             {d.media && (
               <img
                 src={d.media}
-                className="w-[80rem] max-h-[30rem] object-cover"
+                className="w-[80rem] max-h-[30rem] object-cover rounded-xl"
               />
             )}
             <ul className="mt-5 list-disc">
@@ -214,10 +214,10 @@ const Lesson = () => {
         ))}
       </div>
 
-      <div>
+      <div className="mt-10">
         <h2 className="font-bold">Vocabulary</h2>
         {(lesson.vocabulary ?? []).map((l: any, index: number) => (
-          <div key={index} className="mx-auto">
+          <div key={index} className="mx-auto mt-10">
             <h3 className="font-semibold">{l.category}</h3>
             <FlashcardList
               cardList={l.items}
@@ -230,15 +230,15 @@ const Lesson = () => {
       </div>
 
       <div>
-        <h2 className="font-bold">Grammar</h2>
+        <h2 className="font-bold mt-5">Grammar</h2>
         {(lesson.grammar ?? []).map((g: any, index: number) => (
-          <div key={index} className="mx-auto">
-            <h3 className="font-semibold">{g.title}</h3>
+          <div key={index} className="mx-auto mb-10">
+            <h3 className="font-semibold mt-5">{g.title}</h3>
             <GrammarTable
               grammarPoint={g.content}
               lang={lesson.voice_languagePath}
             />
-            <h3 className="font-medium">Notes</h3>
+            <h3 className="font-medium mt-5">Notes</h3>
             <ul className="list-disc">
               {(g.notes ?? []).map((n: string, idx: number) => (
                 <li key={idx}>{n}</li>

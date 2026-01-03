@@ -50,7 +50,7 @@ const FlashcardList = ({
     });
   }, []);
   return (
-    <div className="grid grid-cols-4 gap-4 mt-6">
+    <div className="grid grid-cols-4 gap-4 mt-6 mb-10">
       {cardList.map((card, i) => (
         <div
           ref={(card) => {
