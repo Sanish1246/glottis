@@ -14,13 +14,13 @@ router.get("/:lang/:level", async (req, res) => {
     if (level == "none") {
       medias = await Immersion.find({
         language: lang,
-        status: { $ne: "Pending" },
+        status: { $nin: ["Rejected", "Pending"] },
       });
     } else {
       medias = await Immersion.find({
         language: lang,
         level: level,
-        status: { $ne: "Pending" },
+        status: { $nin: ["Rejected", "Pending"] },
       });
     }
 
@@ -43,6 +43,48 @@ router.get("/pending", async (req, res) => {
   } catch (err) {
     console.error("Unable to get medias:", err);
     res.status(500).json({ error: "Server while fetching medias" });
+  }
+});
+
+router.put("/approve/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    if (req.session?.user?.role !== "admin") {
+      return res.status(401).json({ error: "You don't have permissions!" });
+    }
+    const media = await Immersion.findByIdAndUpdate(
+      id,
+      { status: "Approved" },
+      { new: true }
+    );
+    if (!media) {
+      return res.status(404).json({ error: "Media not found" });
+    }
+    res.json({ message: "Media approved!" });
+  } catch (err) {
+    console.error("Unable to get media:", err);
+    res.status(500).json({ error: "Server error while fetching media" });
+  }
+});
+
+router.put("/reject/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    if (req.session?.user?.role !== "admin") {
+      return res.status(401).json({ error: "You don't have permissions!" });
+    }
+    const media = await Immersion.findByIdAndUpdate(
+      id,
+      { status: "Rejected" },
+      { new: true }
+    );
+    if (!media) {
+      return res.status(404).json({ error: "Media not found" });
+    }
+    res.json({ message: "Media rejected!" });
+  } catch (err) {
+    console.error("Unable to get media:", err);
+    res.status(500).json({ error: "Server error while fetching media" });
   }
 });
 

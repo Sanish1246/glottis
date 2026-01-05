@@ -35,6 +35,48 @@ router.get("/pending", async (req, res) => {
   }
 });
 
+router.put("/approve/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    if (req.session?.user?.role !== "admin") {
+      return res.status(401).json({ error: "You don't have permissions!" });
+    }
+    const deck = await FlashcardDeck.findByIdAndUpdate(
+      id,
+      { status: "Approved" },
+      { new: true }
+    );
+    if (!deck) {
+      return res.status(404).json({ error: "Deck not found" });
+    }
+    res.json({ message: "Deck approved!" });
+  } catch (err) {
+    console.error("Unable to get deck:", err);
+    res.status(500).json({ error: "Server error while fetching deck" });
+  }
+});
+
+router.put("/reject/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    if (req.session?.user?.role !== "admin") {
+      return res.status(401).json({ error: "You don't have permissions!" });
+    }
+    const deck = await FlashcardDeck.findByIdAndUpdate(
+      id,
+      { status: "Rejected" },
+      { new: true }
+    );
+    if (!deck) {
+      return res.status(404).json({ error: "Deck not found" });
+    }
+    res.json({ message: "Deck rejected!" });
+  } catch (err) {
+    console.error("Unable to get deck:", err);
+    res.status(500).json({ error: "Server error while fetching deck" });
+  }
+});
+
 router.get("/:id", async (req, res) => {
   try {
     const deck = await FlashcardDeck.findById(req.params.id);
@@ -79,6 +121,7 @@ router.get("/customDecks/:lang/:level", async (req, res) => {
       language: lang,
       level: level,
       author: { $ne: defaultAuthor },
+      status: "Approved",
     });
     res.json(decks);
   } catch (err) {
