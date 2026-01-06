@@ -140,7 +140,7 @@ const RegisterForm = ({
               <FormLabel className=" mx-auto mt-5">Username</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="shadcn"
+                  placeholder="Username"
                   {...field}
                   className="w-[50%] mx-auto"
                 />
@@ -158,7 +158,7 @@ const RegisterForm = ({
               <FormLabel className=" mx-auto mt-5">Email</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="shadcn"
+                  placeholder="Emails"
                   {...field}
                   className="w-[50%] mx-auto"
                 />
@@ -176,7 +176,7 @@ const RegisterForm = ({
               <FormLabel className=" mx-auto mt-5">Password</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="shadcn"
+                  placeholder="Password"
                   {...field}
                   className="w-[50%] mx-auto mb-5"
                 />

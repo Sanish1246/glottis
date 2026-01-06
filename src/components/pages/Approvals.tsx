@@ -98,6 +98,7 @@ const Approvals = () => {
         credentials: "include",
       });
       const data = await response.json();
+      setDecksArray(decksArray.filter((item: DeckProp) => item._id !== id));
       toast.success(data.message, {
         action: {
           label: "Close",
@@ -131,6 +132,7 @@ const Approvals = () => {
         credentials: "include",
       });
       const data = await response.json();
+      setMedias(medias.filter((item: MediaProps) => item._id !== id));
       toast.success(data.message, {
         action: {
           label: "Close",
@@ -178,6 +180,12 @@ const Approvals = () => {
           <TabsTrigger value="lessons">Lessons</TabsTrigger>
         </TabsList>
         <TabsContent value="decks">
+          <h2 className="font-bold text-center">
+            {decksArray.length == 0
+              ? "No decks pending for approval!"
+              : "Decks pending for approval"}
+          </h2>
+
           {decksArray.map((deck: DeckProp) => {
             return (
               <Link
@@ -226,6 +234,11 @@ const Approvals = () => {
           })}
         </TabsContent>
         <TabsContent value="medias">
+          <h2 className="font-bold text-center">
+            {medias.length == 0
+              ? "No medias pending for approval!"
+              : "Medias pending for approval"}
+          </h2>
           {medias.map((media: MediaProps) => {
             return (
               <Link

@@ -8,6 +8,14 @@ import { useLanguage } from "../context/LanguageContext";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import MediaCard from "../ui/MediaCard";
 import UploadMediaForm from "./UploadMediaForm";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "../ui/pagination";
 
 type Options = {
   value: string;
@@ -53,6 +61,7 @@ const levels: Options[] = [
 ];
 
 const Immersion = () => {
+  const { currentPage, setCurrentPage } = useState(1);
   const [uploadOpen, setUploadOpen] = useState(false);
   const { languagePath, setLanguagePath } = useLanguage();
   const [searchTerm, setSearchTerm] = useState("");
@@ -209,6 +218,23 @@ const Immersion = () => {
             {medias.map((m, index) => (
               <MediaCard key={index} media={m} onLikeChange={filterMedia} />
             ))}
+          </div>
+          <div className="mt-6 ">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious href="#" />
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink href="#" isActive>
+                    {currentPage}
+                  </PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationNext href="#" />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
           </div>
         </>
       )}

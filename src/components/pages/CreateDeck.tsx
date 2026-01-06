@@ -289,7 +289,17 @@ const CreateDeck = () => {
               <TableCell className="font-">{w.word}</TableCell>
 
               <TableCell>{w.english}</TableCell>
-              <Button variant="destructive" onClick={() => {}}>
+              <Button
+                variant="destructive"
+                onClick={() => {
+                  setNewDeck(
+                    newDeck.filter(
+                      (item: FlashCardProps) =>
+                        item.word !== w.word && item.english !== w.english
+                    )
+                  );
+                }}
+              >
                 Delete
               </Button>
             </TableRow>

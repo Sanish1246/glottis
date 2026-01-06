@@ -25,16 +25,14 @@ const languagePaths: Options[] = [
 const LessonsList = () => {
   const { languagePath, setLanguagePath } = useLanguage();
   const [lessonArray, setLessonArray] = useState([]);
-  useGSAP(
-    () => {
-      gsap.fromTo(
-        ".lesson",
-        { x: -50000 },
-        { x: 0, stagger: 0.09, ease: "power1.inOut" }
-      );
-    },
-    { dependencies: [lessonArray], overwrite: "auto" }
-  );
+  const [loaded, setLoaded] = useState(false);
+  useGSAP(() => {
+    gsap.fromTo(
+      ".lesson",
+      { x: -50000 },
+      { x: 0, stagger: 0.09, ease: "power1.inOut" }
+    );
+  }, [loaded]);
 
   useEffect(() => {
     const fetchLessons = async () => {
@@ -44,6 +42,7 @@ const LessonsList = () => {
         );
         const data = await response.json();
         setLessonArray(data);
+        setLoaded(true);
       } catch (error) {
         toast.error(String(error), {
           action: {

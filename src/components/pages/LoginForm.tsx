@@ -117,7 +117,7 @@ const LoginForm = ({
               <FormLabel className=" mx-auto mt-5">Username</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="shadcn"
+                  placeholder="Username"
                   {...field}
                   className="w-[50%] mx-auto"
                 />
@@ -135,7 +135,7 @@ const LoginForm = ({
               <FormLabel className=" mx-auto mt-5">Password</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="shadcn"
+                  placeholder="Password"
                   {...field}
                   className="w-[50%] mx-auto mb-5"
                 />

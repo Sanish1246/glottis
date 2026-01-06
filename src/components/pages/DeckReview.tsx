@@ -156,7 +156,7 @@ const DeckReview = () => {
         dueDate,
       };
 
-      const res = await fetch(`http://localhost:8000/user_decks/${language}`, {
+      await fetch(`http://localhost:8000/user_decks/${language}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -234,14 +234,17 @@ const DeckReview = () => {
           </ChartContainer>
         </div>
       ) : (
-        <ReviewCard
-          key={index}
-          word={currentCard.word}
-          english={currentCard.english}
-          audio={currentCard.audio}
-          lang={language}
-          onReviewed={reviewCard}
-        />
+        <>
+          <p>Cards left: {remaining}</p>
+          <ReviewCard
+            key={index}
+            word={currentCard.word}
+            english={currentCard.english}
+            audio={currentCard.audio}
+            lang={language}
+            onReviewed={reviewCard}
+          />
+        </>
       )}
     </div>
   );
