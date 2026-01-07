@@ -17,6 +17,16 @@ import {
   PaginationPrevious,
 } from "../ui/pagination";
 
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+
 type Options = {
   value: string;
   label: string;
@@ -61,19 +71,30 @@ const levels: Options[] = [
 ];
 
 const Immersion = () => {
-  const { currentPage, setCurrentPage } = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchPage, setSearchPage] = useState(1);
   const [uploadOpen, setUploadOpen] = useState(false);
   const { languagePath, setLanguagePath } = useLanguage();
   const [searchTerm, setSearchTerm] = useState("");
   const [levelFilter, setLevelFilter] = useState("none");
   const [medias, setMedias] = useState([]);
   const [searchResult, setSearchResult] = useState([]);
+  const [recs, setRecs] = useState([]);
   const [searching, setSearching] = useState(false);
+
+  useGSAP(() => {
+    gsap.fromTo(
+      ".media",
+      { opacity: 0 },
+      { opacity: 1, ease: "power1.inOut", duration: 0.8 }
+    );
+  }, [currentPage, searchPage, searchResult]);
 
   const searchMedia = async () => {
     try {
+      setSearchPage(1);
       const res = await fetch(
-        `http://localhost:8000/immersion/searchMedia?m=${searchTerm}`,
+        `http://localhost:8000/immersion/searchMedia/${searchPage}?m=${searchTerm}`,
         {
           method: "GET",
           credentials: "include",
@@ -98,12 +119,14 @@ const Immersion = () => {
     setSearchResult([]);
     setSearchTerm("");
     setSearching(false);
+    setCurrentPage(1);
   };
 
   const filterMedia = async () => {
     try {
+      setCurrentPage(1);
       const response = await fetch(
-        `http://localhost:8000/immersion/${languagePath}/${levelFilter}`,
+        `http://localhost:8000/immersion/${languagePath}/${levelFilter}/${currentPage}`,
         {
           method: "GET",
           credentials: "include",
@@ -127,7 +150,7 @@ const Immersion = () => {
     const filterMedia = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8000/immersion/${languagePath}/${levelFilter}`,
+          `http://localhost:8000/immersion/${languagePath}/${levelFilter}/${currentPage}`,
           {
             method: "GET",
             credentials: "include",
@@ -148,14 +171,40 @@ const Immersion = () => {
     };
 
     filterMedia();
-  }, [languagePath, levelFilter]);
+  }, [languagePath, levelFilter, currentPage]);
+
+  useEffect(() => {
+    const getRecommendation = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8000/immersion/recommendations`,
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
+        const data = await response.json();
+        setRecs(data);
+      } catch (error) {
+        toast.error(String(error), {
+          action: {
+            label: "Close",
+            onClick: () => {
+              toast.dismiss();
+            },
+          },
+        });
+      }
+    };
+    getRecommendation();
+  }, []);
 
   return (
     <div>
       <div className="flex flex-row gap-2 max-w-[50%] mx-auto mt-3">
         <Input
           id="search"
-          placeholder="Search for a user..."
+          placeholder="Search for a media title..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -192,11 +241,37 @@ const Immersion = () => {
           <h3 className="text-center text-xl font-bold">
             {searchResult.length == 0 ? "No media found!" : "Search Results"}
           </h3>
-          <div className="grid md:grid-cols-3 grid-cols-1 gap-3 mx-auto mt-5 items-center justify-items-center">
+          <div className="grid md:grid-cols-3 grid-cols-1 gap-3 mx-auto mt-5 items-center justify-items-center media">
             {searchResult.map((m, index) => (
               <MediaCard key={index} media={m} onLikeChange={filterMedia} />
             ))}
           </div>
+          {searchResult.length == 0 ? null : (
+            <div className="mt-6 ">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      href="#"
+                      onClick={() => setSearchPage(searchPage - 1)}
+                      className={searchPage === 1 ? "invisible" : ""}
+                    />
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationLink href="#" isActive>
+                      {searchPage}
+                    </PaginationLink>
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationNext
+                      href="#"
+                      onClick={() => setSearchPage(searchPage + 1)}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
+          )}
         </div>
       ) : (
         <>
@@ -214,7 +289,22 @@ const Immersion = () => {
               setFilter={setLevelFilter}
             ></Combobox>
           </div>
-          <div className="grid md:grid-cols-3 grid-cols-1 mx-auto mt-5 items-center justify-items-center">
+          <div>
+            <h2>Recommendations</h2>
+            <Carousel className="max-w-95 mx-auto">
+              <CarouselContent>
+                {recs.map((r, index) => (
+                  <CarouselItem key={index}>
+                    <MediaCard media={r} onLikeChange={filterMedia} />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+          </div>
+          <h2>List of medias</h2>
+          <div className="grid md:grid-cols-3 grid-cols-1 mx-auto mt-5 items-center justify-items-center media">
             {medias.map((m, index) => (
               <MediaCard key={index} media={m} onLikeChange={filterMedia} />
             ))}
@@ -223,15 +313,22 @@ const Immersion = () => {
             <Pagination>
               <PaginationContent>
                 <PaginationItem>
-                  <PaginationPrevious href="#" />
+                  <PaginationPrevious
+                    href="#"
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                    className={currentPage === 1 ? "invisible" : ""}
+                  />
                 </PaginationItem>
                 <PaginationItem>
-                  <PaginationLink href="#" isActive>
+                  <PaginationLink href="#" isActive className="text-black">
                     {currentPage}
                   </PaginationLink>
                 </PaginationItem>
                 <PaginationItem>
-                  <PaginationNext href="#" />
+                  <PaginationNext
+                    href="#"
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                  />
                 </PaginationItem>
               </PaginationContent>
             </Pagination>

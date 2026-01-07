@@ -121,7 +121,7 @@ const MediaCard = ({ media, onLikeChange }: MediaCardProps) => {
         media,
       }}
     >
-      <div className="text-center mb-50 rounded-tl-xl rounded-tr-xl rounded-bl-xl rounded-br-xl shadow-md border-black dark:border-white dark:shadow-white dark:shadow-sm w-95 h-75">
+      <div className="text-center mb-50 rounded-xl  shadow-md border-black dark:border-white dark:shadow-white dark:shadow-sm w-95 h-75">
         <div>
           <img
             src={media.img_path}

@@ -32,7 +32,7 @@ const LessonsList = () => {
       { x: -50000 },
       { x: 0, stagger: 0.09, ease: "power1.inOut" }
     );
-  }, [loaded]);
+  }, [loaded, languagePath]);
 
   useEffect(() => {
     const fetchLessons = async () => {

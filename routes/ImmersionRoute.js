@@ -3,25 +3,63 @@ import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs/promises";
 import Immersion from "../models/immersion.js";
+import User from "../models/user.js";
+
 const router = express.Router();
 
-router.get("/:lang/:level", async (req, res) => {
+async function recommend(userId, limit = 5) {
+  //Getting the user's likes
+  const user = await User.findById(userId).lean();
+  console.log(user);
+  if (!user || !user.likes || !user.likes.length) return []; // cold start
+
+  // 2. build profile
+  const titles = user.likes.map((i) => i.title);
+  const profile = await Immersion.find({ title: { $in: titles } })
+    .select("language level genres")
+    .lean();
+
+  const languages = [...new Set(profile.map((p) => p.language))];
+  const levels = [...new Set(profile.map((p) => p.level))];
+  const genres = [...new Set(profile.map((p) => p.genres).flat())];
+
+  // 3. unseen items that match at least one genre OR same (lang + level)
+  const query = {
+    title: { $nin: titles }, // unseen
+    $or: [
+      { genres: { $in: genres } },
+      { $and: [{ language: { $in: languages } }, { level: { $in: levels } }] },
+    ],
+  };
+
+  return Immersion.find(query).select("-__v").limit(limit).lean();
+}
+
+router.get("/:lang/:level/:page", async (req, res) => {
   try {
     const lang = req.params.lang;
     const level = req.params.level;
+    const page = req.params.page;
+    const limit = 9;
+
+    const skipAmount = (parseInt(page) - 1) * parseInt(limit);
 
     let medias;
     if (level == "none") {
       medias = await Immersion.find({
         language: lang,
         status: { $nin: ["Rejected", "Pending"] },
-      });
+      })
+        .skip(skipAmount)
+        .limit(parseInt(limit));
     } else {
       medias = await Immersion.find({
         language: lang,
         level: level,
         status: { $nin: ["Rejected", "Pending"] },
-      });
+      })
+        .skip(skipAmount)
+        .limit(parseInt(limit));
     }
 
     res.json(medias);
@@ -88,8 +126,12 @@ router.put("/reject/:id", async (req, res) => {
   }
 });
 
-router.get("/searchMedia", async (req, res) => {
+router.get("/searchMedia/:page", async (req, res) => {
   const searchTitle = req.query.m;
+  const page = req.params.page;
+  const limit = 9;
+
+  const skipAmount = (parseInt(page) - 1) * parseInt(limit);
   try {
     if (!req.session?.user) {
       return res.status(401).json({ error: "Not authenticated" });
@@ -100,7 +142,9 @@ router.get("/searchMedia", async (req, res) => {
         $regex: searchTitle,
         $options: "i",
       },
-    });
+    })
+      .skip(skipAmount)
+      .limit(parseInt(limit));
 
     res.json(medias);
   } catch (err) {
@@ -155,6 +199,20 @@ router.post("/submitMedia", async (req, res) => {
   } catch (err) {
     console.error("Unable to submit media:", err);
     res.status(500).json({ error: "Server error while submitting" });
+  }
+});
+
+router.get("/recommendations", async (req, res) => {
+  if (!req.session?.user)
+    return res.status(401).json({ error: "Not authenticated" });
+  console.log(req.session.user.id);
+  try {
+    const list = await recommend(req.session.user.id, 5);
+    console.log(list);
+    res.json(list);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
