@@ -294,7 +294,7 @@ const Immersion = () => {
             <Carousel className="max-w-95 mx-auto">
               <CarouselContent>
                 {recs.map((r, index) => (
-                  <CarouselItem key={index}>
+                  <CarouselItem key={index} className="rounded-xl">
                     <MediaCard media={r} onLikeChange={filterMedia} />
                   </CarouselItem>
                 ))}

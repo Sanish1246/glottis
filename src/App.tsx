@@ -134,7 +134,7 @@ function App() {
                     </Link>
                   </DropdownMenuItem>
                   {user.role != "student" ? (
-                    <Link to="/">
+                    <Link to="/create_lesson">
                       <DropdownMenuItem>Create Lesson</DropdownMenuItem>
                     </Link>
                   ) : null}
