@@ -76,7 +76,6 @@ const DialogueBlockEditor = ({ dialogue, onChange, onRemove }) => {
           <Trash2 className="h-4 w-4" />
         </Button>
       </div>
-      {/* ... rest of the component */}
     </Card>
   );
 };

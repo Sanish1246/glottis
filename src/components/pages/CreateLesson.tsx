@@ -47,6 +47,10 @@ const CreateLesson = () => {
     }));
   };
 
+  const updateLesson = (updatedLessonData) => {
+    setLessonData(updatedLessonData);
+  };
+
   return (
     <div className=" mx-auto p-6">
       <Progress value={(currentStep + 1) * (100 / steps.length)} />
@@ -57,7 +61,11 @@ const CreateLesson = () => {
         </CardHeader>
         <CardContent>
           {currentStep === 0 && (
-            <BasicInfoForm setCurrentStep={setCurrentStep} />
+            <BasicInfoForm
+              data={lessonData}
+              onChange={updateLesson}
+              setCurrentStep={setCurrentStep}
+            />
           )}
           {currentStep === 1 && (
             <>
@@ -68,8 +76,6 @@ const CreateLesson = () => {
               />
             </>
           )}
-          {/* {currentStep === 1 && <VocabularyForm />} */}
-          {/* ... other steps */}
           {currentStep}
         </CardContent>
       </Card>
