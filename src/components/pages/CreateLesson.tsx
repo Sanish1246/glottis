@@ -4,6 +4,8 @@ import { Progress } from "../ui/progress";
 import BasicInfoForm from "../ui/BasicInfoForm";
 import IntroductionForm from "../ui/IntroductionForm";
 import VocabForm from "../ui/VocabForm";
+import GrammarForm from "../ui/GrammarForm";
+import CreateFIB from "../ui/createFIB";
 
 const steps = [
   "Basic Info", // language, level, title, objectives
@@ -85,6 +87,28 @@ const CreateLesson = () => {
                 data={lessonData.vocabulary}
                 onChange={(updatedVocab) =>
                   setLessonData({ ...lessonData, vocabulary: updatedVocab })
+                }
+                setCurrentStep={setCurrentStep}
+              />
+            </>
+          )}
+          {currentStep === 3 && (
+            <>
+              <GrammarForm
+                data={lessonData.grammar}
+                onChange={(updatedGrammar) =>
+                  setLessonData({ ...lessonData, grammar: updatedGrammar })
+                }
+                setCurrentStep={setCurrentStep}
+              />
+            </>
+          )}
+          {currentStep === 4 && (
+            <>
+              <CreateFIB
+                data={lessonData.fib}
+                onChange={(updatedFIB) =>
+                  setLessonData({ ...lessonData, grammar: updatedFIB })
                 }
                 setCurrentStep={setCurrentStep}
               />

@@ -1,24 +1,32 @@
-import React from "react";
 import { Button } from "./button";
 import { Plus, Trash2 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Card } from "./card";
 import { Input } from "./input";
-import Combobox from "./Combobox";
 import { Label } from "../ui/label";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "./table";
 
 const AddCardForm = ({ deck, onChange }) => {
-  const [newDeck, setNewDeck] = useState({ category: "", items: [] });
   const [newCard, setNewCard] = useState({ word: "", english: "" });
 
   const addCard = () => {
     if (newCard.word.trim() && newCard.english.trim()) {
-      const updatedCardList = [...newDeck.items, newCard];
-      const updatedDeck = { ...newDeck, items: updatedCardList };
-
+      const updatedDeck = {
+        ...deck,
+        items: [...deck.items, newCard],
+      };
+      onChange(updatedDeck);
       setNewCard({ word: "", english: "" });
     }
   };
+
   return (
     <Card className="p-4 space-y-4">
       <div className="flex justify-between items-center">
@@ -27,16 +35,15 @@ const AddCardForm = ({ deck, onChange }) => {
           <Input
             id="title"
             placeholder="Deck title"
-            value={newDeck.category}
-            onChange={(e) =>
-              setNewDeck({ ...newDeck, category: e.target.value })
-            }
+            value={deck.category}
+            onChange={(e) => onChange({ ...deck, category: e.target.value })}
           />
           <Input
             placeholder="Card word"
             value={newCard.word}
             onChange={(e) => setNewCard({ ...newCard, word: e.target.value })}
           />
+
           <Input
             placeholder="English translation"
             value={newCard.english}
@@ -45,13 +52,7 @@ const AddCardForm = ({ deck, onChange }) => {
             }
           />
         </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => {
-            addCard();
-          }}
-        >
+        <Button size="icon" onClick={addCard} className="mt-10 ml-2">
           <Plus className="h-4 w-4" />
         </Button>
       </div>
@@ -87,8 +88,47 @@ const VocabForm = ({ data, onChange, setCurrentStep }) => {
                 deck={deck}
                 onChange={(updated) => updateDeck(idx, updated)}
               />
-              <h2>Cards in {deck.category}:</h2>
-              <ul className="list-disc"></ul>
+              <Button
+                variant="destructive"
+                size="icon"
+                onClick={() => {
+                  removeDeck(idx);
+                }}
+                className="mt-2"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+              <h2>Cards in the deck:</h2>
+              <Table className="w-[50%] mx-auto text-center">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="text-center">Word</TableHead>
+                    <TableHead className="text-center">English</TableHead>
+                    <TableHead className="text-center">Delete</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {deck.items.map((w, index: number) => (
+                    <TableRow key={index}>
+                      <TableCell className="font-semibold">{w.word}</TableCell>
+
+                      <TableCell>{w.english}</TableCell>
+                      <Button
+                        variant="destructive"
+                        onClick={() => {
+                          const updatedItems = deck.items.filter(
+                            (item) =>
+                              item.word !== w.word && item.english !== w.english
+                          );
+                          updateDeck(idx, { ...deck, items: updatedItems });
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </>
           ) : null}
         </div>
@@ -110,7 +150,7 @@ const VocabForm = ({ data, onChange, setCurrentStep }) => {
           }}
           variant="outline"
         >
-          <Plus className="mr-2 h-4 w-4" /> Add Dialogue Block
+          <Plus className="mr-2 h-4 w-4" /> Add Deck
         </Button>
         <Button
           onClick={() => {
@@ -118,7 +158,7 @@ const VocabForm = ({ data, onChange, setCurrentStep }) => {
           }}
           disabled={data.length <= 1 || currentPage == 1}
         >
-          Previous Dialogue
+          Previous Deck
         </Button>
         <Button
           onClick={() => {
@@ -126,7 +166,7 @@ const VocabForm = ({ data, onChange, setCurrentStep }) => {
           }}
           disabled={data.length <= 1 || currentPage + 1 == data.length}
         >
-          Next Dialogue
+          Next Deck
         </Button>
 
         <Button
