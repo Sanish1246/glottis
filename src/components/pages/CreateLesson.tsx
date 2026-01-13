@@ -3,15 +3,18 @@ import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { Progress } from "../ui/progress";
 import BasicInfoForm from "../ui/BasicInfoForm";
 import IntroductionForm from "../ui/IntroductionForm";
+import VocabForm from "../ui/VocabForm";
 
 const steps = [
   "Basic Info", // language, level, title, objectives
   "Introduction", // dialogues
   "Vocabulary", // vocabulary categories
   "Grammar", // grammar sections
-  "Exercises", // fill-in-blank & MCQ
+  "Excercises - Fill in the blanks", // fill-in-blank & MCQ
+  "Excercises - MCQs",
   "Cultural Notes", // optional
-  "Resources & Summary", // additional resources, summary
+  "Additional resoruces",
+  "Summary", // additional resources, summary
 ];
 
 const CreateLesson = () => {
@@ -72,6 +75,17 @@ const CreateLesson = () => {
               <IntroductionForm
                 data={lessonData.introduction}
                 onChange={updateIntroduction}
+                setCurrentStep={setCurrentStep}
+              />
+            </>
+          )}
+          {currentStep === 2 && (
+            <>
+              <VocabForm
+                data={lessonData.vocabulary}
+                onChange={(updatedVocab) =>
+                  setLessonData({ ...lessonData, vocabulary: updatedVocab })
+                }
                 setCurrentStep={setCurrentStep}
               />
             </>

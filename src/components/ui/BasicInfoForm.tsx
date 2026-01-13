@@ -5,6 +5,7 @@ import { Card } from "./card";
 import { Input } from "./input";
 import Combobox from "./Combobox";
 import { Label } from "../ui/label";
+import { toast } from "sonner";
 
 type BasicInfoProps = {
   setCurrentStep: any;
@@ -43,6 +44,16 @@ const BasicInfoForm = ({ data, onChange, setCurrentStep }: any) => {
     onChange({ ...data, [field]: value });
   };
   const [level, setLevel] = useState("Beginner");
+  const [newObjective, setNewObjective] = useState("");
+
+  const addObjective = () => {
+    if (newObjective.trim()) {
+      // Also validate non-empty
+      const newObjectives = [...data.objectives, newObjective];
+      onChange({ ...data, objectives: newObjectives });
+      setNewObjective("");
+    }
+  };
 
   return (
     <div>
@@ -60,12 +71,53 @@ const BasicInfoForm = ({ data, onChange, setCurrentStep }: any) => {
               onChange={(e) => updateField("language", e.target.value)}
             />
             <Combobox choices={levels} filter={level} setFilter={setLevel} />
+            <div className="flex flex-row gap-3">
+              <Input
+                id="objective"
+                placeholder="Enter an objective"
+                value={newObjective}
+                className="w-[80%]"
+                onChange={(e) => {
+                  setNewObjective(e.target.value);
+                }}
+              />
+              <Button
+                onClick={() => {
+                  addObjective();
+                }}
+              >
+                Add
+              </Button>
+            </div>
           </div>
         </div>
       </Card>
+      <div>
+        <h2>Objectives</h2>
+        <ul className="list-disc">
+          {data.objectives.map((obj: string, index: number) => {
+            return <li key={index}>{obj}</li>;
+          })}
+        </ul>
+      </div>
       <Button
         onClick={() => {
-          setCurrentStep((prevCurrent: number) => prevCurrent + 1);
+          if (
+            data.title == "" ||
+            data.language == "" ||
+            data.objectives.length == 0
+          ) {
+            toast.error("You should fill in all the fields first!", {
+              action: {
+                label: "Close",
+                onClick: () => {
+                  toast.dismiss();
+                },
+              },
+            });
+          } else {
+            setCurrentStep((prevCurrent: number) => prevCurrent + 1);
+          }
         }}
       >
         Next section

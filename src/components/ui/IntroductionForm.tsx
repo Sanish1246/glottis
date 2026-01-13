@@ -22,6 +22,7 @@ const dialogueTypes: Options[] = [
     label: "Informal",
   },
 ];
+
 const DialogueBlockEditor = ({ dialogue, onChange, onRemove }) => {
   const [fileName, setFileName] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -80,7 +81,76 @@ const DialogueBlockEditor = ({ dialogue, onChange, onRemove }) => {
   );
 };
 
+const DialogLinesEditor = ({ data, dialogue, onChange }) => {
+  const [newLine, setNewLine] = useState({
+    speaker: "",
+    text: "",
+    english: "",
+  });
+
+  const addLine = () => {
+    if (
+      newLine.speaker.trim() &&
+      newLine.text.trim() &&
+      newLine.english.trim()
+    ) {
+      const updatedLines = [...dialogue.lines, newLine];
+      const updatedDialogue = { ...dialogue, lines: updatedLines };
+
+      const newDialogues = data.dialogues.map((d, i) =>
+        d === dialogue ? updatedDialogue : d
+      );
+
+      onChange({ ...data, dialogues: newDialogues });
+
+      setNewLine({
+        speaker: "",
+        text: "",
+        english: "",
+      });
+    }
+  };
+
+  return (
+    <Card className="p-4 space-y-4">
+      <div className="flex justify-between items-center">
+        <div className="grid grid-cols-3 gap-2 flex-1">
+          <Input
+            placeholder="Speaker"
+            value={newLine.speaker}
+            onChange={(e) =>
+              setNewLine({ ...newLine, speaker: e.target.value })
+            }
+          />
+          <Input
+            placeholder="Text"
+            value={newLine.text}
+            onChange={(e) => setNewLine({ ...newLine, text: e.target.value })}
+          />
+          <Input
+            placeholder="English translation"
+            value={newLine.english}
+            onChange={(e) =>
+              setNewLine({ ...newLine, english: e.target.value })
+            }
+          />
+        </div>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => {
+            addLine();
+          }}
+        >
+          <Plus className="h-4 w-4" />
+        </Button>
+      </div>
+    </Card>
+  );
+};
+
 const IntroductionForm = ({ data, onChange, setCurrentStep }) => {
+  const [currentPage, setCurrentPage] = useState(1);
   const dialogues = data.dialogues || [];
 
   const addDialogue = () => {
@@ -91,11 +161,11 @@ const IntroductionForm = ({ data, onChange, setCurrentStep }) => {
         scene: "",
         type: "",
         media: "",
-        lines: [{ speaker: "", text: "", english: "" }],
+        lines: [],
       },
     ];
     // Update parent component
-    onChange({ dialogues: newDialogues });
+    onChange({ ...data, dialogues: newDialogues });
   };
 
   const updateDialogue = (index, updatedDialogue) => {
@@ -114,13 +184,33 @@ const IntroductionForm = ({ data, onChange, setCurrentStep }) => {
     <div className="space-y-6">
       {dialogues.map((dialogue, idx) => (
         <>
-          <DialogueBlockEditor
-            key={idx}
-            dialogue={dialogue}
-            onChange={(updated) => updateDialogue(idx, updated)}
-            onRemove={() => removeDialogue(idx)}
-          />
-          <p>{dialogue.type}</p>
+          {idx + 1 == currentPage ? (
+            <>
+              <DialogueBlockEditor
+                key={idx}
+                dialogue={dialogue}
+                onChange={(updated) => updateDialogue(idx, updated)}
+                onRemove={() => removeDialogue(idx)}
+              />
+              <DialogLinesEditor
+                data={data}
+                dialogue={dialogue}
+                onChange={onChange}
+              />
+              <h2>Lines:</h2>
+              <ul className=" list-disc">
+                {dialogue.lines.map((l, index: number) => {
+                  return (
+                    <li key={index}>
+                      <span className="font-semibold">{l.speaker}:</span>{" "}
+                      {l.text}
+                      {l.english && <p>({l.english})</p>}
+                    </li>
+                  );
+                })}
+              </ul>
+            </>
+          ) : null}
         </>
       ))}
       <div>
@@ -131,9 +221,37 @@ const IntroductionForm = ({ data, onChange, setCurrentStep }) => {
         >
           Previous Section
         </Button>
-        <Button onClick={addDialogue} variant="outline">
+        <Button
+          onClick={() => {
+            addDialogue();
+            if (data.dialogues.length > 1) {
+              setCurrentPage((prevPage: number) => prevPage + 1);
+            }
+          }}
+          variant="outline"
+        >
           <Plus className="mr-2 h-4 w-4" /> Add Dialogue Block
         </Button>
+        <Button
+          onClick={() => {
+            setCurrentPage((prevPage: number) => prevPage - 1);
+          }}
+          disabled={data.dialogues.length <= 1 || currentPage == 1}
+        >
+          Previous Dialogue
+        </Button>
+        <Button
+          onClick={() => {
+            setCurrentPage((prevPage: number) => prevPage + 1);
+          }}
+          disabled={
+            data.dialogues.length <= 1 ||
+            currentPage + 1 == data.dialogues.length
+          }
+        >
+          Next Dialogue
+        </Button>
+
         <Button
           onClick={() => {
             setCurrentStep((prevCurrent: number) => prevCurrent + 1);
