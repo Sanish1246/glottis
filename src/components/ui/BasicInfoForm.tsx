@@ -1,10 +1,9 @@
 import { Button } from "./button";
 import { Plus, Trash2 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Card } from "./card";
 import { Input } from "./input";
 import Combobox from "./Combobox";
-import { Label } from "../ui/label";
 import { toast } from "sonner";
 
 type BasicInfoProps = {

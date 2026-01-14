@@ -6,17 +6,17 @@ import { Input } from "./input";
 import { Label } from "../ui/label";
 import { toast } from "sonner";
 
-const AddFibForm = ({ data, onChange }) => {
-  const [ques, setQues] = useState({ text: "", options: [], answer: "" });
+const AddMcqForm = ({ data, onChange }) => {
+  const [ques, setQues] = useState({ question: "", options: [], answer: "" });
   const [newOpt, setNewOpt] = useState(["", "", ""]);
 
   const addQues = () => {
-    if (newOpt.length === 3 && ques.text.trim() && ques.answer.trim()) {
+    if (newOpt.length === 3 && ques.question.trim() && ques.answer.trim()) {
       if (newOpt.includes(ques.answer)) {
         const updatedQuestion = { ...ques, options: newOpt };
-        const updatedFibs = [...data, updatedQuestion];
-        onChange(updatedFibs);
-        setQues({ text: "", options: [], answer: "" });
+        const updatedMcqs = [...data, updatedQuestion];
+        onChange(updatedMcqs);
+        setQues({ question: "", options: [], answer: "" });
         setNewOpt(["", "", ""]);
       } else {
         toast.error("The answer should match one of the options!", {
@@ -41,8 +41,8 @@ const AddFibForm = ({ data, onChange }) => {
           <Input
             id="question"
             placeholder="Question"
-            value={ques.text}
-            onChange={(e) => setQues({ ...ques, text: e.target.value })}
+            value={ques.question}
+            onChange={(e) => setQues({ ...ques, question: e.target.value })}
           />
           <Input
             placeholder="Add the answer"
@@ -91,23 +91,22 @@ const AddFibForm = ({ data, onChange }) => {
   );
 };
 
-const CreateFIB = ({ data, onChange, setCurrentStep }) => {
-  const removeFib = (index) => {
-    const newFibs = data.filter((_, i) => i !== index);
-    onChange(newFibs);
+const CreateMcq = ({ data, onChange, setCurrentStep }) => {
+  const removeMcq = (index) => {
+    const newMcqs = data.filter((_, i) => i !== index);
+    onChange(newMcqs);
   };
-
   return (
     <div className="space-y-6">
       <div>
-        <AddFibForm data={data} onChange={onChange} />
+        <AddMcqForm data={data} onChange={onChange} />
 
         <h2>Questions:</h2>
 
         <ul className="list-disc">
           {data.map((ques, idx) => (
             <li key={idx}>
-              {ques.text}:
+              {ques.question}:
               {ques.options.map((opt, index) => (
                 <span key={index}>{opt}, </span>
               ))}
@@ -115,7 +114,7 @@ const CreateFIB = ({ data, onChange, setCurrentStep }) => {
               <Button
                 size="icon"
                 variant="ghost"
-                onClick={() => removeFib(idx)}
+                onClick={() => removeMcq(idx)}
               >
                 <Trash2 className="h-4 w-4" />
               </Button>
@@ -145,4 +144,4 @@ const CreateFIB = ({ data, onChange, setCurrentStep }) => {
   );
 };
 
-export default CreateFIB;
+export default CreateMcq;

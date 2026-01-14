@@ -5,7 +5,10 @@ import BasicInfoForm from "../ui/BasicInfoForm";
 import IntroductionForm from "../ui/IntroductionForm";
 import VocabForm from "../ui/VocabForm";
 import GrammarForm from "../ui/GrammarForm";
-import CreateFIB from "../ui/createFIB";
+import CreateFIB from "../ui/CreateFIB";
+import CreateMcq from "../ui/CreateMcq";
+import CreateCulturalNote from "../ui/CreateCulturalNote";
+import CreateAdditionalResource from "../ui/CreateAdditionalResource";
 
 const steps = [
   "Basic Info", // language, level, title, objectives
@@ -14,9 +17,10 @@ const steps = [
   "Grammar", // grammar sections
   "Excercises - Fill in the blanks", // fill-in-blank & MCQ
   "Excercises - MCQs",
-  "Cultural Notes", // optional
+  "Cultural Notes",
   "Additional resoruces",
-  "Summary", // additional resources, summary
+  "Summary - Grammar points", // additional resources, summary
+  "Summary - Skills learned",
 ];
 
 const CreateLesson = () => {
@@ -108,7 +112,43 @@ const CreateLesson = () => {
               <CreateFIB
                 data={lessonData.fib}
                 onChange={(updatedFIB) =>
-                  setLessonData({ ...lessonData, grammar: updatedFIB })
+                  setLessonData({ ...lessonData, fib: updatedFIB })
+                }
+                setCurrentStep={setCurrentStep}
+              />
+            </>
+          )}
+          {currentStep === 5 && (
+            <>
+              <CreateMcq
+                data={lessonData.mcq}
+                onChange={(updatedMcq) =>
+                  setLessonData({ ...lessonData, mcq: updatedMcq })
+                }
+                setCurrentStep={setCurrentStep}
+              />
+            </>
+          )}
+          {currentStep === 6 && (
+            <>
+              <CreateCulturalNote
+                data={lessonData.cultural_note}
+                onChange={(updatedNote) =>
+                  setLessonData({ ...lessonData, cultural_note: updatedNote })
+                }
+                setCurrentStep={setCurrentStep}
+              />
+            </>
+          )}
+          {currentStep === 7 && (
+            <>
+              <CreateAdditionalResource
+                data={lessonData.additional_resources}
+                onChange={(updatedResource) =>
+                  setLessonData({
+                    ...lessonData,
+                    additional_resources: updatedResource,
+                  })
                 }
                 setCurrentStep={setCurrentStep}
               />
