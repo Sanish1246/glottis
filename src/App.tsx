@@ -129,7 +129,7 @@ function App() {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Link to="/lessons" className="hover:underline">
+                    <Link to="/customLessons" className="hover:underline">
                       Custom Lessons
                     </Link>
                   </DropdownMenuItem>

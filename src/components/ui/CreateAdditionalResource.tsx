@@ -102,7 +102,7 @@ const CreateAdditionalResource = ({ data, onChange, setCurrentStep }) => {
         <ul className="list-disc">
           {data.map((r, index: number) => (
             <li key={index}>
-              <a href={r.url}>
+              <a href={r.url} target="_blank" className="underline">
                 [{r.type}] - {r.title}
               </a>
               <Button
@@ -120,7 +120,7 @@ const CreateAdditionalResource = ({ data, onChange, setCurrentStep }) => {
         </ul>
       </div>
 
-      <div>
+      <div className="flex justify-between">
         <Button
           onClick={() => {
             setCurrentStep((prevCurrent: number) => prevCurrent - 1);

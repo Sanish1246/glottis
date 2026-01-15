@@ -133,13 +133,22 @@ const VocabForm = ({ data, onChange, setCurrentStep }) => {
           ) : null}
         </div>
       ))}
-      <div>
+      <div className="flex justify-between">
         <Button
           onClick={() => {
             setCurrentStep((prevCurrent: number) => prevCurrent - 1);
           }}
         >
           Previous Section
+        </Button>
+
+        <Button
+          onClick={() => {
+            setCurrentPage((prevPage: number) => prevPage - 1);
+          }}
+          disabled={data.length <= 1 || currentPage == 1}
+        >
+          Previous Deck
         </Button>
         <Button
           onClick={() => {
@@ -151,14 +160,6 @@ const VocabForm = ({ data, onChange, setCurrentStep }) => {
           variant="outline"
         >
           <Plus className="mr-2 h-4 w-4" /> Add Deck
-        </Button>
-        <Button
-          onClick={() => {
-            setCurrentPage((prevPage: number) => prevPage - 1);
-          }}
-          disabled={data.length <= 1 || currentPage == 1}
-        >
-          Previous Deck
         </Button>
         <Button
           onClick={() => {

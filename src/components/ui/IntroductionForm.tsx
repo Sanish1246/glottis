@@ -213,13 +213,22 @@ const IntroductionForm = ({ data, onChange, setCurrentStep }) => {
           ) : null}
         </>
       ))}
-      <div>
+      <div className="flex justify-between">
         <Button
           onClick={() => {
             setCurrentStep((prevCurrent: number) => prevCurrent - 1);
           }}
         >
           Previous Section
+        </Button>
+
+        <Button
+          onClick={() => {
+            setCurrentPage((prevPage: number) => prevPage - 1);
+          }}
+          disabled={data.dialogues.length <= 1 || currentPage == 1}
+        >
+          Previous Dialogue
         </Button>
         <Button
           onClick={() => {
@@ -231,14 +240,6 @@ const IntroductionForm = ({ data, onChange, setCurrentStep }) => {
           variant="outline"
         >
           <Plus className="mr-2 h-4 w-4" /> Add Dialogue Block
-        </Button>
-        <Button
-          onClick={() => {
-            setCurrentPage((prevPage: number) => prevPage - 1);
-          }}
-          disabled={data.dialogues.length <= 1 || currentPage == 1}
-        >
-          Previous Dialogue
         </Button>
         <Button
           onClick={() => {

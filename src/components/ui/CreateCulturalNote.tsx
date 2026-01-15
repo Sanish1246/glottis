@@ -89,7 +89,7 @@ const CreateCulturalNote = ({ data, onChange, setCurrentStep }) => {
         </ul>
       </div>
 
-      <div>
+      <div className="flex justify-between">
         <Button
           onClick={() => {
             if (

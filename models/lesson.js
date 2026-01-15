@@ -11,7 +11,7 @@ const DialogueBlockSchema = new mongoose.Schema({
   title: { type: String, required: true },
   scene: { type: String, required: true },
   type: { type: String, required: true },
-  media: { type: String, required: true },
+  media: { type: String },
   lines: [DialogueLineSchema],
 });
 
@@ -35,7 +35,7 @@ const GrammarContentSchema = new mongoose.Schema({
 
 const GrammarSchema = new mongoose.Schema({
   title: { type: String, required: true },
-  type: { type: String, required: true },
+  type: { type: String },
   content: [GrammarContentSchema],
   notes: [String],
 });
@@ -71,11 +71,11 @@ const SummarySchema = new mongoose.Schema({
 const LessonSchema = new mongoose.Schema({
   language: { type: String, required: true },
 
-  voice_language: { type: String, required: true },
+  voice_language: { type: String },
 
   level: { type: String, required: true },
-  lessonNumber: { type: Number, required: true },
-  lessonNumber_level: { type: Number, required: true },
+  lessonNumber: { type: Number },
+  lessonNumber_level: { type: Number },
   title: { type: String, required: true },
 
   objectives: [String],
@@ -94,6 +94,8 @@ const LessonSchema = new mongoose.Schema({
   additional_resources: [AdditionalResourceSchema],
 
   summary: SummarySchema,
+  author: { type: String },
+  status: { type: String },
 });
 
 export default mongoose.model("lessons", LessonSchema);

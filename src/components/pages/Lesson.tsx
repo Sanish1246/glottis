@@ -177,10 +177,13 @@ const Lesson = () => {
           Back
         </Button>
         <h1 className="font-black text-xl">
-          Lesson {lesson.lessonNumber} - {lesson.title}
+          {lesson.author
+            ? `${lesson.title}`
+            : ` Lesson ${lesson.lessonNumber} - ${lesson.title}`}
         </h1>
       </div>
 
+      <h2 className="font-semibold">Objectives</h2>
       <ul className="list-disc">
         {(lesson.objectives ?? []).map((objective: string, index: number) => (
           <li key={index}>{objective}</li>
@@ -215,7 +218,10 @@ const Lesson = () => {
       </div>
 
       <div className="mt-10">
-        <h2 className="font-bold">Vocabulary</h2>
+        {lesson.vocabulary.length > 0 ? (
+          <h2 className="font-bold">Vocabulary</h2>
+        ) : null}
+
         {(lesson.vocabulary ?? []).map((l: any, index: number) => (
           <div key={index} className="mx-auto mt-10">
             <h3 className="font-semibold">{l.category}</h3>
@@ -230,7 +236,9 @@ const Lesson = () => {
       </div>
 
       <div>
-        <h2 className="font-bold mt-5">Grammar</h2>
+        {lesson.grammar.length > 0 ? (
+          <h2 className="font-bold">Grammar</h2>
+        ) : null}
         {(lesson.grammar ?? []).map((g: any, index: number) => (
           <div key={index} className="mx-auto mb-10">
             <h3 className="font-semibold mt-5">{g.title}</h3>
@@ -250,11 +258,17 @@ const Lesson = () => {
 
       {/*  Exercises  */}
       <div>
-        <h2 className="font-bold">Exercises - Test your knowledge</h2>
+        {lesson.fib.length > 0 || lesson.mcq.length > 0 ? (
+          <h2 className="font-bold">Exercises - Test your knowledge</h2>
+        ) : null}
+
         {correctFib < totalFib && (
           <>
-            <h3 className="font-semibold">Fill in the blanks</h3>
-            {lesson.fib.map((q: any, index: number) => (
+            {lesson.fib.length > 0 ? (
+              <h3 className="font-semibold">Fill in the blanks</h3>
+            ) : null}
+
+            {(lesson.fib ?? []).map((q: any, index: number) => (
               <div
                 key={index}
                 className={`mx-auto ${
@@ -284,8 +298,11 @@ const Lesson = () => {
         {/*  Multiple Choice Questions */}
         {correctFib >= totalFib && correctMcq < totalMcq && (
           <>
-            <h3 className="mt-5 font-semibold">Multiple Choice Questions</h3>
-            {lesson.mcq.map((q: any, index: number) => (
+            {lesson.mcq.length > 0 ? (
+              <h3 className="mt-5 font-semibold">Multiple Choice Questions</h3>
+            ) : null}
+
+            {(lesson.mcq ?? []).map((q: any, index: number) => (
               <div
                 key={index}
                 className={`mx-auto ${

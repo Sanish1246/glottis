@@ -124,7 +124,7 @@ const CreateFIB = ({ data, onChange, setCurrentStep }) => {
         </ul>
       </div>
 
-      <div>
+      <div className="flex justify-between">
         <Button
           onClick={() => {
             setCurrentStep((prevCurrent: number) => prevCurrent - 1);

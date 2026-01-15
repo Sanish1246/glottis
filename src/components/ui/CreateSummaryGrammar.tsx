@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Card } from "./card";
 import { Input } from "./input";
 import { Label } from "../ui/label";
-import { toast } from "sonner";
 
 const AddGrammarForm = ({ data, onChange }) => {
   const [newGrammar, setNewGrammar] = useState("");
@@ -34,7 +33,7 @@ const AddGrammarForm = ({ data, onChange }) => {
             onChange={(e) => setNewGrammar(e.target.value)}
           />
         </div>
-        <Button onClick={addGrammar}>
+        <Button onClick={addGrammar} className="ml-2">
           <Plus className="h-4 w-4" />
         </Button>
       </div>
@@ -44,8 +43,13 @@ const AddGrammarForm = ({ data, onChange }) => {
 
 const CreateSummaryGrammar = ({ data, onChange, setCurrentStep }) => {
   const removeGrammar = (index) => {
-    const newGrammar = data.filter((_, i) => i !== index);
-    onChange(newGrammar);
+    const updatedGrammarPoints = data.grammarPoints.filter(
+      (_, i) => i !== index
+    );
+    onChange({
+      ...data,
+      grammarPoints: updatedGrammarPoints,
+    });
   };
   return (
     <div className="space-y-6">
@@ -71,7 +75,7 @@ const CreateSummaryGrammar = ({ data, onChange, setCurrentStep }) => {
         </ul>
       </div>
 
-      <div>
+      <div className="flex justify-between">
         <Button
           onClick={() => {
             setCurrentStep((prevCurrent: number) => prevCurrent - 1);
@@ -82,7 +86,7 @@ const CreateSummaryGrammar = ({ data, onChange, setCurrentStep }) => {
 
         <Button
           onClick={() => {
-            setCurrentStep((prevCurrent: number) => prevCurrent - 1);
+            setCurrentStep((prevCurrent: number) => prevCurrent + 1);
           }}
         >
           Next Section

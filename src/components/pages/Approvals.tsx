@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import { Badge } from "../ui/badge";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "../ui/button";
@@ -44,6 +45,7 @@ interface MediaProps {
 const Approvals = () => {
   const [medias, setMedias] = useState([]);
   const [decksArray, setDecksArray] = useState([]);
+  const [lessons, setLessons] = useState([]);
   const [action, setAction] = useState("");
   const fetchDecks = async () => {
     try {
@@ -73,6 +75,26 @@ const Approvals = () => {
       });
       const data = await response.json();
       setMedias(data);
+    } catch (error) {
+      toast.error(String(error), {
+        action: {
+          label: "Close",
+          onClick: () => {
+            toast.dismiss();
+          },
+        },
+      });
+    }
+  };
+
+  const fetchLessons = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/lessons/pending`, {
+        method: "GET",
+        credentials: "include",
+      });
+      const data = await response.json();
+      setLessons(data);
     } catch (error) {
       toast.error(String(error), {
         action: {
@@ -153,6 +175,40 @@ const Approvals = () => {
     }
   };
 
+  const lessonActions = async (id: string, approve: boolean) => {
+    let url = "";
+    if (approve == true) {
+      url = `http://localhost:8000/lessons/approve/${id}`;
+    } else {
+      url = `http://localhost:8000/lessons/reject/${id}`;
+    }
+    try {
+      const response = await fetch(url, {
+        method: "PUT",
+        credentials: "include",
+      });
+      const data = await response.json();
+      setLessons(lessons.filter((item) => item._id !== id));
+      toast.success(data.message, {
+        action: {
+          label: "Close",
+          onClick: () => {
+            toast.dismiss();
+          },
+        },
+      });
+    } catch (error) {
+      toast.error(String(error), {
+        action: {
+          label: "Close",
+          onClick: () => {
+            toast.dismiss();
+          },
+        },
+      });
+    }
+  };
+
   useEffect(() => {
     fetchDecks();
   }, []);
@@ -177,7 +233,14 @@ const Approvals = () => {
           >
             Medias
           </TabsTrigger>
-          <TabsTrigger value="lessons">Lessons</TabsTrigger>
+          <TabsTrigger
+            value="lessons"
+            onClick={() => {
+              fetchLessons();
+            }}
+          >
+            Lessons
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="decks">
           <h2 className="font-bold text-center">
@@ -285,6 +348,62 @@ const Approvals = () => {
                         e.preventDefault();
                         e.stopPropagation();
                         mediaActions(media._id, false);
+                      }}
+                    >
+                      Reject
+                    </Button>
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
+        </TabsContent>
+        <TabsContent value="lessons">
+          <h2 className="font-bold text-center">
+            {lessons.length == 0
+              ? "No lessons pending for approval!"
+              : "Lessons pending for approval"}
+          </h2>
+
+          {lessons.map((lesson) => {
+            return (
+              <Link
+                to={`/lessons/${lesson._id}`}
+                state={{ lesson }}
+                className="block hover:translate-1"
+              >
+                <div
+                  key={lesson._id}
+                  className="items-center border-2 rounded-lg p-3 mb-4 mt-2 shadow-sm hover:cursor-pointer deck hover:translate-1 flex flex-row justify-between"
+                >
+                  <p>
+                    <b>{lesson.title}</b>
+                  </p>
+
+                  <Badge>{lesson.language}</Badge>
+                  <Badge>{lesson.level}</Badge>
+
+                  <span className="text-sm">
+                    Created by <b>{lesson.author}</b>
+                  </span>
+
+                  <span className="flex gap-1">
+                    <Button
+                      className="bg-green-600 hover:bg-green-400"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        lessonActions(lesson._id, true);
+                      }}
+                    >
+                      Approve
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        lessonActions(lesson._id, false);
                       }}
                     >
                       Reject

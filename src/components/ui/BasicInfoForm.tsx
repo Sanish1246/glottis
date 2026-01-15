@@ -1,6 +1,6 @@
 import { Button } from "./button";
 import { Plus, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "./card";
 import { Input } from "./input";
 import Combobox from "./Combobox";
@@ -43,6 +43,7 @@ const BasicInfoForm = ({ data, onChange, setCurrentStep }: any) => {
     onChange({ ...data, [field]: value });
   };
   const [level, setLevel] = useState("Beginner");
+
   const [newObjective, setNewObjective] = useState("");
 
   const addObjective = () => {
@@ -53,6 +54,10 @@ const BasicInfoForm = ({ data, onChange, setCurrentStep }: any) => {
       setNewObjective("");
     }
   };
+
+  useEffect(() => {
+    updateField("level", level);
+  }, [level]);
 
   return (
     <div>
@@ -99,28 +104,30 @@ const BasicInfoForm = ({ data, onChange, setCurrentStep }: any) => {
           })}
         </ul>
       </div>
-      <Button
-        onClick={() => {
-          if (
-            data.title == "" ||
-            data.language == "" ||
-            data.objectives.length == 0
-          ) {
-            toast.error("You should fill in all the fields first!", {
-              action: {
-                label: "Close",
-                onClick: () => {
-                  toast.dismiss();
+      <div className="flex justify-end">
+        <Button
+          onClick={() => {
+            if (
+              data.title == "" ||
+              data.language == "" ||
+              data.objectives.length == 0
+            ) {
+              toast.error("You should fill in all the fields first!", {
+                action: {
+                  label: "Close",
+                  onClick: () => {
+                    toast.dismiss();
+                  },
                 },
-              },
-            });
-          } else {
-            setCurrentStep((prevCurrent: number) => prevCurrent + 1);
-          }
-        }}
-      >
-        Next section
-      </Button>
+              });
+            } else {
+              setCurrentStep((prevCurrent: number) => prevCurrent + 1);
+            }
+          }}
+        >
+          Next section
+        </Button>
+      </div>
     </div>
   );
 };

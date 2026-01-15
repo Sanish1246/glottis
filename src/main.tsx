@@ -20,6 +20,7 @@ import Immersion from "./components/pages/Immersion.tsx";
 import MediaInfo from "./components/pages/MediaInfo.tsx";
 import CreateDeck from "./components/pages/CreateDeck.tsx";
 import CustomDecks from "./components/pages/CustomDecks.tsx";
+import CustomLessons from "./components/pages/CustomLessons.tsx";
 import Approvals from "./components/pages/Approvals.tsx";
 import CreateLesson from "./components/pages/CreateLesson.tsx";
 
@@ -42,6 +43,7 @@ const router = createBrowserRouter([
       { path: "media", element: <MediaInfo /> },
       { path: "createDeck", element: <CreateDeck /> },
       { path: "customDecks", element: <CustomDecks /> },
+      { path: "customLessons", element: <CustomLessons /> },
       { path: "approvals", element: <Approvals /> },
       { path: "create_lesson", element: <CreateLesson /> },
     ],

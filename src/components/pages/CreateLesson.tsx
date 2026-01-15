@@ -173,6 +173,7 @@ const CreateLesson = () => {
           {currentStep === 9 && (
             <>
               <CreateSummarySkills
+                fullLesson={lessonData}
                 data={lessonData.summary}
                 onChange={(updatedSummary) =>
                   setLessonData({
@@ -184,7 +185,6 @@ const CreateLesson = () => {
               />
             </>
           )}
-          {currentStep}
         </CardContent>
       </Card>
     </div>
