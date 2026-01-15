@@ -9,6 +9,8 @@ import CreateFIB from "../ui/CreateFIB";
 import CreateMcq from "../ui/CreateMcq";
 import CreateCulturalNote from "../ui/CreateCulturalNote";
 import CreateAdditionalResource from "../ui/CreateAdditionalResource";
+import CreateSummaryGrammar from "../ui/CreateSummaryGrammar";
+import CreateSummarySkills from "../ui/CreateSummarySkills";
 
 const steps = [
   "Basic Info", // language, level, title, objectives
@@ -148,6 +150,34 @@ const CreateLesson = () => {
                   setLessonData({
                     ...lessonData,
                     additional_resources: updatedResource,
+                  })
+                }
+                setCurrentStep={setCurrentStep}
+              />
+            </>
+          )}
+          {currentStep === 8 && (
+            <>
+              <CreateSummaryGrammar
+                data={lessonData.summary}
+                onChange={(updatedSummary) =>
+                  setLessonData({
+                    ...lessonData,
+                    summary: updatedSummary,
+                  })
+                }
+                setCurrentStep={setCurrentStep}
+              />
+            </>
+          )}
+          {currentStep === 9 && (
+            <>
+              <CreateSummarySkills
+                data={lessonData.summary}
+                onChange={(updatedSummary) =>
+                  setLessonData({
+                    ...lessonData,
+                    summary: updatedSummary,
                   })
                 }
                 setCurrentStep={setCurrentStep}

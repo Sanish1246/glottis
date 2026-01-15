@@ -49,7 +49,7 @@ const AddNotesForm = ({ note, onChange }) => {
             value={newNote}
             onChange={(e) => setNewNote(e.target.value)}
           />
-          <Button onClick={addNote} className="w-[50%]">
+          <Button onClick={addNote} className="w-[30%]">
             Add Note
           </Button>
         </div>
