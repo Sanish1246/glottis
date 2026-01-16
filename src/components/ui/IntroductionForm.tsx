@@ -41,6 +41,13 @@ const DialogueBlockEditor = ({ dialogue, onChange, onRemove }) => {
     if (uploadedFile) {
       setFileName(uploadedFile.name);
       setFile(uploadedFile);
+      // Update both file and media in one call
+      const updated = {
+        ...dialogue,
+        file: uploadedFile,
+        media: uploadedFile.name,
+      };
+      onChange(updated);
     }
   };
 
@@ -159,25 +166,29 @@ const IntroductionForm = ({ data, onChange, setCurrentStep }) => {
       {
         title: "",
         scene: "",
-        type: "",
+        type: "Formal",
         media: "",
+        file: null,
         lines: [],
       },
     ];
-    // Update parent component
     onChange({ ...data, dialogues: newDialogues });
+    setCurrentPage(newDialogues.length);
   };
-
   const updateDialogue = (index, updatedDialogue) => {
     const newDialogues = dialogues.map((dialogue, i) =>
       i === index ? updatedDialogue : dialogue
     );
-    onChange({ dialogues: newDialogues });
+    onChange({ ...data, dialogues: newDialogues }); // FIX: Pass full data object
   };
 
   const removeDialogue = (index) => {
     const newDialogues = dialogues.filter((_, i) => i !== index);
-    onChange({ dialogues: newDialogues });
+    onChange({ ...data, dialogues: newDialogues });
+    // Reset to first page if we deleted the current page
+    if (currentPage > newDialogues.length) {
+      setCurrentPage(Math.max(1, newDialogues.length));
+    }
   };
 
   return (

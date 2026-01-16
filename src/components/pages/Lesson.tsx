@@ -193,7 +193,8 @@ const Lesson = () => {
       <div className="mt-5">
         {(lesson.introduction?.dialogues ?? []).map((d: any, i: number) => (
           <div key={i} className="mt-7">
-            <h2 className="font-semibold">{d.scene}</h2>
+            <h3 className="font-bold">{d.title}</h3>
+            <h4 className="font-semibold">{d.scene}</h4>
             {d.media && (
               <img
                 src={d.media}

@@ -56,35 +56,63 @@ const CreateSummarySkills = ({
     });
   };
 
+  // const submitLesson = async () => {
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append("lesson", JSON.stringify(fullLesson));
+
+  //     // Collect all dialogue images
+  //     fullLesson.introduction?.dialogues?.forEach((dialogue, idx) => {
+  //       if (dialogue.file instanceof File) {
+  //         formData.append("dialogueImages", dialogue.file);
+  //       }
+  //     });
+
+  //     const res = await fetch("http://localhost:8000/lessons/submit", {
+  //       method: "POST",
+  //       credentials: "include",
+  //       body: formData,
+  //     });
+
+  //     const data = await res.json();
+  //     if (data.message) {
+  //       toast.success(data.message);
+  //     }
+  //   } catch (error: any) {
+  //     toast.error(error.message || "Submission failed");
+  //   }
+  // };
   const submitLesson = async () => {
     try {
+      const formData = new FormData();
+      formData.append("lesson", JSON.stringify(fullLesson));
+
+      // Collect all dialogue images
+      let fileCount = 0;
+      fullLesson.introduction?.dialogues?.forEach((dialogue, idx) => {
+        if (dialogue.file instanceof File) {
+          console.log(`Adding file ${idx}: ${dialogue.file.name}`);
+          formData.append("dialogueImages", dialogue.file);
+          fileCount++;
+        }
+      });
+
+      console.log(`Submitting with ${fileCount} files`);
+
       const res = await fetch("http://localhost:8000/lessons/submit", {
         method: "POST",
         credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(fullLesson),
+        body: formData,
       });
 
       const data = await res.json();
       if (data.message) {
-        toast.success(data.message, {
-          action: {
-            label: "Close",
-            onClick: () => {
-              toast.dismiss();
-            },
-          },
-        });
+        toast.success(data.message);
+      } else if (data.error) {
+        toast.error(data.error);
       }
     } catch (error: any) {
-      toast.error(error, {
-        action: {
-          label: "Close",
-          onClick: () => {
-            toast.dismiss();
-          },
-        },
-      });
+      toast.error(error.message || "Submission failed");
     }
   };
 

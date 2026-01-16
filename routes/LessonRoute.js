@@ -1,5 +1,8 @@
 import express from "express";
 import Lesson from "../models/lesson.js";
+import path from "path";
+import { fileURLToPath } from "url";
+import fs from "fs/promises";
 
 const router = express.Router();
 
@@ -91,11 +94,76 @@ router.get("/content/:id", async (req, res) => {
   }
 });
 
+// router.post("/submit", async (req, res) => {
+//   const lesson = req.body;
+//   try {
+//     if (!req.session?.user) {
+//       return res.status(401).json({ error: "Not authenticated" });
+//     }
+
+//     const newLesson = {
+//       ...lesson,
+//       author: req.session.user.username,
+//       status: "Pending",
+//     };
+
+//     const created = await Lesson.create(newLesson);
+//     console.log(newLesson);
+//     res.json({ message: "Lesson submitted successfully!" });
+//   } catch (err) {
+//     console.error("Unable to submit lesson:", err);
+//     res.status(500).json({ error: "Server error while submitting" });
+//   }
+// });
+
 router.post("/submit", async (req, res) => {
-  const lesson = req.body;
   try {
     if (!req.session?.user) {
       return res.status(401).json({ error: "Not authenticated" });
+    }
+
+    const lessonField = req.body?.lesson;
+    const lesson = lessonField
+      ? typeof lessonField === "string"
+        ? JSON.parse(lessonField)
+        : lessonField
+      : req.body;
+
+    const files = req.files?.dialogueImages
+      ? Array.isArray(req.files.dialogueImages)
+        ? req.files.dialogueImages
+        : [req.files.dialogueImages]
+      : [];
+
+    console.log("Files received:", files.length);
+    console.log("Dialogues:", lesson.introduction?.dialogues.length);
+
+    const uploadDir = path.join(process.cwd(), "public", "customLessons");
+    await fs.mkdir(uploadDir, { recursive: true });
+
+    // Process dialogue images - match files to dialogues that have media
+    if (lesson.introduction?.dialogues) {
+      let fileIndex = 0;
+      for (let i = 0; i < lesson.introduction.dialogues.length; i++) {
+        const dialogue = lesson.introduction.dialogues[i];
+
+        // If dialogue has media placeholder (filename from upload) and we have files
+        if (
+          dialogue.media &&
+          dialogue.media !== "" &&
+          fileIndex < files.length
+        ) {
+          const file = files[fileIndex];
+          const fileName = `${Date.now()}-${i}-${file.name}`;
+          const dest = path.join(uploadDir, fileName);
+
+          console.log(`Saving file ${fileIndex} to ${dest}`);
+          await fs.writeFile(dest, file.data);
+
+          lesson.introduction.dialogues[i].media = `/customLessons/${fileName}`;
+          fileIndex++;
+        }
+      }
     }
 
     const newLesson = {
@@ -104,8 +172,7 @@ router.post("/submit", async (req, res) => {
       status: "Pending",
     };
 
-    const created = await Lesson.create(newLesson);
-    console.log(newLesson);
+    await Lesson.create(newLesson);
     res.json({ message: "Lesson submitted successfully!" });
   } catch (err) {
     console.error("Unable to submit lesson:", err);
@@ -124,7 +191,7 @@ router.get("/customLessons/:level", async (req, res) => {
     });
     res.json(lessons);
   } catch (err) {
-    console.error("Unable to get flashcard lessons:", err);
+    console.error("Unable to get lessons:", err);
     res.status(500).json({ error: "Server while fetching lessons" });
   }
 });
