@@ -59,6 +59,48 @@ const BasicInfoForm = ({ data, onChange, setCurrentStep }: any) => {
     updateField("level", level);
   }, [level]);
 
+  const checkExisting = async () => {
+    const fields = {
+      title: data.title,
+      language: data.language,
+    };
+    try {
+      const res = await fetch(
+        `http://localhost:8000/lessons/existing/${fields.title}/${fields.language}`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+      const data = await res.json();
+      console.log(data);
+      if (data.length == 0) {
+        setCurrentStep((prevCurrent: number) => prevCurrent + 1);
+      } else {
+        toast.error(
+          "A custom lesson with this title and language already exists!",
+          {
+            action: {
+              label: "Close",
+              onClick: () => {
+                toast.dismiss();
+              },
+            },
+          }
+        );
+      }
+    } catch (error) {
+      toast.error(String(error), {
+        action: {
+          label: "Close",
+          onClick: () => {
+            toast.dismiss();
+          },
+        },
+      });
+    }
+  };
+
   return (
     <div>
       <Card className="p-4 space-y-4">
@@ -121,7 +163,7 @@ const BasicInfoForm = ({ data, onChange, setCurrentStep }: any) => {
                 },
               });
             } else {
-              setCurrentStep((prevCurrent: number) => prevCurrent + 1);
+              checkExisting();
             }
           }}
         >

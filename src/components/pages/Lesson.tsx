@@ -87,7 +87,6 @@ const Lesson = () => {
 
   const removeFromDeck = async (card: FlashCardProps) => {
     try {
-      console.log(card);
       const res = await fetch(
         `http://localhost:8000/remove_card/${languagePath}`,
         {

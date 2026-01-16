@@ -21,6 +21,29 @@ router.get("/pending", async (req, res) => {
   }
 });
 
+router.get("/existing/:title/:language", async (req, res) => {
+  const checkTitle = req.params.title;
+  const checkLang = req.params.language;
+
+  try {
+    if (req.session?.user.role !== "admin") {
+      return res.status(401).json({ error: "You don't have permissions!" });
+    }
+
+    const lessons = await Lesson.find({
+      language: checkLang,
+      title: checkTitle,
+      status: { $in: ["Approved", "Pending"] },
+    });
+
+    console.log(lessons);
+    res.json(lessons);
+  } catch (err) {
+    console.error("Unable to get lessons:", err);
+    res.status(500).json({ error: "Server while fetching lessons" });
+  }
+});
+
 router.put("/approve/:id", async (req, res) => {
   const id = req.params.id;
   try {
