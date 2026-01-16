@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { Progress } from "../ui/progress";
+import { Button } from "../ui/button";
 import BasicInfoForm from "../ui/BasicInfoForm";
 import IntroductionForm from "../ui/IntroductionForm";
 import VocabForm from "../ui/VocabForm";
@@ -11,6 +12,7 @@ import CreateCulturalNote from "../ui/CreateCulturalNote";
 import CreateAdditionalResource from "../ui/CreateAdditionalResource";
 import CreateSummaryGrammar from "../ui/CreateSummaryGrammar";
 import CreateSummarySkills from "../ui/CreateSummarySkills";
+import { useNavigate } from "react-router-dom";
 
 const steps = [
   "Basic Info", // language, level, title, objectives
@@ -27,6 +29,7 @@ const steps = [
 
 const CreateLesson = () => {
   const [currentStep, setCurrentStep] = useState(0);
+  const navigate = useNavigate();
   const [lessonData, setLessonData] = useState({
     language: "",
     level: "",
@@ -63,131 +66,140 @@ const CreateLesson = () => {
   };
 
   return (
-    <div className=" mx-auto p-6">
-      <Progress value={(currentStep + 1) * (100 / steps.length)} />
+    <>
+      <Button
+        onClick={() => {
+          navigate(-1);
+        }}
+      >
+        Back
+      </Button>
+      <div className=" mx-auto p-6">
+        <Progress value={(currentStep + 1) * (100 / steps.length)} />
 
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle>{steps[currentStep]}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {currentStep === 0 && (
-            <BasicInfoForm
-              data={lessonData}
-              onChange={updateLesson}
-              setCurrentStep={setCurrentStep}
-            />
-          )}
-          {currentStep === 1 && (
-            <>
-              <IntroductionForm
-                data={lessonData.introduction}
-                onChange={updateIntroduction}
+        <Card className="mt-6">
+          <CardHeader>
+            <CardTitle>{steps[currentStep]}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {currentStep === 0 && (
+              <BasicInfoForm
+                data={lessonData}
+                onChange={updateLesson}
                 setCurrentStep={setCurrentStep}
               />
-            </>
-          )}
-          {currentStep === 2 && (
-            <>
-              <VocabForm
-                data={lessonData.vocabulary}
-                onChange={(updatedVocab) =>
-                  setLessonData({ ...lessonData, vocabulary: updatedVocab })
-                }
-                setCurrentStep={setCurrentStep}
-              />
-            </>
-          )}
-          {currentStep === 3 && (
-            <>
-              <GrammarForm
-                data={lessonData.grammar}
-                onChange={(updatedGrammar) =>
-                  setLessonData({ ...lessonData, grammar: updatedGrammar })
-                }
-                setCurrentStep={setCurrentStep}
-              />
-            </>
-          )}
-          {currentStep === 4 && (
-            <>
-              <CreateFIB
-                data={lessonData.fib}
-                onChange={(updatedFIB) =>
-                  setLessonData({ ...lessonData, fib: updatedFIB })
-                }
-                setCurrentStep={setCurrentStep}
-              />
-            </>
-          )}
-          {currentStep === 5 && (
-            <>
-              <CreateMcq
-                data={lessonData.mcq}
-                onChange={(updatedMcq) =>
-                  setLessonData({ ...lessonData, mcq: updatedMcq })
-                }
-                setCurrentStep={setCurrentStep}
-              />
-            </>
-          )}
-          {currentStep === 6 && (
-            <>
-              <CreateCulturalNote
-                data={lessonData.cultural_note}
-                onChange={(updatedNote) =>
-                  setLessonData({ ...lessonData, cultural_note: updatedNote })
-                }
-                setCurrentStep={setCurrentStep}
-              />
-            </>
-          )}
-          {currentStep === 7 && (
-            <>
-              <CreateAdditionalResource
-                data={lessonData.additional_resources}
-                onChange={(updatedResource) =>
-                  setLessonData({
-                    ...lessonData,
-                    additional_resources: updatedResource,
-                  })
-                }
-                setCurrentStep={setCurrentStep}
-              />
-            </>
-          )}
-          {currentStep === 8 && (
-            <>
-              <CreateSummaryGrammar
-                data={lessonData.summary}
-                onChange={(updatedSummary) =>
-                  setLessonData({
-                    ...lessonData,
-                    summary: updatedSummary,
-                  })
-                }
-                setCurrentStep={setCurrentStep}
-              />
-            </>
-          )}
-          {currentStep === 9 && (
-            <>
-              <CreateSummarySkills
-                fullLesson={lessonData}
-                data={lessonData.summary}
-                onChange={(updatedSummary) =>
-                  setLessonData({
-                    ...lessonData,
-                    summary: updatedSummary,
-                  })
-                }
-                setCurrentStep={setCurrentStep}
-              />
-            </>
-          )}
-        </CardContent>
-      </Card>
-    </div>
+            )}
+            {currentStep === 1 && (
+              <>
+                <IntroductionForm
+                  data={lessonData.introduction}
+                  onChange={updateIntroduction}
+                  setCurrentStep={setCurrentStep}
+                />
+              </>
+            )}
+            {currentStep === 2 && (
+              <>
+                <VocabForm
+                  data={lessonData.vocabulary}
+                  onChange={(updatedVocab) =>
+                    setLessonData({ ...lessonData, vocabulary: updatedVocab })
+                  }
+                  setCurrentStep={setCurrentStep}
+                />
+              </>
+            )}
+            {currentStep === 3 && (
+              <>
+                <GrammarForm
+                  data={lessonData.grammar}
+                  onChange={(updatedGrammar) =>
+                    setLessonData({ ...lessonData, grammar: updatedGrammar })
+                  }
+                  setCurrentStep={setCurrentStep}
+                />
+              </>
+            )}
+            {currentStep === 4 && (
+              <>
+                <CreateFIB
+                  data={lessonData.fib}
+                  onChange={(updatedFIB) =>
+                    setLessonData({ ...lessonData, fib: updatedFIB })
+                  }
+                  setCurrentStep={setCurrentStep}
+                />
+              </>
+            )}
+            {currentStep === 5 && (
+              <>
+                <CreateMcq
+                  data={lessonData.mcq}
+                  onChange={(updatedMcq) =>
+                    setLessonData({ ...lessonData, mcq: updatedMcq })
+                  }
+                  setCurrentStep={setCurrentStep}
+                />
+              </>
+            )}
+            {currentStep === 6 && (
+              <>
+                <CreateCulturalNote
+                  data={lessonData.cultural_note}
+                  onChange={(updatedNote) =>
+                    setLessonData({ ...lessonData, cultural_note: updatedNote })
+                  }
+                  setCurrentStep={setCurrentStep}
+                />
+              </>
+            )}
+            {currentStep === 7 && (
+              <>
+                <CreateAdditionalResource
+                  data={lessonData.additional_resources}
+                  onChange={(updatedResource) =>
+                    setLessonData({
+                      ...lessonData,
+                      additional_resources: updatedResource,
+                    })
+                  }
+                  setCurrentStep={setCurrentStep}
+                />
+              </>
+            )}
+            {currentStep === 8 && (
+              <>
+                <CreateSummaryGrammar
+                  data={lessonData.summary}
+                  onChange={(updatedSummary) =>
+                    setLessonData({
+                      ...lessonData,
+                      summary: updatedSummary,
+                    })
+                  }
+                  setCurrentStep={setCurrentStep}
+                />
+              </>
+            )}
+            {currentStep === 9 && (
+              <>
+                <CreateSummarySkills
+                  fullLesson={lessonData}
+                  data={lessonData.summary}
+                  onChange={(updatedSummary) =>
+                    setLessonData({
+                      ...lessonData,
+                      summary: updatedSummary,
+                    })
+                  }
+                  setCurrentStep={setCurrentStep}
+                />
+              </>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </>
   );
 };
 

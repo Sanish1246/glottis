@@ -5,8 +5,9 @@ import { Card } from "./card";
 import { Input } from "./input";
 import { Label } from "../ui/label";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
-const AddGrammarForm = ({ data, onChange }) => {
+const AddSkillsForm = ({ data, onChange }) => {
   const [newSkill, setNewSkill] = useState("");
 
   const addSkill = () => {
@@ -55,6 +56,7 @@ const CreateSummarySkills = ({
       skills: updatedSkills,
     });
   };
+  const navigate = useNavigate();
 
   // const submitLesson = async () => {
   //   try {
@@ -108,6 +110,7 @@ const CreateSummarySkills = ({
       const data = await res.json();
       if (data.message) {
         toast.success(data.message);
+        navigate("/");
       } else if (data.error) {
         toast.error(data.error);
       }
@@ -119,7 +122,7 @@ const CreateSummarySkills = ({
   return (
     <div className="space-y-6">
       <div>
-        <AddGrammarForm data={data} onChange={onChange} />
+        <AddSkillsForm data={data} onChange={onChange} />
         <h3>Skills:</h3>
         <ul className="list-disc">
           {data.skills.map((s: string, index: number) => (

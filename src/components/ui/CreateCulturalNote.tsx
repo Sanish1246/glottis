@@ -93,8 +93,8 @@ const CreateCulturalNote = ({ data, onChange, setCurrentStep }) => {
         <Button
           onClick={() => {
             if (
-              (data.title == "" && data.content.length > 0) ||
-              data.title != ""
+              data.title != "" ||
+              (data.title == "" && data.content.length == 0)
             ) {
               setCurrentStep((prevCurrent: number) => prevCurrent - 1);
             } else {
@@ -115,8 +115,8 @@ const CreateCulturalNote = ({ data, onChange, setCurrentStep }) => {
         <Button
           onClick={() => {
             if (
-              (data.title == "" && data.content.length > 0) ||
-              data.title != ""
+              data.title != "" ||
+              (data.title == "" && data.content.length == 0)
             ) {
               setCurrentStep((prevCurrent: number) => prevCurrent + 1);
             } else {

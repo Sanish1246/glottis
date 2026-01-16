@@ -53,7 +53,7 @@ const McqSchema = new mongoose.Schema({
 });
 
 const CulturalNoteSchema = new mongoose.Schema({
-  title: { type: String, required: true },
+  title: { type: String },
   content: [String],
 });
 
