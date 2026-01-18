@@ -36,7 +36,6 @@ router.get("/existing/:title/:language", async (req, res) => {
       status: { $in: ["Approved", "Pending"] },
     });
 
-    console.log(lessons);
     res.json(lessons);
   } catch (err) {
     console.error("Unable to get lessons:", err);

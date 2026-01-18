@@ -17,6 +17,7 @@ import lessonRoutes from "./routes/LessonRoute.js";
 import flashcardRoutes from "./routes/FlashcardRoute.js";
 import authRoutes from "./routes/AuthRoute.js";
 import immersionRoutes from "./routes/ImmersionRoute.js";
+import chatRoutes from "./routes/ChatRoute.js";
 
 dotenv.config();
 
@@ -37,7 +38,7 @@ app.use(
     origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
-  })
+  }),
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -59,12 +60,13 @@ app.use(
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false },
-  })
+  }),
 );
 
 app.use("/", userRoutes);
 app.use("/", authRoutes);
 app.use("/chatbot", chatbotRoutes);
+app.use("/chat", chatRoutes);
 app.use("/webhook", whatsappRoutes);
 app.use("/lessons", lessonRoutes);
 app.use("/flashcards", flashcardRoutes);
@@ -89,7 +91,7 @@ io.on("connection", (socket) => {
     io.to(data.room).emit("receive_message", data);
     console.log(
       `Message from ${data.sender} in room ${data.room}:`,
-      data.content
+      data.content,
     );
   });
 
@@ -122,14 +124,14 @@ async function startServer() {
             Authorization: `Bearer ${process.env.APP_ACCESS_TOKEN}`,
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       console.log("✅ Webhook updated on Meta");
     } catch (err) {
       console.error(
         "❌ Error starting ngrok or updating Meta Webhook:",
-        err.response?.data || err
+        err.response?.data || err,
       );
     }
   });

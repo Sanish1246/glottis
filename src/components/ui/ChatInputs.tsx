@@ -3,8 +3,9 @@ import { Button } from "./button";
 
 interface Message {
   id: number;
-  text: string;
+  content: string;
   sender: string;
+  timestamp: string;
 }
 
 interface messageProp {
