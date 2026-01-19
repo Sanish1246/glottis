@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import EditDeck from "../ui/EditDeck";
@@ -22,6 +23,8 @@ import {
 import ReviewCard from "../ui/ReviewCard";
 import { supermemo, type SuperMemoGrade } from "supermemo";
 
+dayjs.extend(customParseFormat);
+
 interface FlashCardProps {
   word: string;
   english: string;
@@ -38,7 +41,7 @@ interface DeckProp {
 }
 
 const DeckReview = () => {
-  const [nextCards, setNextCards] = useState([0, 0, 0, 0, 0, 0]);
+  const [nextCards, setNextCards] = useState([0, 0, 0, 0, 0, 0, 0]);
   const chartData = [
     { day: "1 day", cards: nextCards[0] },
     { day: "2 days", cards: nextCards[1] },
@@ -66,6 +69,7 @@ const DeckReview = () => {
   const [deck, setDeck] = useState<DeckProp | null>(initialDeck);
   const [fullDeck, setFullDeck] = useState<DeckProp | null>(initialDeck);
   const [loading, setLoading] = useState(!initialDeck);
+  const [late, setLate] = useState(0);
   useEffect(() => {
     const fetchDeck = async () => {
       setLoading(true);
@@ -75,26 +79,34 @@ const DeckReview = () => {
           {
             method: "GET",
             credentials: "include",
-          }
+          },
         );
         if (!res.ok) throw new Error("Deck not found");
         const data: DeckProp = await res.json();
+
+        const today = dayjs(Date.now()).startOf("day");
+
         const reviewDeck = data.items.filter(
-          (c) => c.dueDate <= dayjs(Date.now()).format("DD-MM-YYYY")
+          (c) => dayjs(c.dueDate, "DD-MM-YYYY").startOf("day") <= today,
         );
-        console.log(reviewDeck);
+        const lateDeck = data.items.filter(
+          (c) => dayjs(c.dueDate, "DD-MM-YYYY").startOf("day") < today,
+        );
+
+        console.log(data);
+        setLate(lateDeck.length);
         setRemaining(reviewDeck.length);
         setDeck({ language: data.language, items: reviewDeck });
         setFullDeck(data);
-        for (let i = 1; i < nextCards.length + 1; i++) {
-          const nextDeck = data.items.filter(
-            (c) =>
-              c.dueDate === dayjs(Date.now()).add(i, "day").format("DD-MM-YYYY")
-          );
-          setNextCards((prev) =>
-            prev.map((val, idx) => (idx === i - 1 ? nextDeck.length : val))
-          );
-        }
+
+        const forecast = Array.from(
+          { length: 7 },
+          (_, i) =>
+            data.items.filter(
+              (c) => c.dueDate === today.add(i + 1, "day").format("DD-MM-YYYY"),
+            ).length,
+        );
+        setNextCards(forecast);
       } catch (err) {
         console.error(err);
       } finally {
@@ -117,20 +129,20 @@ const DeckReview = () => {
           {
             method: "GET",
             credentials: "include",
-          }
+          },
         );
         if (!res.ok) throw new Error("Deck not found");
         const data: DeckProp = await res.json();
         setFullDeck(data);
-        for (let i = 1; i < nextCards.length + 1; i++) {
-          const nextDeck = data.items.filter(
-            (c) =>
-              c.dueDate === dayjs(Date.now()).add(i, "day").format("DD-MM-YYYY")
-          );
-          setNextCards((prev) =>
-            prev.map((val, idx) => (idx === i - 1 ? nextDeck.length : val))
-          );
-        }
+        const today = dayjs().startOf("day");
+        const forecast = Array.from(
+          { length: 7 },
+          (_, i) =>
+            data.items.filter(
+              (c) => c.dueDate === today.add(i + 1, "day").format("DD-MM-YYYY"),
+            ).length,
+        );
+        setNextCards(forecast);
       } catch (err) {
         console.error(err);
       }
@@ -188,6 +200,12 @@ const DeckReview = () => {
             {remaining != 0
               ? `Cards to review today: ${remaining}`
               : `No cards to review today`}
+            {late > 0 ? (
+              <span className="text-red-500 font-semibold">
+                {" "}
+                (Late: {late})
+              </span>
+            ) : null}
           </h3>
           <Button
             onClick={() => {

@@ -57,7 +57,7 @@ function App() {
                 <DropdownMenuContent align="end">
                   {isLoggedIn ? (
                     <>
-                      <Link to="/">
+                      <Link to="dashboard">
                         <DropdownMenuItem>Dashboard</DropdownMenuItem>
                       </Link>
                       {user.role == "admin" ? (

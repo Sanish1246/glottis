@@ -23,6 +23,7 @@ import CustomDecks from "./components/pages/CustomDecks.tsx";
 import CustomLessons from "./components/pages/CustomLessons.tsx";
 import Approvals from "./components/pages/Approvals.tsx";
 import CreateLesson from "./components/pages/CreateLesson.tsx";
+import UserDashboard from "./components/pages/UserDashboard.tsx";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,7 @@ const router = createBrowserRouter([
       { path: "customLessons", element: <CustomLessons /> },
       { path: "approvals", element: <Approvals /> },
       { path: "create_lesson", element: <CreateLesson /> },
+      { path: "dashboard", element: <UserDashboard /> },
     ],
   },
 ]);
@@ -57,5 +59,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <RouterProvider router={router} />
       </LanguageProvider>
     </UserProvider>
-  </StrictMode>
+  </StrictMode>,
 );

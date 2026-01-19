@@ -176,8 +176,6 @@ const ChatPage = () => {
                   Today
                 </p>
               ) : null}
-              {/* {msg.date > splitDate ? (<p>{msg.date}</p>
-              setSplitDate(msg.date)) : null} */}
               <div
                 key={index}
                 className={`mt-2 rounded-md border-2 w-fit ${
