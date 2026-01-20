@@ -26,7 +26,7 @@ interface FlashCardProps {
 
 const Lesson = () => {
   const { languagePath } = useLanguage();
-  const { setUser } = useUser();
+  const { user, setUser } = useUser();
   const navigate = useNavigate();
   const [correctFib, setCorrectFib] = useState(0);
   const [correctMcq, setCorrectMcq] = useState(0);
@@ -38,6 +38,8 @@ const Lesson = () => {
     (location.state as { lesson?: LessonData } | null)?.lesson || null;
 
   const [lesson, setLesson] = useState<LessonData | null>(initialLesson);
+
+  console.log(user);
 
   const addToDeck = async (card: FlashCardProps) => {
     try {
@@ -57,7 +59,7 @@ const Lesson = () => {
           },
           credentials: "include",
           body: JSON.stringify(card),
-        }
+        },
       );
       const data = await res.json();
       setUser({
@@ -96,7 +98,7 @@ const Lesson = () => {
           },
           credentials: "include",
           body: JSON.stringify(card),
-        }
+        },
       );
       const data = await res.json();
       console.log(data);
@@ -135,10 +137,9 @@ const Lesson = () => {
     const fetchLesson = async () => {
       try {
         const res = await fetch(
-          `http://localhost:8000/lessons/content/${lessonId}`
+          `http://localhost:8000/lessons/content/${lessonId}`,
         );
         const data = await res.json();
-        console.log(data);
         setLesson(data);
       } catch (error) {
         toast.error(String(error), {
@@ -156,14 +157,94 @@ const Lesson = () => {
     fetchLesson();
   }, [lessonId, initialLesson]);
 
-  if (loading) return <div>Loading lesson...</div>;
-  if (!lesson) return <div>Lesson not found</div>;
-
   const totalFib = lesson.fib?.length ?? 0;
   const totalMcq = lesson.mcq?.length ?? 0;
 
-  const allExercisesCompleted = true;
-  // correctFib >= totalFib && correctMcq >= totalMcq;
+  const allExercisesCompleted =
+    correctFib >= totalFib && correctMcq >= totalMcq;
+
+  useEffect(() => {
+    const completeLesson = async () => {
+      let lang;
+      if (lesson.author) {
+        lang = "custom";
+      } else if (
+        lesson.language == "italian" &&
+        user.lessonsCompleted.italian < lesson.lessonNumber
+      ) {
+        lang = "italian";
+      } else if (
+        lesson.language == "french" &&
+        user.lessonsCompleted.french < lesson.lessonNumber
+      ) {
+        lang = "french";
+      }
+      try {
+        const res = await fetch(
+          `http://localhost:8000/complete_lesson/${lang}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          },
+        );
+        const data = await res.json();
+        setUser(data.newUser);
+        console.log("lesson Complete");
+        toast.success(data.message, {
+          action: {
+            label: "Close",
+            onClick: () => {
+              toast.dismiss();
+            },
+          },
+        });
+      } catch (error) {
+        toast.error(String(error), {
+          action: {
+            label: "Close",
+            onClick: () => {
+              toast.dismiss();
+            },
+          },
+        });
+      }
+
+      // if (lesson.author) {
+      //   setUser((prev) => ({
+      //     ...prev,
+      //     lessonsCompleted: {
+      //       ...prev.lessonsCompleted,
+      //       custom: prev.lessonsCompleted.custom + 1,
+      //     },
+      //   }));
+      // } else if (lesson.language == "italian") {
+      //   setUser((prev) => ({
+      //     ...prev,
+      //     lessonsCompleted: {
+      //       ...prev.lessonsCompleted,
+      //       italian: prev.lessonsCompleted.italian + 1,
+      //     },
+      //   }));
+      // } else {
+      //   setUser((prev) => ({
+      //     ...prev,
+      //     lessonsCompleted: {
+      //       ...prev.lessonsCompleted,
+      //       french: prev.lessonsCompleted.french + 1,
+      //     },
+      //   }));
+      // }
+    };
+    if (allExercisesCompleted) {
+      completeLesson();
+    }
+  }, [allExercisesCompleted]);
+
+  if (loading) return <div>Loading lesson...</div>;
+  if (!lesson) return <div>Lesson not found</div>;
 
   return (
     <div>
@@ -338,7 +419,7 @@ const Lesson = () => {
             {(lesson.cultural_note?.content ?? []).map(
               (note: string, index: number) => (
                 <li key={index}>{note}</li>
-              )
+              ),
             )}
           </ul>
         </div>
@@ -356,7 +437,7 @@ const Lesson = () => {
                     {r.title}
                   </a>
                 </li>
-              )
+              ),
             )}
           </ul>
         </div>
@@ -372,7 +453,7 @@ const Lesson = () => {
             {(lesson.summary?.grammarPoints ?? []).map(
               (point: string, index: number) => (
                 <li key={index}>{point}</li>
-              )
+              ),
             )}
           </ul>
 
@@ -381,7 +462,7 @@ const Lesson = () => {
             {(lesson.summary?.skills ?? []).map(
               (skill: string, index: number) => (
                 <li key={index}>{skill}</li>
-              )
+              ),
             )}
           </ul>
         </div>

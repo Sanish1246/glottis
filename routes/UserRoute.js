@@ -27,7 +27,7 @@ router.post("/remove_card/:language", async (req, res) => {
           },
         },
       },
-      { new: true }
+      { new: true },
     );
 
     const updatedDeck = updatedUser.decks.find((d) => d.language === language);
@@ -73,7 +73,7 @@ router.post("/add_card/:language", async (req, res) => {
             "decks.$.items": card,
           },
         },
-        { new: true }
+        { new: true },
       );
     } else {
       updatedUser = await User.findOneAndUpdate(
@@ -86,7 +86,7 @@ router.post("/add_card/:language", async (req, res) => {
             },
           },
         },
-        { new: true }
+        { new: true },
       );
     }
 
@@ -173,7 +173,7 @@ router.put("/user_decks/:language", async (req, res) => {
           { "item.word": card.word, "item.english": card.english },
         ],
         new: true,
-      }
+      },
     );
 
     if (!user) {
@@ -261,7 +261,7 @@ router.put("/like", async (req, res) => {
       { $push: { likes: newMedia } },
       {
         new: true,
-      }
+      },
     );
 
     if (!user) {
@@ -271,7 +271,7 @@ router.put("/like", async (req, res) => {
     const updatedMedia = await Immersion.findOneAndUpdate(
       { title: newMedia.title },
       { $inc: { likes: 1 } },
-      { new: true }
+      { new: true },
     );
 
     if (!updatedMedia) {
@@ -310,7 +310,7 @@ router.put("/removeLike", async (req, res) => {
       },
       {
         new: true,
-      }
+      },
     );
 
     if (!user) {
@@ -320,13 +320,42 @@ router.put("/removeLike", async (req, res) => {
     const updatedMedia = await Immersion.findOneAndUpdate(
       { title: newMedia.title },
       { $inc: { likes: -1 } },
-      { new: true }
+      { new: true },
     );
 
     if (!updatedMedia) {
       return res.status(404).json({ error: "Media not found" });
     }
     res.json({ message: "Like removed", newUser: user });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+router.put("/complete_lesson/:lang", async (req, res) => {
+  if (!req.session?.user) {
+    return res.status(401).json({ error: "Not authenticated" });
+  }
+  const lang = req.params.lang;
+
+  try {
+    const { username } = req.session.user;
+    const user = await User.findOneAndUpdate(
+      {
+        username,
+      },
+      { $inc: { [`lessonsCompleted.${lang}`]: 1 } },
+      {
+        new: true,
+      },
+    );
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.json({ message: "Lesson completed", newUser: user });
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: "Server error" });

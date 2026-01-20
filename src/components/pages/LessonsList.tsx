@@ -5,6 +5,7 @@ import { useLanguage } from "../context/LanguageContext";
 import Combobox from "../ui/Combobox";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { useUser } from "../context/UserContext";
 
 type Options = {
   value: string;
@@ -25,12 +26,14 @@ const languagePaths: Options[] = [
 const LessonsList = () => {
   const { languagePath, setLanguagePath } = useLanguage();
   const [lessonArray, setLessonArray] = useState([]);
+  const { user } = useUser();
   const [loaded, setLoaded] = useState(false);
+
   useGSAP(() => {
     gsap.fromTo(
       ".lesson",
       { x: -50000 },
-      { x: 0, stagger: 0.09, ease: "power1.inOut" }
+      { x: 0, stagger: 0.09, ease: "power1.inOut" },
     );
   }, [loaded, languagePath]);
 
@@ -38,7 +41,7 @@ const LessonsList = () => {
     const fetchLessons = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8000/lessons/${languagePath}`
+          `http://localhost:8000/lessons/${languagePath}`,
         );
         const data = await response.json();
         setLessonArray(data);
@@ -78,9 +81,11 @@ const LessonsList = () => {
             <Link
               to={`/lessons/${lesson._id}`}
               state={{ lesson }}
-              className="hover:translate-1"
+              className={`hover:translate-1 ${(lesson.language == "french" && !lesson.author && user.lessonsCompleted.french + 1 < lesson.lessonNumber) || (lesson.language == "italian" && !lesson.author && user.lessonsCompleted.italian + 1 < lesson.lessonNumber) ? `opacity-50 pointer-events-none` : null}`}
             >
-              <div className="border-2 rounded-lg p-3 mb-5 mt-1 shadow-sm hover:cursor-pointer hover:translate-1  lesson">
+              <div
+                className={`border-2 rounded-lg p-3 mb-5 mt-1 shadow-sm hover:cursor-pointer hover:translate-1 lesson  ${(lesson.language == "french" && !lesson.author && user.lessonsCompleted.french >= lesson.lessonNumber) || (lesson.language == "italian" && !lesson.author && user.lessonsCompleted.italian >= lesson.lessonNumber) ? `border-green-500` : null}`}
+              >
                 <b>Lesson {lesson.lessonNumber}</b>: {lesson.title}
               </div>
             </Link>

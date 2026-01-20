@@ -26,6 +26,12 @@ const flashcardDeckSchema = new mongoose.Schema({
   items: [VocabularyItemSchema],
 });
 
+const lessonsCompletedSchema = new mongoose.Schema({
+  italian: { type: Number, default: 0, required: true },
+  french: { type: Number, default: 0, required: true },
+  custom: { type: Number, default: 0, required: true },
+});
+
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true, trim: true },
   email: { type: String, default: 0, required: true, unique: true },
@@ -33,6 +39,7 @@ const userSchema = new mongoose.Schema({
   role: { type: String, required: true },
   decks: { type: [flashcardDeckSchema], default: [] },
   likes: { type: [immersionSchema], default: [] },
+  lessonsCompleted: { type: lessonsCompletedSchema },
 });
 
 export default mongoose.model("users", userSchema);
