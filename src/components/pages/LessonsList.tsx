@@ -6,6 +6,7 @@ import Combobox from "../ui/Combobox";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { useUser } from "../context/UserContext";
+import { CircleCheck } from "lucide-react";
 
 type Options = {
   value: string;
@@ -35,7 +36,7 @@ const LessonsList = () => {
       { x: -50000 },
       { x: 0, stagger: 0.09, ease: "power1.inOut" },
     );
-  }, [loaded, languagePath]);
+  }, [loaded]);
 
   useEffect(() => {
     const fetchLessons = async () => {
@@ -72,7 +73,21 @@ const LessonsList = () => {
       </div>
       {lessonArray.map((lesson: any) => {
         const showLevelHeader = lesson.lessonNumber_level == 1;
+        const completed =
+          (lesson.language == "french" &&
+            !lesson.author &&
+            user.lessonsCompleted.french >= lesson.lessonNumber) ||
+          (lesson.language == "italian" &&
+            !lesson.author &&
+            user.lessonsCompleted.italian >= lesson.lessonNumber);
 
+        const notCompleted =
+          (lesson.language == "french" &&
+            !lesson.author &&
+            user.lessonsCompleted.french + 1 < lesson.lessonNumber) ||
+          (lesson.language == "italian" &&
+            !lesson.author &&
+            user.lessonsCompleted.italian + 1 < lesson.lessonNumber);
         return (
           <div key={lesson._id}>
             {showLevelHeader && (
@@ -81,12 +96,20 @@ const LessonsList = () => {
             <Link
               to={`/lessons/${lesson._id}`}
               state={{ lesson }}
-              className={`hover:translate-1 ${(lesson.language == "french" && !lesson.author && user.lessonsCompleted.french + 1 < lesson.lessonNumber) || (lesson.language == "italian" && !lesson.author && user.lessonsCompleted.italian + 1 < lesson.lessonNumber) ? `opacity-50 pointer-events-none` : null}`}
+              className={`hover:translate-1 ${notCompleted ? `opacity-50 pointer-events-none` : null}`}
             >
               <div
-                className={`border-2 rounded-lg p-3 mb-5 mt-1 shadow-sm hover:cursor-pointer hover:translate-1 lesson  ${(lesson.language == "french" && !lesson.author && user.lessonsCompleted.french >= lesson.lessonNumber) || (lesson.language == "italian" && !lesson.author && user.lessonsCompleted.italian >= lesson.lessonNumber) ? `border-green-500` : null}`}
+                className={`flex flex-row justify-between border-2 rounded-lg p-3 mb-5 mt-1 shadow-sm hover:cursor-pointer hover:translate-1 lesson  ${completed ? `border-green-500` : null}`}
               >
-                <b>Lesson {lesson.lessonNumber}</b>: {lesson.title}
+                <div>
+                  <b>Lesson {lesson.lessonNumber}</b>: {lesson.title}
+                </div>
+
+                {completed ? (
+                  <span>
+                    <CircleCheck />
+                  </span>
+                ) : null}
               </div>
             </Link>
           </div>
