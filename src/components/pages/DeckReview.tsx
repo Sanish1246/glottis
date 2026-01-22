@@ -93,7 +93,6 @@ const DeckReview = () => {
           (c) => dayjs(c.dueDate, "DD-MM-YYYY").startOf("day") < today,
         );
 
-        console.log(data);
         setLate(lateDeck.length);
         setRemaining(reviewDeck.length);
         setDeck({ language: data.language, items: reviewDeck });
@@ -168,13 +167,18 @@ const DeckReview = () => {
         dueDate,
       };
 
+      const revisionData = {
+        updatedCard,
+        grade: grade,
+      };
+
       await fetch(`http://localhost:8000/user_decks/${language}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify(updatedCard),
+        body: JSON.stringify(revisionData),
       });
       await nextCard();
     } catch (error) {

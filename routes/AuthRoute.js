@@ -27,6 +27,21 @@ router.post("/register", async (req, res) => {
       email,
       password: hashedPassword,
       role,
+      streakData: {
+        startDate: dayjs(Date.now(), "DD-MM-YYYY").startOf("day"),
+        endDate: dayjs(Date.now(), "DD-MM-YYYY").startOf("day"),
+        currentDuration: 1,
+        maxStartDate: dayjs(Date.now(), "DD-MM-YYYY").startOf("day"),
+        maxEndDate: dayjs(Date.now(), "DD-MM-YYYY").startOf("day"),
+        maxDuration: 1,
+      },
+      revisionData: {
+        forgotten: 0,
+        difficult: 0,
+        medium: 0,
+        easy: 0,
+        very_easy: 0,
+      },
     });
 
     req.session.user = {
@@ -66,6 +81,24 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ error: "Invalid password" });
     }
 
+    //If logging in on the following day, increase streak
+    if (
+      newUser.streakData.endDate ==
+      dayjs(Date.now(), "DD-MM-YYYY").subtract(1, "day").format("DD-MM-YYYY")
+    ) {
+      newUser.streakData.currentDuration++;
+      newUser.streakData.endDate == dayjs(Date.now(), "DD-MM-YYYY");
+    } else {
+      newUser.streakData.currentDuration = 1;
+      newUser.streakData.startDate == dayjs(Date.now(), "DD-MM-YYYY");
+      newUser.streakData.endDate == dayjs(Date.now(), "DD-MM-YYYY");
+    }
+
+    if (newUser.streakData.currentDuration > newUser.streakData.maxDuration) {
+      newUser.streakData.maxEndDate == dayjs(Date.now(), "DD-MM-YYYY");
+      newUser.streakData.maxStartDate == newUser.streakData.startDate;
+      newUser.streakData.maxDuration = newUser.streakData.currentDuration;
+    }
     req.session.user = {
       id: newUser._id,
       username: newUser.username,
@@ -73,6 +106,8 @@ router.post("/login", async (req, res) => {
       decks: newUser.decks,
       role: newUser.role,
     };
+
+    await newUser.save();
 
     res.json({
       message: "Login successful",

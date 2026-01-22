@@ -34,10 +34,10 @@ const lessonsCompletedSchema = new mongoose.Schema({
 
 const streakDataSchema = new mongoose.Schema({
   startDate: { type: String, default: "", required: true },
-  endDate: { type: Number, default: "", required: true },
+  endDate: { type: String, default: "", required: true },
   currentDuration: { type: Number, default: 0, required: true },
   maxStartDate: { type: String, default: "", required: true },
-  maxEndDate: { type: Number, default: "", required: true },
+  maxEndDate: { type: String, default: "", required: true },
   maxDuration: { type: Number, default: 0, required: true },
 });
 

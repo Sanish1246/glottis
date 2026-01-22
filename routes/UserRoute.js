@@ -155,8 +155,34 @@ router.put("/user_decks/:language", async (req, res) => {
   if (!req.session?.user) {
     return res.status(401).json({ error: "Not authenticated" });
   }
-  const card = req.body;
+  const card = req.body.updatedCard;
+  const grade = req.body.grade;
   const language = req.params.language;
+  let targetGrade = "very_easy";
+
+  switch (grade) {
+    case 1:
+      targetGrade = "forgotten";
+      break;
+    case 2:
+      targetGrade = "hard";
+      break;
+    case 3:
+      targetGrade = "medium";
+      break;
+    case 4:
+      targetGrade = "easy";
+      break;
+    case 5:
+      targetGrade = "very_easy";
+      break;
+  }
+
+  const incField = `revisionData.${targetGrade}`;
+  const update = {
+    $set: { "decks.$[deck].items.$[item]": card },
+    $inc: { [incField]: 1 },
+  };
 
   try {
     const { username } = req.session.user;
@@ -167,9 +193,10 @@ router.put("/user_decks/:language", async (req, res) => {
         "decks.items.word": card.word,
         "decks.items.english": card.english,
       },
-      { $set: { "decks.$.items.$[item]": card } },
+      update,
       {
         arrayFilters: [
+          { "deck.language": language },
           { "item.word": card.word, "item.english": card.english },
         ],
         new: true,
