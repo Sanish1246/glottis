@@ -124,17 +124,17 @@ function App() {
                 <span className="sr-only">Lessons</span>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem>
-                    <Link to="/lessons" className="hover:underline">
+                    <Link to="lessons" className="hover:underline">
                       Lessons
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Link to="/customLessons" className="hover:underline">
+                    <Link to="customLessons" className="hover:underline">
                       Custom Lessons
                     </Link>
                   </DropdownMenuItem>
                   {user.role != "student" ? (
-                    <Link to="/create_lesson">
+                    <Link to="create_lesson">
                       <DropdownMenuItem>Create Lesson</DropdownMenuItem>
                     </Link>
                   ) : null}
@@ -205,7 +205,7 @@ function App() {
             )}
 
             {isLoggedIn ? (
-              <Link to="/immersion" className="hover:underline">
+              <Link to="immersion" className="hover:underline">
                 Immersion
               </Link>
             ) : (

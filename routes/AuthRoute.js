@@ -1,6 +1,7 @@
 import express from "express";
 import User from "../models/user.js";
 import bcrypt from "bcrypt";
+import dayjs from "dayjs";
 const router = express.Router();
 
 router.post("/register", async (req, res) => {

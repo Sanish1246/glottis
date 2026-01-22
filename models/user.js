@@ -32,6 +32,23 @@ const lessonsCompletedSchema = new mongoose.Schema({
   custom: { type: Number, default: 0, required: true },
 });
 
+const streakDataSchema = new mongoose.Schema({
+  startDate: { type: String, default: "", required: true },
+  endDate: { type: Number, default: "", required: true },
+  currentDuration: { type: Number, default: 0, required: true },
+  maxStartDate: { type: String, default: "", required: true },
+  maxEndDate: { type: Number, default: "", required: true },
+  maxDuration: { type: Number, default: 0, required: true },
+});
+
+const revisionDataSchema = new mongoose.Schema({
+  forgotten: { type: Number, default: 0, required: true },
+  difficult: { type: Number, default: 0, required: true },
+  medium: { type: Number, default: 0, required: true },
+  easy: { type: Number, default: 0, required: true },
+  very_easy: { type: Number, default: 0, required: true },
+});
+
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true, trim: true },
   email: { type: String, default: 0, required: true, unique: true },
@@ -40,6 +57,8 @@ const userSchema = new mongoose.Schema({
   decks: { type: [flashcardDeckSchema], default: [] },
   likes: { type: [immersionSchema], default: [] },
   lessonsCompleted: { type: lessonsCompletedSchema },
+  streakData: { type: streakDataSchema },
+  revisionData: { type: revisionDataSchema },
 });
 
 export default mongoose.model("users", userSchema);
