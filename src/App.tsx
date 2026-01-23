@@ -22,6 +22,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "./components/ui/button";
 import { toast } from "sonner";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 
 import "./App.css";
 
@@ -31,11 +33,27 @@ function App() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
+  useGSAP(() => {
+    gsap.fromTo(
+      ".navbar",
+      {
+        y: -150,
+        opacity: 0,
+      },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 1,
+        ease: "power4",
+      },
+    );
+  }, []);
+
   const navigate = useNavigate();
   return (
     <div>
       <header>
-        <nav className="flex flex-row justify-between mb-1">
+        <nav className="navbar flex flex-row justify-between mb-1">
           <div className="flex flex-row items-center">
             <img src="/glottis.svg" alt="Glottis" className="w-6 h-6" />
             <h1 className="self-center text-md md:text-2xl font-extrabold">
