@@ -36,9 +36,10 @@ const Landing = () => {
       },
       {
         y: 0,
+        delay: 0.3,
         opacity: 1,
         duration: 1.2,
-        ease: "power4",
+        ease: "power1.inOut",
       },
     );
 
@@ -51,9 +52,24 @@ const Landing = () => {
       {
         y: 0,
         opacity: 1,
-        duration: 1.4,
+        duration: 2,
         ease: "power1.inOut",
         stagger: 0.5,
+      },
+    );
+    gsap.fromTo(
+      ".features",
+      {
+        y: -150,
+        opacity: 0,
+      },
+      {
+        y: 0,
+        opacity: 1,
+        delay: 2.3,
+        duration: 1,
+        ease: "power1.inOut",
+        stagger: 0.4,
       },
     );
   }, []);
@@ -157,14 +173,14 @@ const Landing = () => {
       {/* Features Section */}
       <section className="py-16 px-4 max-w-7xl mx-auto">
         <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-2 mb-4">
+          <div className="features flex items-center justify-center gap-2 mb-4">
             <Sparkles className="w-6 h-6 text-primary" />
-            <h2 className="text-3xl md:text-4xl font-bold">
+            <h2 className=" text-3xl md:text-4xl font-bold">
               Everything you need to learn languages
             </h2>
             <Sparkles className="w-6 h-6 text-primary" />
           </div>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className=" features text-lg text-muted-foreground max-w-2xl mx-auto">
             A comprehensive platform combining structured learning, AI
             assistance, and authentic content
           </p>
@@ -217,7 +233,7 @@ const Landing = () => {
       </section>
 
       {/* Languages Section */}
-      <section className="py-16 px-4 bg-muted/50">
+      <section className="py-16 px-4 bg-muted/50 rounded-lg">
         <div className="max-w-4xl mx-auto text-center">
           <Languages className="w-12 h-12 mx-auto mb-4 text-primary" />
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
