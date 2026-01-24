@@ -28,11 +28,11 @@ router.post("/register", async (req, res) => {
       password: hashedPassword,
       role,
       streakData: {
-        startDate: dayjs(Date.now(), "DD-MM-YYYY").startOf("day"),
-        endDate: dayjs(Date.now(), "DD-MM-YYYY").startOf("day"),
+        startDate: dayjs(Date.now(), "DD-MM-YYYY").format("DD-MM-YYYY"),
+        endDate: dayjs(Date.now(), "DD-MM-YYYY").format("DD-MM-YYYY"),
         currentDuration: 1,
-        maxStartDate: dayjs(Date.now(), "DD-MM-YYYY").startOf("day"),
-        maxEndDate: dayjs(Date.now(), "DD-MM-YYYY").startOf("day"),
+        maxStartDate: dayjs(Date.now(), "DD-MM-YYYY").format("DD-MM-YYYY"),
+        maxEndDate: dayjs(Date.now(), "DD-MM-YYYY").format("DD-MM-YYYY"),
         maxDuration: 1,
       },
       revisionData: {
@@ -87,16 +87,24 @@ router.post("/login", async (req, res) => {
       dayjs(Date.now(), "DD-MM-YYYY").subtract(1, "day").format("DD-MM-YYYY")
     ) {
       newUser.streakData.currentDuration++;
-      newUser.streakData.endDate == dayjs(Date.now(), "DD-MM-YYYY");
+      newUser.streakData.endDate = dayjs(Date.now(), "DD-MM-YYYY").format(
+        "DD-MM-YYYY",
+      );
     } else {
       newUser.streakData.currentDuration = 1;
-      newUser.streakData.startDate == dayjs(Date.now(), "DD-MM-YYYY");
-      newUser.streakData.endDate == dayjs(Date.now(), "DD-MM-YYYY");
+      newUser.streakData.startDate = dayjs(Date.now(), "DD-MM-YYYY").format(
+        "DD-MM-YYYY",
+      );
+      newUser.streakData.endDate = dayjs(Date.now(), "DD-MM-YYYY").format(
+        "DD-MM-YYYY",
+      );
     }
 
     if (newUser.streakData.currentDuration > newUser.streakData.maxDuration) {
-      newUser.streakData.maxEndDate == dayjs(Date.now(), "DD-MM-YYYY");
-      newUser.streakData.maxStartDate == newUser.streakData.startDate;
+      newUser.streakData.maxEndDate = dayjs(Date.now(), "DD-MM-YYYY").format(
+        "DD-MM-YYYY",
+      );
+      newUser.streakData.maxStartDate = newUser.streakData.startDate;
       newUser.streakData.maxDuration = newUser.streakData.currentDuration;
     }
     req.session.user = {

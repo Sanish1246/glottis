@@ -22,12 +22,18 @@ import {
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import SplitText from "gsap/SplitText";
+import ScrollTrigger from "gsap/ScrollTrigger";
 
 const Landing = () => {
   const { isLoggedIn } = useUser();
-  gsap.registerPlugin(SplitText);
 
   useGSAP(() => {
+    gsap.registerPlugin(ScrollTrigger, SplitText);
+    const splitLanguageTitle = new SplitText(".language-title", {
+      type: "chars",
+    });
+
+    const languageTitle = splitLanguageTitle.chars;
     gsap.fromTo(
       ".title",
       {
@@ -36,7 +42,7 @@ const Landing = () => {
       },
       {
         y: 0,
-        delay: 0.3,
+        delay: 0.35,
         opacity: 1,
         duration: 1.2,
         ease: "power1.inOut",
@@ -69,9 +75,58 @@ const Landing = () => {
         delay: 2.3,
         duration: 1,
         ease: "power1.inOut",
-        stagger: 0.4,
+        stagger: 0.3,
       },
     );
+    gsap.fromTo(
+      ".feature-card",
+      {
+        opacity: 0,
+      },
+      {
+        scrollTrigger: ".feature-card",
+        opacity: 1,
+        duration: 1,
+        stagger: 0.6,
+      },
+    );
+
+    gsap.fromTo(
+      languageTitle,
+      {
+        opacity: 0,
+      },
+      {
+        scrollTrigger: ".language-title",
+        opacity: 1,
+        duration: 0.3,
+        stagger: 0.07,
+      },
+    );
+
+    gsap.fromTo(
+      ".language-paragraph",
+      {
+        opacity: 0,
+        x: 1000,
+      },
+      {
+        scrollTrigger: ".language-paragraph",
+        x: 0,
+        opacity: 1,
+        duration: 1,
+        stagger: 0.5,
+      },
+    );
+
+    gsap.from(".languages", {
+      scrollTrigger: ".languages",
+      delay: 0.7,
+      opacity: 0,
+      x: 1000,
+      duration: 1,
+      stagger: 0.5,
+    });
   }, []);
 
   const features = [
@@ -175,12 +230,12 @@ const Landing = () => {
         <div className="text-center mb-12">
           <div className="features flex items-center justify-center gap-2 mb-4">
             <Sparkles className="w-6 h-6 text-primary" />
-            <h2 className=" text-3xl md:text-4xl font-bold">
+            <h2 className="text-3xl md:text-4xl font-bold">
               Everything you need to learn languages
             </h2>
             <Sparkles className="w-6 h-6 text-primary" />
           </div>
-          <p className=" features text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="features text-lg text-muted-foreground max-w-2xl mx-auto">
             A comprehensive platform combining structured learning, AI
             assistance, and authentic content
           </p>
@@ -192,7 +247,7 @@ const Landing = () => {
             return (
               <Card
                 key={feature.title}
-                className="hover:shadow-lg transition-shadow duration-300 hover:border-primary/50"
+                className="feature-card hover:shadow-lg transition-shadow duration-300 hover:border-primary/50"
               >
                 <CardHeader>
                   <div className="flex items-center gap-3 mb-2">
@@ -236,19 +291,19 @@ const Landing = () => {
       <section className="py-16 px-4 bg-muted/50 rounded-lg">
         <div className="max-w-4xl mx-auto text-center">
           <Languages className="w-12 h-12 mx-auto mb-4 text-primary" />
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="language-title text-3xl md:text-4xl font-bold mb-4">
             Learn Multiple Languages
           </h2>
-          <p className="text-lg text-muted-foreground mb-8">
+          <p className="language-paragraph text-lg text-muted-foreground mb-8">
             Currently supporting French and Italian, with more languages coming
             soon
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <div className="px-6 py-3 bg-background rounded-lg border shadow-sm">
+            <div className="languages px-6 py-3 bg-background rounded-lg border shadow-sm">
               <span className="text-xl font-semibold">🇫🇷 French</span>
             </div>
-            <div className="px-6 py-3 bg-background rounded-lg border shadow-sm">
-              <span className="text-xl font-semibold">🇮🇹 Italian</span>
+            <div className="languages px-6 py-3 bg-background rounded-lg border shadow-sm">
+              <span className=" text-xl font-semibold">🇮🇹 Italian</span>
             </div>
           </div>
         </div>

@@ -60,14 +60,45 @@ const Deck = () => {
           },
           credentials: "include",
           body: JSON.stringify(card),
-        }
+        },
       );
       const data = await res.json();
-      setUser({
-        username: data.user.username,
-        email: data.user.email,
-        decks: data.user.decks,
+      setUser(data.user);
+      toast.success(data.message, {
+        action: {
+          label: "Close",
+          onClick: () => {
+            toast.dismiss();
+          },
+        },
       });
+    } catch (error) {
+      toast.error(String(error), {
+        action: {
+          label: "Close",
+          onClick: () => {
+            toast.dismiss();
+          },
+        },
+      });
+    }
+  };
+
+  const removeFromDeck = async (card: FlashCardProps) => {
+    try {
+      const res = await fetch(
+        `http://localhost:8000/remove_card/${languagePath}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(card),
+        },
+      );
+      const data = await res.json();
+      setUser(data.user);
       toast.success(data.message, {
         action: {
           label: "Close",
@@ -127,7 +158,7 @@ const Deck = () => {
         cardList={deck.items}
         lang={deck.language}
         addToDeck={addToDeck}
-        removeFromDeck={() => {}}
+        removeFromDeck={removeFromDeck}
       />
     </>
   );

@@ -34,11 +34,7 @@ router.post("/remove_card/:language", async (req, res) => {
 
     res.status(201).json({
       message: "Card removed successfully",
-      user: {
-        username: updatedUser.username,
-        email: updatedUser.email,
-        decks: updatedUser.decks,
-      },
+      user: updatedUser,
       newDeck: updatedDeck,
     });
   } catch (err) {
@@ -90,13 +86,11 @@ router.post("/add_card/:language", async (req, res) => {
       );
     }
 
+    console.log(updatedUser);
+
     res.status(201).json({
       message: "Card added successfully",
-      user: {
-        username: updatedUser.username,
-        email: updatedUser.email,
-        decks: updatedUser.decks,
-      },
+      user: updatedUser,
     });
   } catch (err) {
     console.error("Failed to add card", err);

@@ -62,11 +62,7 @@ const Lesson = () => {
         },
       );
       const data = await res.json();
-      setUser({
-        username: data.user.username,
-        email: data.user.email,
-        decks: data.user.decks,
-      });
+      setUser(data.user);
       toast.success(data.message, {
         action: {
           label: "Close",
@@ -102,12 +98,7 @@ const Lesson = () => {
       );
       const data = await res.json();
       console.log(data);
-      setUser({
-        username: data.user.username,
-        email: data.user.email,
-        decks: data.user.decks,
-        role: data.user.role,
-      });
+      setUser(data.user);
       toast.success(data.message, {
         action: {
           label: "Close",
