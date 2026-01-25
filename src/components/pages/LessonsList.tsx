@@ -96,7 +96,7 @@ const LessonsList = () => {
             <Link
               to={`/lessons/${lesson._id}`}
               state={{ lesson }}
-              className={`hover:translate-1 ${notCompleted ? `opacity-50 pointer-events-none` : null}`}
+              className={`hover:translate-1 `}
             >
               <div
                 className={`flex flex-row justify-between border-2 rounded-lg p-3 mb-5 mt-1 shadow-sm hover:cursor-pointer hover:translate-1 lesson  ${completed ? `border-green-500` : null}`}

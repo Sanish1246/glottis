@@ -1,4 +1,17 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import LoginForm from "@/components/pages/LoginForm";
+import RegisterForm from "@/components/pages/RegisterForm";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogHeader,
+  DialogFooter,
+  DialogDescription,
+  DialogTitle,
+  DialogClose,
+} from "@/components/ui/dialog";
 import { useUser } from "../context/UserContext";
 import { Button } from "../ui/button";
 import {
@@ -18,14 +31,16 @@ import {
   ArrowRight,
   Languages,
 } from "lucide-react";
-
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import SplitText from "gsap/SplitText";
 import ScrollTrigger from "gsap/ScrollTrigger";
 
 const Landing = () => {
-  const { isLoggedIn } = useUser();
+  const navigate = useNavigate();
+  const { isLoggedIn, setIsLoggedIn } = useUser();
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
   useGSAP(() => {
     gsap.registerPlugin(ScrollTrigger, SplitText);
@@ -204,7 +219,7 @@ const Landing = () => {
                 size="lg"
                 className="text-lg px-8"
               >
-                <Link to="/dashboard">View Dashboard</Link>
+                <Link to="/lessons">Explore Lessons</Link>
               </Button>
             </>
           ) : (
@@ -213,12 +228,14 @@ const Landing = () => {
                 <Link to="/athena">Try Athena</Link>
               </Button>
               <Button
-                asChild
                 variant="outline"
                 size="lg"
                 className="text-lg px-8"
+                onClick={() => {
+                  setIsLoginOpen(true);
+                }}
               >
-                <Link to="/lessons">Explore Lessons</Link>
+                Explore Lessons
               </Button>
             </>
           )}
@@ -264,20 +281,20 @@ const Landing = () => {
                   {isLoggedIn ? (
                     <Button asChild variant="outline" className="w-full">
                       <Link to={feature.link}>
-                        Explore {feature.title}{" "}
+                        Explore {feature.title}
                         <ArrowRight className="ml-2 w-4 h-4" />
                       </Link>
                     </Button>
                   ) : (
-                    <Button asChild variant="outline" className="w-full">
-                      <Link
-                        to={
-                          feature.link === "/users" ? "/athena" : feature.link
-                        }
-                      >
-                        {feature.link === "/users" ? "Try Athena" : "Explore"}{" "}
-                        <ArrowRight className="ml-2 w-4 h-4" />
-                      </Link>
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => {
+                        setIsLoginOpen(true);
+                      }}
+                    >
+                      Explore
+                      <ArrowRight className="ml-2 w-4 h-4" />
                     </Button>
                   )}
                 </CardContent>
@@ -320,12 +337,38 @@ const Landing = () => {
             possibilities
           </p>
           {!isLoggedIn && (
-            <Button asChild size="lg" className="text-lg px-8">
-              <Link to="/athena">Get Started for Free</Link>
+            <Button
+              size="lg"
+              className="text-lg px-8"
+              onClick={() => {
+                setIsRegisterOpen(true);
+              }}
+            >
+              Get Started for Free
             </Button>
           )}
         </div>
       </section>
+
+      <Dialog open={isLoginOpen} onOpenChange={setIsLoginOpen}>
+        <DialogContent>
+          <LoginForm
+            setIsLoggedIn={setIsLoggedIn}
+            setIsRegisterOpen={setIsRegisterOpen}
+            onClose={() => setIsLoginOpen(false)}
+          />
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isRegisterOpen} onOpenChange={setIsRegisterOpen}>
+        <DialogContent>
+          <RegisterForm
+            setIsLoggedIn={setIsLoggedIn}
+            setIsLoginOpen={setIsLoginOpen}
+            onClose={() => setIsRegisterOpen(false)}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

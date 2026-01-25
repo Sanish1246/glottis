@@ -72,7 +72,7 @@ app.use("/lessons", lessonRoutes);
 app.use("/flashcards", flashcardRoutes);
 app.use("/immersion", immersionRoutes);
 
-// //serving the main html file
+// serving the main html file
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
@@ -102,7 +102,7 @@ io.on("connection", (socket) => {
 
 async function startServer() {
   await connectToDb();
-  // Starting server + ngrok
+  // Starting server + ngrok for the whatsapp cloud api
   server.listen(PORT, async () => {
     console.log(`🚀 Server listening on http://localhost:${PORT}`);
 
