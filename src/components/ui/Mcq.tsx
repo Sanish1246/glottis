@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useId, useState } from "react";
 import { Button } from "./button";
 import { toast } from "sonner";
 
@@ -15,6 +15,7 @@ interface QuestionProp {
 
 const Mcq = ({ question, setCorrectMcq }: QuestionProp) => {
   const [newAnswer, setNewAnswer] = useState("");
+  const groupName = useId();
 
   function checkAnswer() {
     if (newAnswer.toLowerCase() == question.answer.toLowerCase()) {
@@ -41,22 +42,46 @@ const Mcq = ({ question, setCorrectMcq }: QuestionProp) => {
   }
 
   return (
-    <div className="space-y-3">
-      <p className="font-medium">{question.question}</p>
-      {question.options.map((opt, i) => (
-        <label key={i} className="block">
-          <input
-            type="radio"
-            name="quiz"
-            value={opt}
-            checked={newAnswer === opt}
-            onChange={(e) => setNewAnswer(e.target.value)}
-            className="mr-2"
-          />
-          {opt}
-        </label>
-      ))}
-      <Button onClick={checkAnswer}>Confirm</Button>
+    <div className="space-y-4">
+      <p className="text-sm font-medium leading-relaxed">{question.question}</p>
+
+      <div className="grid gap-2">
+        {question.options.map((opt, i) => {
+          const id = `${groupName}-${i}`;
+          const selected = newAnswer === opt;
+          return (
+            <label
+              key={id}
+              htmlFor={id}
+              className={`flex cursor-pointer items-start gap-3 rounded-lg border p-3 text-sm transition ${
+                selected
+                  ? "border-primary bg-primary/5"
+                  : "border-border hover:bg-muted/40"
+              }`}
+            >
+              <input
+                id={id}
+                type="radio"
+                name={groupName}
+                value={opt}
+                checked={selected}
+                onChange={(e) => setNewAnswer(e.target.value)}
+                className="mt-0.5"
+              />
+              <span className="leading-relaxed">{opt}</span>
+            </label>
+          );
+        })}
+      </div>
+
+      <div className="flex items-center gap-2">
+        <Button onClick={checkAnswer} disabled={!newAnswer}>
+          Confirm
+        </Button>
+        <span className="text-xs text-muted-foreground">
+          Select an option to continue
+        </span>
+      </div>
     </div>
   );
 };
