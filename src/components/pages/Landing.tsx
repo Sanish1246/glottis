@@ -101,8 +101,8 @@ const Landing = () => {
       {
         scrollTrigger: ".feature-card",
         opacity: 1,
-        duration: 1,
-        stagger: 0.6,
+        duration: 0.9,
+        stagger: 0.55,
       },
     );
 
