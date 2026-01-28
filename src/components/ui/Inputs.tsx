@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button } from "./button";
+import { Input } from "./input";
 
 interface Message {
   id: number;
@@ -15,6 +16,7 @@ const Inputs = ({ setMessages }: messageProp) => {
   const [newMessage, setNewMessage] = useState("");
 
   async function sendMessage() {
+    if (!newMessage.trim()) return;
     setMessages((prev: Message[]) => [
       ...prev,
       { id: prev.length + 1, text: newMessage, sender: "user" },
@@ -38,16 +40,24 @@ const Inputs = ({ setMessages }: messageProp) => {
     }
   }
   return (
-    <div className="flex flex-row gap-2 justify-center mt-2">
-      <input
+    <form
+      className="flex flex-col gap-2 pt-2 sm:flex-row"
+      onSubmit={(e) => {
+        e.preventDefault();
+        sendMessage();
+      }}
+    >
+      <Input
         type="text"
-        placeholder="Type your message..."
-        className="border-2 border-gray-300 p-2 rounded-md w-[60%]"
+        placeholder="Ask Athena anything about your target language…"
         value={newMessage}
         onChange={(e) => setNewMessage(e.target.value)}
+        className="flex-1"
       />
-      <Button onClick={() => sendMessage()}>Send</Button>
-    </div>
+      <Button type="submit" disabled={!newMessage.trim()}>
+        Send
+      </Button>
+    </form>
   );
 };
 
