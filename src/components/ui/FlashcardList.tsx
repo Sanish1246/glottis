@@ -50,15 +50,16 @@ const FlashcardList = ({
     });
   }, []);
   return (
-    <div className="grid grid-cols-4 gap-4 mt-6 mb-10">
+    <div className="grid grid-cols-1 gap-4 mt-6 mb-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {cardList.map((card, i) => (
         <div
+          key={`${card.word}-${card.english}-${i}`}
           ref={(card) => {
             cardRefs.current[i] = card;
           }}
+          className="mx-auto"
         >
           <Flashcard
-            key={i}
             word={card.word}
             english={card.english}
             audio={card.audio}

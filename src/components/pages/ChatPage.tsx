@@ -1,10 +1,17 @@
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import ChatInputs from "../ui/ChatInputs";
 import io, { Socket } from "socket.io-client";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import dayjs from "dayjs";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
 
 const socket: Socket = io("http://localhost:8000");
 
@@ -30,7 +37,15 @@ const ChatPage = () => {
   }, [username, currentUser]);
   const [room, setRoom] = useState(initialRoom);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [splitDate, setSplitDate] = useState("00-00-0000");
+  const scrollerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    // Keep view pinned to the latest message
+    scrollerRef.current?.scrollTo({
+      top: scrollerRef.current.scrollHeight,
+      behavior: "smooth",
+    });
+  }, [messages.length]);
 
   useEffect(() => {
     const createChat = async () => {
@@ -59,7 +74,6 @@ const ChatPage = () => {
           credentials: "include",
         });
         const data = await res.json();
-        console.log(data);
         if (data) {
           setMessages(data.messages);
         } else {
@@ -82,18 +96,15 @@ const ChatPage = () => {
     } else {
       setRoom(currentUser + "&" + username);
     }
-    console.log(room);
     if (!room) return;
 
     getMessages();
 
     // Join the room
     socket.emit("join_room", room);
-    console.log(`Joined room: ${room}`);
 
     // Listen for incoming messages
     const handleReceiveMessage = (data: ChatMessage) => {
-      console.log("Message received:", data);
       setMessages((list) => [...list, data]);
     };
 
@@ -141,8 +152,6 @@ const ChatPage = () => {
       });
     }
 
-    console.log("Sending message:", messageData);
-
     // Emit to server — don't add to state here
     socket.emit("send_message", messageData);
 
@@ -154,48 +163,90 @@ const ChatPage = () => {
   };
 
   return (
-    <div>
-      <div className="flex flex-row items-center">
-        <Button
-          onClick={() => {
-            navigate(-1);
-          }}
-        >
-          Back
-        </Button>
-        <h1>Chat with {username}</h1>
-      </div>
-
-      <div>
-        <div className=" h-[35rem] flex flex-col overflow-y-auto">
-          {/* Applying different formatting based on who sends the message */}
-          {messages.map((msg, index: number) => (
-            <>
-              {msg.date == dayjs(Date.now()).format("DD-MM-YYYY") ? (
-                <p className=" w-[5%] text-center border-2 p-1 mx-auto text-sm rounded-lg">
-                  Today
-                </p>
-              ) : null}
-              <div
-                key={index}
-                className={`mt-2 rounded-md border-2 w-fit ${
-                  msg.sender === currentUser
-                    ? "self-end mr-5 bg-user-msg"
-                    : "self-start bg-bot-msg text-msg-text text-left ml-5"
-                }`}
-              >
-                <p>{msg.content}</p>
-                <p>{msg.timestamp}</p>
-              </div>
-            </>
-          ))}
+    <div className="mx-auto flex h-[calc(100vh-5rem)] max-w-5xl flex-col gap-4 px-4 py-4">
+      {/* Header */}
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <Button
+            variant="secondary"
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
+            Back
+          </Button>
+          <div>
+            <h1 className="text-xl font-bold tracking-tight">Chat</h1>
+            <p className="text-sm text-muted-foreground">Chat with {username}</p>
+          </div>
         </div>
       </div>
-      <ChatInputs
-        sendMessage={sendMessage}
-        currentMessage={currentMessage}
-        setCurrentMessage={setCurrentMessage}
-      />
+
+      <Card className="flex min-h-0 flex-1 flex-col">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base">{username}</CardTitle>
+          <CardDescription className="text-xs">
+            Messages are delivered in real time.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex min-h-0 flex-1 flex-col justify-between gap-3 pb-4">
+          <div
+            ref={scrollerRef}
+            className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto rounded-lg bg-muted/40 p-3"
+          >
+            {messages.length === 0 && (
+              <div className="my-auto text-center text-sm text-muted-foreground">
+                No messages yet. Say hello.
+              </div>
+            )}
+
+            {/* Applying different formatting based on who sends the message */}
+            {messages.map((msg, index: number) => {
+              const prev = messages[index - 1];
+              const showDateChip = !prev || prev.date !== msg.date;
+              const isToday = msg.date === dayjs(Date.now()).format("DD-MM-YYYY");
+              return (
+                <div key={`${msg.timestamp}-${index}`} className="space-y-2">
+                  {showDateChip && (
+                    <div className="flex justify-center">
+                      <span className="rounded-full border bg-background px-3 py-1 text-xs text-muted-foreground">
+                        {isToday ? "Today" : msg.date}
+                      </span>
+                    </div>
+                  )}
+
+                  <div
+                    className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm shadow-sm ${
+                      msg.sender === currentUser
+                        ? "ml-auto bg-primary text-primary-foreground"
+                        : "mr-auto border bg-background text-foreground"
+                    }`}
+                  >
+                    <p className="whitespace-pre-wrap leading-relaxed">
+                      {msg.content}
+                    </p>
+                    <p
+                      className={`mt-1 text-[11px] ${
+                        msg.sender === currentUser
+                          ? "text-primary-foreground/80"
+                          : "text-muted-foreground"
+                      }`}
+                    >
+                      {msg.timestamp}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <ChatInputs
+            sendMessage={sendMessage}
+            currentMessage={currentMessage}
+            setCurrentMessage={setCurrentMessage}
+          />
+        </CardContent>
+      </Card>
     </div>
   );
 };

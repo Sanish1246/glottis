@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Input } from "./input";
 import { Button } from "./button";
 import { toast } from "sonner";
+import { Badge } from "./badge";
 
 interface Question {
   text: string;
@@ -41,32 +42,41 @@ const FillInTheBlanks = ({ question, setCorrectFib }: QuestionProp) => {
     }
   }
   return (
-    <div>
-      <div className="flex flex-row">
-        <p>
-          {question.text} [
-          {question.options.map((a, index) => (
-            <span key={index}>{a}, </span>
-          ))}
-          ]
-        </p>
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <p className="text-sm font-medium leading-relaxed">{question.text}</p>
+        {question.options?.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {question.options.map((opt, index) => (
+              <Badge key={index} variant="secondary" className="text-xs">
+                {opt}
+              </Badge>
+            ))}
+          </div>
+        )}
       </div>
-      <div className="flex flex-row max-w-[20%]">
-        <label htmlFor="answer"></label>
+
+      <form
+        className="flex w-full flex-col gap-2 sm:flex-row sm:items-center"
+        onSubmit={(e) => {
+          e.preventDefault();
+          checkAnswer();
+        }}
+      >
+        <label htmlFor="answer" className="sr-only">
+          Answer
+        </label>
         <Input
           id="answer"
-          placeholder="answer"
+          placeholder="Type your answer…"
           value={newAnswer}
           onChange={(e) => setNewAnswer(e.target.value)}
-        ></Input>
-        <Button
-          onClick={() => {
-            checkAnswer();
-          }}
-        >
-          Send
+          className="sm:max-w-sm"
+        />
+        <Button type="submit" disabled={!newAnswer.trim()}>
+          Check
         </Button>
-      </div>
+      </form>
     </div>
   );
 };
