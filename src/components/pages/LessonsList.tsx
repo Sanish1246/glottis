@@ -51,7 +51,11 @@ const LessonsList = () => {
       totalCount: total,
       progress: total ? Math.round((completed / total) * 100) : 0,
     };
-  }, [lessonArray, user.lessonsCompleted.french, user.lessonsCompleted.italian]);
+  }, [
+    lessonArray,
+    user.lessonsCompleted.french,
+    user.lessonsCompleted.italian,
+  ]);
 
   useGSAP(() => {
     gsap.fromTo(
@@ -127,77 +131,77 @@ const LessonsList = () => {
 
       <div className="space-y-4">
         {lessonArray.map((lesson: any) => {
-        const showLevelHeader = lesson.lessonNumber_level == 1;
-        const completed =
-          (lesson.language == "french" &&
-            !lesson.author &&
-            user.lessonsCompleted.french >= lesson.lessonNumber) ||
-          (lesson.language == "italian" &&
-            !lesson.author &&
-            user.lessonsCompleted.italian >= lesson.lessonNumber);
+          const showLevelHeader = lesson.lessonNumber_level == 1;
+          const completed =
+            (lesson.language == "french" &&
+              !lesson.author &&
+              user.lessonsCompleted.french >= lesson.lessonNumber) ||
+            (lesson.language == "italian" &&
+              !lesson.author &&
+              user.lessonsCompleted.italian >= lesson.lessonNumber);
 
-        const notCompleted =
-          (lesson.language == "french" &&
-            !lesson.author &&
-            user.lessonsCompleted.french + 1 < lesson.lessonNumber) ||
-          (lesson.language == "italian" &&
-            !lesson.author &&
-            user.lessonsCompleted.italian + 1 < lesson.lessonNumber);
-        return (
-          <div key={lesson._id} className="space-y-1">
-            {showLevelHeader && (
-              <h2 className="mt-4 text-lg font-semibold tracking-tight">
-                {lesson.level}
-              </h2>
-            )}
-            <Link
-              to={`/lessons/${lesson._id}`}
-              state={{ lesson }}
-              className={`block ${
-                notCompleted ? "pointer-events-none" : "hover:no-underline"
-              }`}
-            >
-              <div
-                className={`lesson group relative flex items-center justify-between gap-4 rounded-xl border bg-card p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
-                  completed
-                    ? "border-green-500 bg-green-50"
-                    : "border-border bg-background"
-                } ${notCompleted ? "opacity-60" : ""}`}
+          const notCompleted =
+            (lesson.language == "french" &&
+              !lesson.author &&
+              user.lessonsCompleted.french + 1 < lesson.lessonNumber) ||
+            (lesson.language == "italian" &&
+              !lesson.author &&
+              user.lessonsCompleted.italian + 1 < lesson.lessonNumber);
+          return (
+            <div key={lesson._id} className="space-y-1">
+              {showLevelHeader && (
+                <h2 className="mt-4 text-lg font-semibold tracking-tight">
+                  {lesson.level}
+                </h2>
+              )}
+              <Link
+                to={`/lessons/${lesson._id}`}
+                state={{ lesson }}
+                className={`block ${
+                  notCompleted ? "pointer-events-none" : "hover:no-underline"
+                }`}
               >
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <p className="text-sm font-semibold">
-                      Lesson {lesson.lessonNumber}
+                <div
+                  className={`lesson group relative flex items-center justify-between gap-4 rounded-xl border bg-card p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
+                    completed
+                      ? "border-green-500 bg-green-50"
+                      : "border-border bg-background"
+                  } ${notCompleted ? "opacity-60" : ""}`}
+                >
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-semibold">
+                        Lesson {lesson.lessonNumber}
+                      </p>
+                      {lesson.topic && (
+                        <Badge variant="outline" className="text-xs">
+                          {lesson.topic}
+                        </Badge>
+                      )}
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      {lesson.title}
                     </p>
-                    {lesson.topic && (
-                      <Badge variant="outline" className="text-xs">
-                        {lesson.topic}
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    {notCompleted && (
+                      <Badge variant="secondary" className="text-xs">
+                        Locked
                       </Badge>
                     )}
+                    {completed && (
+                      <span className="flex items-center gap-1 text-sm font-medium text-green-700">
+                        <CircleCheck className="h-5 w-5" />
+                        Completed
+                      </span>
+                    )}
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    {lesson.title}
-                  </p>
                 </div>
-
-                <div className="flex items-center gap-2">
-                  {notCompleted && (
-                    <Badge variant="secondary" className="text-xs">
-                      Locked
-                    </Badge>
-                  )}
-                  {completed && (
-                    <span className="flex items-center gap-1 text-sm font-medium text-green-700">
-                      <CircleCheck className="h-5 w-5" />
-                      Completed
-                    </span>
-                  )}
-                </div>
-              </div>
-            </Link>
-          </div>
-        );
-      })}
+              </Link>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

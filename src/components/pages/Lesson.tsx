@@ -20,6 +20,7 @@ import {
 } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Progress } from "../ui/progress";
+import { MonitorPlay, PanelTop } from "lucide-react";
 
 type LessonData = any;
 
@@ -153,7 +154,7 @@ const Lesson = () => {
     };
     fetchLesson();
   }, [lessonId, initialLesson]);
- 
+
   const totalFib = lesson?.fib?.length ?? 0;
   const totalMcq = lesson?.mcq?.length ?? 0;
 
@@ -164,7 +165,8 @@ const Lesson = () => {
 
   const exerciseProgress = useMemo(() => {
     const total = totalFib + totalMcq;
-    const completed = Math.min(correctFib, totalFib) + Math.min(correctMcq, totalMcq);
+    const completed =
+      Math.min(correctFib, totalFib) + Math.min(correctMcq, totalMcq);
     return {
       completed,
       total,
@@ -221,13 +223,17 @@ const Lesson = () => {
           },
         });
       }
-
-
     };
     if (allExercisesCompleted) {
       completeLesson();
     }
-  }, [allExercisesCompleted, lesson, setUser, user.lessonsCompleted.french, user.lessonsCompleted.italian]);
+  }, [
+    allExercisesCompleted,
+    lesson,
+    setUser,
+    user.lessonsCompleted.french,
+    user.lessonsCompleted.italian,
+  ]);
 
   if (loading)
     return (
@@ -263,7 +269,9 @@ const Lesson = () => {
                   : `Lesson ${lesson.lessonNumber} · ${lesson.title}`}
               </h1>
               <div className="mt-1 flex flex-wrap items-center gap-2">
-                {lesson.level && <Badge variant="outline">{lesson.level}</Badge>}
+                {lesson.level && (
+                  <Badge variant="outline">{lesson.level}</Badge>
+                )}
                 {lesson.language && (
                   <Badge variant="secondary">{lesson.language}</Badge>
                 )}
@@ -291,13 +299,17 @@ const Lesson = () => {
         <Card>
           <CardHeader>
             <CardTitle>Objectives</CardTitle>
-            <CardDescription>What you’ll be able to do after this lesson.</CardDescription>
+            <CardDescription>
+              What you’ll be able to do after this lesson.
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <ul className="list-disc space-y-1 pl-5 text-sm">
-              {(lesson.objectives ?? []).map((objective: string, index: number) => (
-                <li key={index}>{objective}</li>
-              ))}
+              {(lesson.objectives ?? []).map(
+                (objective: string, index: number) => (
+                  <li key={index}>{objective}</li>
+                ),
+              )}
             </ul>
           </CardContent>
         </Card>
@@ -334,7 +346,9 @@ const Lesson = () => {
                         <div className="flex items-start justify-between gap-3">
                           <div className="space-y-1">
                             <p className="text-sm">
-                              <span className="font-semibold">{l.speaker}:</span>{" "}
+                              <span className="font-semibold">
+                                {l.speaker}:
+                              </span>{" "}
                               <span className="leading-relaxed">{l.text}</span>
                             </p>
                             {l.english && (
@@ -393,7 +407,10 @@ const Lesson = () => {
                 <CardTitle>{g.title}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <GrammarTable grammarPoint={g.content} lang={lesson.voice_languagePath} />
+                <GrammarTable
+                  grammarPoint={g.content}
+                  lang={lesson.voice_languagePath}
+                />
                 {(g.notes ?? []).length > 0 && (
                   <div className="space-y-2">
                     <h3 className="text-sm font-semibold">Notes</h3>
@@ -436,47 +453,55 @@ const Lesson = () => {
                     <div className="mb-3 text-xs text-muted-foreground">
                       Question {index + 1}
                     </div>
-                    <FillInTheBlanks question={q} setCorrectFib={setCorrectFib} />
+                    <FillInTheBlanks
+                      question={q}
+                      setCorrectFib={setCorrectFib}
+                    />
                   </div>
                 ))}
               </div>
             )}
 
             {/* Transition */}
-            {totalFib > 0 && correctFib === totalFib && correctMcq === 0 && totalMcq > 0 && (
-              <div className="rounded-xl border bg-green-50 p-4">
-                <p className="text-sm font-semibold text-green-800">
-                  Nice work — fill-in-the-blanks completed.
-                </p>
-                <p className="mt-1 text-sm text-green-700">
-                  Next up: multiple choice questions.
-                </p>
-              </div>
-            )}
+            {totalFib > 0 &&
+              correctFib === totalFib &&
+              correctMcq === 0 &&
+              totalMcq > 0 && (
+                <div className="rounded-xl border bg-green-50 p-4">
+                  <p className="text-sm font-semibold text-green-800">
+                    Nice work — fill-in-the-blanks completed.
+                  </p>
+                  <p className="mt-1 text-sm text-green-700">
+                    Next up: multiple choice questions.
+                  </p>
+                </div>
+              )}
 
             {/* MCQ */}
-            {correctFib >= totalFib && correctMcq < totalMcq && totalMcq > 0 && (
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-semibold">Multiple choice</h3>
-                  <span className="text-xs text-muted-foreground">
-                    {Math.min(correctMcq + 1, totalMcq)}/{totalMcq}
-                  </span>
-                </div>
-
-                {(lesson.mcq ?? []).map((q: any, index: number) => (
-                  <div
-                    key={index}
-                    className={index === correctMcq ? "block" : "hidden"}
-                  >
-                    <div className="mb-3 text-xs text-muted-foreground">
-                      Question {index + 1}
-                    </div>
-                    <Mcq question={q} setCorrectMcq={setCorrectMcq} />
+            {correctFib >= totalFib &&
+              correctMcq < totalMcq &&
+              totalMcq > 0 && (
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-sm font-semibold">Multiple choice</h3>
+                    <span className="text-xs text-muted-foreground">
+                      {Math.min(correctMcq + 1, totalMcq)}/{totalMcq}
+                    </span>
                   </div>
-                ))}
-              </div>
-            )}
+
+                  {(lesson.mcq ?? []).map((q: any, index: number) => (
+                    <div
+                      key={index}
+                      className={index === correctMcq ? "block" : "hidden"}
+                    >
+                      <div className="mb-3 text-xs text-muted-foreground">
+                        Question {index + 1}
+                      </div>
+                      <Mcq question={q} setCorrectMcq={setCorrectMcq} />
+                    </div>
+                  ))}
+                </div>
+              )}
 
             {allExercisesCompleted && exerciseProgress.total > 0 && (
               <div className="rounded-xl border bg-blue-50 p-4">
@@ -511,31 +536,38 @@ const Lesson = () => {
         </Card>
       )}
 
-      {allExercisesCompleted && (lesson.additional_resources ?? []).length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Additional resources</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-2 text-sm">
-              {(lesson.additional_resources ?? []).map((r: any, index: number) => (
-                <li key={index} className="rounded-lg border p-3">
-                  <a
-                    href={r.url}
-                    target="_blank"
-                    className="font-medium underline underline-offset-4"
-                  >
-                    <span className="mr-2 text-muted-foreground">
-                      [{r.type}]
-                    </span>
-                    {r.title}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-      )}
+      {allExercisesCompleted &&
+        (lesson.additional_resources ?? []).length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Additional resources</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-2 text-sm">
+                {(lesson.additional_resources ?? []).map(
+                  (r: any, index: number) => (
+                    <li key={index} className="rounded-lg border p-3">
+                      <a
+                        href={r.url}
+                        target="_blank"
+                        className="font-medium underline underline-offset-4 flex flex-row"
+                      >
+                        <span className="mr-2 text-muted-foreground">
+                          {r.type.toLowerCase() == "video" ? (
+                            <MonitorPlay />
+                          ) : (
+                            <PanelTop />
+                          )}
+                        </span>
+                        {r.title}
+                      </a>
+                    </li>
+                  ),
+                )}
+              </ul>
+            </CardContent>
+          </Card>
+        )}
 
       {allExercisesCompleted && lesson.summary && (
         <Card>
