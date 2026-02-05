@@ -11,13 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { MessageCircle } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "../ui/card";
+import { Card, CardContent } from "../ui/card";
 
 const Athena = () => {
   const [messages, setMessages] = useState([
@@ -31,7 +25,8 @@ const Athena = () => {
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Athena</h1>
           <p className="text-sm text-muted-foreground">
-            Your AI language tutor. Ask questions, get explanations, and practice freely.
+            Your AI language tutor. Ask questions, get explanations, and
+            practice freely.
           </p>
         </div>
         <Dialog>
@@ -47,7 +42,8 @@ const Athena = () => {
             </DialogHeader>
             <div className="mx-auto flex flex-col items-center gap-2 py-2">
               <p className="text-sm text-muted-foreground text-center">
-                Scan this QR code with your phone to continue the conversation on WhatsApp.
+                Scan this QR code with your phone to continue the conversation
+                on WhatsApp.
               </p>
               <QrCode />
             </div>
@@ -57,12 +53,6 @@ const Athena = () => {
 
       {/* Chat card */}
       <Card className="flex min-h-0 flex-1 flex-col">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base">Chat</CardTitle>
-          <CardDescription className="text-xs">
-            Athena understands natural language and can answer grammar, vocabulary, and usage questions.
-          </CardDescription>
-        </CardHeader>
         <CardContent className="flex min-h-0 flex-1 flex-col justify-between gap-3 pb-4">
           <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto rounded-lg bg-muted/40 p-3">
             {messages.map((msg) => (

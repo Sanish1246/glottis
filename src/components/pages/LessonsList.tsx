@@ -164,13 +164,13 @@ const LessonsList = () => {
                 <div
                   className={`lesson group relative flex items-center justify-between gap-4 rounded-xl border bg-card p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
                     completed
-                      ? "border-green-500 bg-green-50"
+                      ? "border-green-500 bg-green-50 dark:border-green-50 dark:bg-green-600"
                       : "border-border bg-background"
                   } ${notCompleted ? "opacity-60" : ""}`}
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <p className="text-sm font-semibold">
+                      <p className="text-sm font-semibold dark:font-bold">
                         Lesson {lesson.lessonNumber}
                       </p>
                       {lesson.topic && (
@@ -179,7 +179,7 @@ const LessonsList = () => {
                         </Badge>
                       )}
                     </div>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-muted-foreground dark:text-white">
                       {lesson.title}
                     </p>
                   </div>
@@ -191,7 +191,7 @@ const LessonsList = () => {
                       </Badge>
                     )}
                     {completed && (
-                      <span className="flex items-center gap-1 text-sm font-medium text-green-700">
+                      <span className="flex items-center gap-1 text-sm font-medium text-green-700 dark:text-white">
                         <CircleCheck className="h-5 w-5" />
                         Completed
                       </span>

@@ -27,7 +27,7 @@ const MediaCard = ({ media, onLikeChange }: MediaCardProps) => {
   const { user, setUser } = useUser();
 
   const liked = (user?.likes ?? []).some(
-    (userMedia: MediaProps) => userMedia.title === media.title
+    (userMedia: MediaProps) => userMedia.title === media.title,
   );
 
   const likeMedia = async () => {
@@ -139,7 +139,7 @@ const MediaCard = ({ media, onLikeChange }: MediaCardProps) => {
         </div>
         <div className="w-full">
           <div
-            className={`rounded-br-xl border border-black rounded-bl-xl justify-center items-center flex hover:cursor-pointer hover:bg-red-500 p-1 ${
+            className={`rounded-br-xl border border-black rounded-bl-xl justify-center items-center flex hover:cursor-pointer dark:border-white hover:bg-red-500 p-1 ${
               liked ? "bg-red-500" : ""
             }`}
             onClick={(e) => {
