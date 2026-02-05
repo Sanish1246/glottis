@@ -1,17 +1,8 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import LoginForm from "@/components/pages/LoginForm";
 import RegisterForm from "@/components/pages/RegisterForm";
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-  DialogHeader,
-  DialogFooter,
-  DialogDescription,
-  DialogTitle,
-  DialogClose,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useUser } from "../context/UserContext";
 import { Button } from "../ui/button";
 import {
@@ -37,7 +28,6 @@ import SplitText from "gsap/SplitText";
 import ScrollTrigger from "gsap/ScrollTrigger";
 
 const Landing = () => {
-  const navigate = useNavigate();
   const { isLoggedIn, setIsLoggedIn } = useUser();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
@@ -123,7 +113,7 @@ const Landing = () => {
       ".language-paragraph",
       {
         opacity: 0,
-        x: 1000,
+        x: 100,
       },
       {
         scrollTrigger: ".language-paragraph",
@@ -138,7 +128,7 @@ const Landing = () => {
       scrollTrigger: ".languages",
       delay: 0.7,
       opacity: 0,
-      x: 1000,
+      x: 100,
       duration: 1,
       stagger: 0.5,
     });

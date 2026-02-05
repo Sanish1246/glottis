@@ -86,7 +86,7 @@ const Immersion = () => {
     gsap.fromTo(
       ".media",
       { opacity: 0 },
-      { opacity: 1, ease: "power1.inOut", duration: 0.8 }
+      { opacity: 1, ease: "power1.inOut", duration: 0.8 },
     );
   }, [currentPage, searchPage, searchResult]);
 
@@ -98,7 +98,7 @@ const Immersion = () => {
         {
           method: "GET",
           credentials: "include",
-        }
+        },
       );
       const data = await res.json();
       setSearching(true);
@@ -130,7 +130,7 @@ const Immersion = () => {
         {
           method: "GET",
           credentials: "include",
-        }
+        },
       );
       const data = await response.json();
       setMedias(data);
@@ -154,7 +154,7 @@ const Immersion = () => {
           {
             method: "GET",
             credentials: "include",
-          }
+          },
         );
         const data = await response.json();
         setMedias(data);
@@ -181,7 +181,7 @@ const Immersion = () => {
           {
             method: "GET",
             credentials: "include",
-          }
+          },
         );
         const data = await response.json();
         setRecs(data);
@@ -320,7 +320,11 @@ const Immersion = () => {
                   />
                 </PaginationItem>
                 <PaginationItem>
-                  <PaginationLink href="#" isActive className="text-black">
+                  <PaginationLink
+                    href="#"
+                    isActive
+                    className="text-black dark:text-white"
+                  >
                     {currentPage}
                   </PaginationLink>
                 </PaginationItem>
