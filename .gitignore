@@ -27,6 +27,6 @@ dist-ssr
 
 lessons
 immersionJSON
-data
+data/training-data.json
 frenchLessons
 .cursor

@@ -7,25 +7,59 @@ import User from "../models/user.js";
 
 const router = express.Router();
 
-async function recommend(userId, limit = 5) {
-  //Getting the user's likes
-  const user = await User.findById(userId).lean();
-  console.log(user);
-  if (!user || !user.likes || !user.likes.length) return []; // cold start
+let recommendationModel = null;
 
-  // 2. build profile
+async function loadRecommendationModel() {
+  if (recommendationModel) return recommendationModel;
+  try {
+    const modelPath = path.join(process.cwd(), "data", "recommendation-model.json");
+    const raw = await fs.readFile(modelPath, "utf-8");
+    recommendationModel = JSON.parse(raw);
+    return recommendationModel;
+  } catch {
+    return null;
+  }
+}
+
+function buildItemFeatures(item, profile) {
+  const { languages, levels, genres } = profile;
+  const language_match = languages.includes(item.language) ? 1 : 0;
+  const level_match = levels.includes(item.level) ? 1 : 0;
+  const genre_overlap = (item.genres || []).filter((g) => genres.includes(g)).length;
+  const log_likes = Math.log(1 + (item.likes ?? 0));
+  return [language_match, level_match, genre_overlap, log_likes];
+}
+
+function sigmoid(z) {
+  const x = Math.max(-20, Math.min(20, z));
+  return 1 / (1 + Math.exp(-x));
+}
+
+function predictScore(item, profile, model) {
+  const features = buildItemFeatures(item, profile);
+  let z = model.intercept;
+  for (let i = 0; i < model.coefficients.length; i++) {
+    z += model.coefficients[i] * (features[i] ?? 0);
+  }
+  return sigmoid(z);
+}
+
+async function recommend(userId, limit = 5) {
+  const user = await User.findById(userId).lean();
+  if (!user || !user.likes || !user.likes.length) return [];
+
   const titles = user.likes.map((i) => i.title);
-  const profile = await Immersion.find({ title: { $in: titles } })
+  const profileDocs = await Immersion.find({ title: { $in: titles } })
     .select("language level genres")
     .lean();
 
-  const languages = [...new Set(profile.map((p) => p.language))];
-  const levels = [...new Set(profile.map((p) => p.level))];
-  const genres = [...new Set(profile.map((p) => p.genres).flat())];
+  const languages = [...new Set(profileDocs.map((p) => p.language))];
+  const levels = [...new Set(profileDocs.map((p) => p.level))];
+  const genres = [...new Set(profileDocs.flatMap((p) => p.genres || []))];
+  const profile = { languages, levels, genres };
 
-  // 3. unseen items that match at least one genre OR same (lang + level)
   const query = {
-    title: { $nin: titles }, // unseen
+    title: { $nin: titles },
     $or: [
       { genres: { $in: genres } },
       { $and: [{ language: { $in: languages } }, { level: { $in: levels } }] },
@@ -38,16 +72,21 @@ async function recommend(userId, limit = 5) {
     .limit(candidateLimit)
     .lean();
 
-  // 4. score and rank
-  for (const item of candidates) {
-    let score = 0;
-    if (languages.includes(item.language)) score += 3;
-    if (levels.includes(item.level)) score += 2;
-    const genreMatches = (item.genres || []).filter((g) => genres.includes(g))
-      .length;
-    score += 2 * genreMatches;
-    score += Math.log(1 + (item.likes ?? 0));
-    item._score = score;
+  const model = await loadRecommendationModel();
+  if (model?.coefficients?.length) {
+    for (const item of candidates) {
+      item._score = predictScore(item, profile, model);
+    }
+  } else {
+    for (const item of candidates) {
+      let score = 0;
+      if (languages.includes(item.language)) score += 3;
+      if (levels.includes(item.level)) score += 2;
+      const genreMatches = (item.genres || []).filter((g) => genres.includes(g)).length;
+      score += 2 * genreMatches;
+      score += Math.log(1 + (item.likes ?? 0));
+      item._score = score;
+    }
   }
 
   candidates.sort((a, b) => (b._score ?? 0) - (a._score ?? 0));

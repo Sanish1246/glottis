@@ -107,25 +107,25 @@ async function startServer() {
     console.log(`🚀 Server listening on http://localhost:${PORT}`);
 
     try {
-      const url = await ngrok.connect(PORT);
-      console.log(`🌍 Ngrok active`);
+      // const url = await ngrok.connect(PORT);
+      // console.log(`🌍 Ngrok active`);
 
-      // Update ngrok endpoint automatically to allow access to the Whatsapp cloud API
-      await axios.post(
-        `https://graph.facebook.com/v22.0/${APP_ID}/subscriptions`,
-        {
-          object: "whatsapp_business_account",
-          callback_url: `${url}/webhook`,
-          verify_token: VERIFY_TOKEN,
-          fields: "messages",
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.APP_ACCESS_TOKEN}`,
-            "Content-Type": "application/json",
-          },
-        },
-      );
+      // // Update ngrok endpoint automatically to allow access to the Whatsapp cloud API
+      // await axios.post(
+      //   `https://graph.facebook.com/v22.0/${APP_ID}/subscriptions`,
+      //   {
+      //     object: "whatsapp_business_account",
+      //     callback_url: `${url}/webhook`,
+      //     verify_token: VERIFY_TOKEN,
+      //     fields: "messages",
+      //   },
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${process.env.APP_ACCESS_TOKEN}`,
+      //       "Content-Type": "application/json",
+      //     },
+      //   },
+      // );
 
       console.log("✅ Webhook updated on Meta");
     } catch (err) {
