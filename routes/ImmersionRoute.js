@@ -32,7 +32,28 @@ async function recommend(userId, limit = 5) {
     ],
   };
 
-  return Immersion.find(query).select("-__v").limit(limit).lean();
+  const candidateLimit = 50;
+  const candidates = await Immersion.find(query)
+    .select("-__v")
+    .limit(candidateLimit)
+    .lean();
+
+  // 4. score and rank
+  for (const item of candidates) {
+    let score = 0;
+    if (languages.includes(item.language)) score += 3;
+    if (levels.includes(item.level)) score += 2;
+    const genreMatches = (item.genres || []).filter((g) => genres.includes(g))
+      .length;
+    score += 2 * genreMatches;
+    score += Math.log(1 + (item.likes ?? 0));
+    item._score = score;
+  }
+
+  candidates.sort((a, b) => (b._score ?? 0) - (a._score ?? 0));
+  const top = candidates.slice(0, limit);
+  top.forEach((item) => delete item._score);
+  return top;
 }
 
 router.get("/:lang/:level/:page", async (req, res) => {
