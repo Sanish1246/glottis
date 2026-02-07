@@ -26,5 +26,7 @@ dist-ssr
 *.sw?
 
 lessons
+data
 immersionJSON
 frenchLessons
+.cursor/
