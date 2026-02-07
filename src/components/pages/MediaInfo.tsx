@@ -26,7 +26,7 @@ const MediaInfo = () => {
   const { media } = location.state || null;
 
   const liked = (user?.likes ?? []).some(
-    (userMedia: MediaProps) => userMedia.title === media.title
+    (userMedia: MediaProps) => userMedia.title === media.title,
   );
   const navigate = useNavigate();
 
@@ -156,13 +156,12 @@ const MediaInfo = () => {
             </div>
             <div className="p-2 border rounded-lg bg-black text-white flex flex-row gap-1 hover:cursor-pointer hover:bg-transparent">
               <a href={media.link} target="_blank">
-                Buy/Read Now
+                Buy/Access Now
               </a>
               <ExternalLink />
             </div>
           </div>
           <div className="flex flex-row gap-2 mt-5 items-center justify-center">
-            Genres:
             {media.genres.map((g: string, index: number) => {
               return <Badge key={index}>{g}</Badge>;
             })}

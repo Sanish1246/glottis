@@ -81,8 +81,12 @@ const mediaTypes: Options[] = [
     label: "Movie",
   },
   {
-    value: "TV Series",
-    label: "TV Series",
+    value: "News Articles",
+    label: "News Articles",
+  },
+  {
+    value: "Podcast",
+    label: "Podcast",
   },
 ];
 
@@ -306,7 +310,7 @@ const UploadMediaForm = ({ onClose }: UploadProps) => {
                           const next = checked
                             ? [...(field.value || []), g.value]
                             : (field.value || []).filter(
-                                (v: string) => v !== g.value
+                                (v: string) => v !== g.value,
                               );
                           field.onChange(next);
                         }}
