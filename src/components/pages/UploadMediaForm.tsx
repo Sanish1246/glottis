@@ -88,6 +88,10 @@ const mediaTypes: Options[] = [
     value: "Podcast",
     label: "Podcast",
   },
+  {
+    value: "TV Show",
+    label: "TV Show",
+  },
 ];
 
 const genresOptions: Options[] = [

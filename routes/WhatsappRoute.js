@@ -17,7 +17,7 @@ const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN;
 
 router.get("/qr", async (req, res) => {
   try {
-    const waNumber = "15551710457"; //Phone number of the chatbot
+    const waNumber = "15551446393"; //Phone number of the chatbot
     const chatLink = `https://wa.me/${waNumber}`;
     const qr = await QRCode.toDataURL(chatLink);
     res.json({ qr });
@@ -43,7 +43,7 @@ async function sendWhatsAppMessage(to, text) {
           Authorization: `Bearer ${WHATSAPP_TOKEN}`,
           "Content-Type": "application/json",
         },
-      }
+      },
     );
   } catch (err) {
     console.error("❌ Error sending to  WhatsApp:", err.response?.data || err);
@@ -82,7 +82,7 @@ router.post("/", async (req, res) => {
         // Gemini Api call
         const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
         const result = await model.generateContent(
-          prePrompt + " The user's message is: " + userMessage
+          prePrompt + " The user's message is: " + userMessage,
         );
         const responseText = (await result.response).text();
 

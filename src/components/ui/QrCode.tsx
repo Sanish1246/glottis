@@ -39,7 +39,7 @@ const QrCode = () => {
       ) : (
         <p>✅ WhatsApp is already connected or QR not available</p>
       )}
-      <p>Or use this link: https://wa.me/15551710457</p>
+      <p>Or use this link: https://wa.me/15551446393</p>
     </div>
   );
 };
