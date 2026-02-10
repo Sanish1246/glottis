@@ -124,7 +124,6 @@ const Immersion = () => {
 
   const filterMedia = async () => {
     try {
-      setCurrentPage(1);
       const response = await fetch(
         `http://localhost:8000/immersion/${languagePath}/${levelFilter}/${currentPage}`,
         {
@@ -289,20 +288,23 @@ const Immersion = () => {
               setFilter={setLevelFilter}
             ></Combobox>
           </div>
-          <div>
-            <h2>Recommendations</h2>
-            <Carousel className="max-w-95 mx-auto">
-              <CarouselContent>
-                {recs.map((r, index) => (
-                  <CarouselItem key={index} className="rounded-xl">
-                    <MediaCard media={r} onLikeChange={filterMedia} />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
-            </Carousel>
-          </div>
+          {recs.length > 0 ? (
+            <div>
+              <h2>Recommendations</h2>
+              <Carousel className="max-w-95 mx-auto">
+                <CarouselContent>
+                  {recs.map((r, index) => (
+                    <CarouselItem key={index} className="rounded-xl">
+                      <MediaCard media={r} onLikeChange={filterMedia} />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+              </Carousel>
+            </div>
+          ) : null}
+
           <h2>List of medias</h2>
           <div className="grid md:grid-cols-3 grid-cols-1 mx-auto mt-5 items-center justify-items-center media">
             {medias.map((m, index) => (

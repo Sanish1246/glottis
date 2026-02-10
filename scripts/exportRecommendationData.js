@@ -51,15 +51,15 @@ async function run() {
 
   //Getting all medias and storing their features
   const medias = await Immersion.find({
-    status: { $nin: ["Rejected", "Pending"] }
-      .select("title language level genres likes")
-      .lean(),
-  });
+    status: { $nin: ["Rejected", "Pending"] },
+  })
+    .select("title language level genres likes")
+    .lean();
 
   //Indexing by title
   const titleIndex = new Map(medias.map((i) => [i.title, i]));
 
-  const dataset = [];
+  const samples = [];
 
   for (const user of users) {
     const titles = (user.likes || []).map((l) => l.title).filter(Boolean);
@@ -80,9 +80,9 @@ async function run() {
 
     const userId = user._id.toString();
 
-    //Pushing each liked item to the dataset, providing positive feedback
+    //Pushing each liked item to the samples, providing positive feedback
     for (const item of likedItems) {
-      dataset.push({
+      samples.push({
         features: buildFeatures(item, profile),
         label: 1,
         userId,
@@ -90,7 +90,7 @@ async function run() {
     }
 
     //Getting negative samples
-    const unseen = allItems.filter((i) => !seen.has(i.title));
+    const unseen = medias.filter((i) => !seen.has(i.title));
 
     const numNeg = Math.min(
       unseen.length,
@@ -102,14 +102,14 @@ async function run() {
       const idx = Math.floor(Math.random() * unseen.length);
       const item = unseen[idx];
       unseen.splice(idx, 1);
-      dataset.push({
+      samples.push({
         features: buildFeatures(item, profile),
         label: 0,
         userId,
       });
     }
   }
-  //Saving the updated dataset
+  //Saving the updated samples
   const outPath = path.join(process.cwd(), "data", "training-data.json");
   await fs.mkdir(path.dirname(outPath), { recursive: true });
   await fs.writeFile(

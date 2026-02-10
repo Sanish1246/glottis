@@ -45,8 +45,10 @@ router.post("/register", async (req, res) => {
     });
 
     req.session.user = {
+      id: newUser._id,
       username: newUser.username,
       email: newUser.email,
+      decks: newUser.decks,
       role: newUser.role,
     };
 

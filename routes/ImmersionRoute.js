@@ -7,10 +7,9 @@ import User from "../models/user.js";
 
 const router = express.Router();
 
-async function recommend(userId, limit = 5) {
+async function recommend(userId, limit = 3) {
   //Getting the user's likes
   const user = await User.findById(userId).lean();
-  console.log(user);
   if (!user || !user.likes || !user.likes.length) return []; // cold start
 
   // 2. build profile
@@ -43,8 +42,9 @@ async function recommend(userId, limit = 5) {
     let score = 0;
     if (languages.includes(item.language)) score += 3;
     if (levels.includes(item.level)) score += 2;
-    const genreMatches = (item.genres || []).filter((g) => genres.includes(g))
-      .length;
+    const genreMatches = (item.genres || []).filter((g) =>
+      genres.includes(g),
+    ).length;
     score += 2 * genreMatches;
     score += Math.log(1 + (item.likes ?? 0));
     item._score = score;
@@ -114,7 +114,7 @@ router.put("/approve/:id", async (req, res) => {
     const media = await Immersion.findByIdAndUpdate(
       id,
       { status: "Approved" },
-      { new: true }
+      { new: true },
     );
     if (!media) {
       return res.status(404).json({ error: "Media not found" });
@@ -135,7 +135,7 @@ router.put("/reject/:id", async (req, res) => {
     const media = await Immersion.findByIdAndUpdate(
       id,
       { status: "Rejected" },
-      { new: true }
+      { new: true },
     );
     if (!media) {
       return res.status(404).json({ error: "Media not found" });
@@ -229,7 +229,6 @@ router.get("/recommendations", async (req, res) => {
   console.log(req.session.user.id);
   try {
     const list = await recommend(req.session.user.id, 5);
-    console.log(list);
     res.json(list);
   } catch (e) {
     console.error(e);
