@@ -1,0 +1,40 @@
+{
+  "featureOrder": [
+    "language_match",
+    "level_match",
+    "genre_overlap",
+    "log_likes"
+  ],
+  "samples": [
+    {
+      "features": [
+        1,
+        1,
+        2,
+        0.6931471805599453
+      ],
+      "label": 1,
+      "userId": "6915b39d217c008bbab989e5"
+    },
+    {
+      "features": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "label": 0,
+      "userId": "6915b39d217c008bbab989e5"
+    },
+    {
+      "features": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "label": 0,
+      "userId": "6915b39d217c008bbab989e5"
+    }
+  ]
+}
