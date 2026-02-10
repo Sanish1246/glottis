@@ -92,6 +92,10 @@ const mediaTypes: Options[] = [
     value: "TV Show",
     label: "TV Show",
   },
+  {
+    value: "Video/Channel",
+    label: "Video/Channel",
+  },
 ];
 
 const genresOptions: Options[] = [

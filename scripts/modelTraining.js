@@ -7,7 +7,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 //70/15/15 ratio for test, train and validation
 const TRAIN = 0.7;
 const VAL = 0.15;
-const TEST = 0.15;
 
 //Applying a sigmoid function to return a number between 0 and 1
 function sigmoid(z) {
@@ -16,7 +15,7 @@ function sigmoid(z) {
 }
 
 function trainModel(samples, featureOrder, options = {}) {
-  const { epochs = 500, lr = 0.1 } = options; //500 epochs and learning rate 0.1
+  const { epochs = 500, lr = 0.05 } = options; //600 epochs and learning rate 0.1
   const numFeatures = featureOrder.length;
 
   //Initizlizing with 0 weights

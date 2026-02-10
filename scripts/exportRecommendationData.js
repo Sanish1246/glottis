@@ -11,22 +11,20 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const FEATURE_ORDER = [
   "language_match",
   "level_match",
-  "genre_overlap",
+  "type_match",
   "log_likes",
 ]; //Giving an explicit definition for the order of features
 const NEGATIVES_PER_POSITIVE = 2; //For every liked item, sample 2 items without like
 
 //Function to get the features by converting a media and user profile into a vector
 function buildFeatures(item, profile) {
-  const { languages, levels, genres } = profile; //Content based profiling
+  const { languages, levels, types } = profile; //Content based profiling
   //Matching the features
   const language_match = languages.includes(item.language) ? 1 : 0;
   const level_match = levels.includes(item.level) ? 1 : 0;
-  const genre_overlap = (item.genres || []).filter((g) =>
-    genres.includes(g),
-  ).length;
+  const type_match = types.includes(item.type) ? 1 : 0;
   const log_likes = Math.log(1 + (item.likes ?? 0));
-  return [language_match, level_match, genre_overlap, log_likes];
+  return [language_match, level_match, type_match, log_likes];
 }
 
 async function run() {
@@ -53,7 +51,7 @@ async function run() {
   const medias = await Immersion.find({
     status: { $nin: ["Rejected", "Pending"] },
   })
-    .select("title language level genres likes")
+    .select("title language level type likes")
     .lean();
 
   //Indexing by title
@@ -73,7 +71,7 @@ async function run() {
     const profile = {
       languages: [...new Set(likedItems.map((i) => i.language))],
       levels: [...new Set(likedItems.map((i) => i.level))],
-      genres: [...new Set(likedItems.map((i) => i.genres || []))],
+      types: [...new Set(likedItems.map((i) => i.type))],
     };
 
     const seen = new Set(titles); //Avoids sampling negative for items already liked by he user
