@@ -4,30 +4,38 @@ import { fileURLToPath } from "url";
 import fs from "fs/promises";
 import Immersion from "../models/immersion.js";
 import User from "../models/user.js";
+import {
+  loadRecommendationModel,
+  buildFeatures,
+  predictProb,
+} from "../utils/recommendationModel.js";
 
 const router = express.Router();
 
 async function recommend(userId, limit = 3) {
-  //Getting the user's likes
   const user = await User.findById(userId).lean();
-  if (!user || !user.likes || !user.likes.length) return []; // cold start
+  if (!user || !user.likes || !user.likes.length) return [];
 
-  // 2. build profile
   const titles = user.likes.map((i) => i.title);
-  const profile = await Immersion.find({ title: { $in: titles } })
-    .select("language level genres")
+  const likedItems = await Immersion.find({ title: { $in: titles } })
+    .select("language level type genres")
     .lean();
 
-  const languages = [...new Set(profile.map((p) => p.language))];
-  const levels = [...new Set(profile.map((p) => p.level))];
-  const genres = [...new Set(profile.map((p) => p.genres).flat())];
+  const languages = [...new Set(likedItems.map((p) => p.language))];
+  const levels = [...new Set(likedItems.map((p) => p.level))];
+  const types = [...new Set(likedItems.map((p) => p.type).filter(Boolean))];
+  const genres = [...new Set(likedItems.map((p) => p.genres).flat())];
 
-  // 3. unseen items that match at least one genre OR same (lang + level)
+  const profile = { languages, levels, types };
+
   const query = {
-    title: { $nin: titles }, // unseen
+    title: { $nin: titles },
+    status: { $nin: ["Rejected", "Pending"] },
     $or: [
       { genres: { $in: genres } },
-      { $and: [{ language: { $in: languages } }, { level: { $in: levels } }] },
+      { language: { $in: languages } },
+      { level: { $in: levels } },
+      { type: { $in: types } },
     ],
   };
 
@@ -37,17 +45,25 @@ async function recommend(userId, limit = 3) {
     .limit(candidateLimit)
     .lean();
 
-  // 4. score and rank
-  for (const item of candidates) {
-    let score = 0;
-    if (languages.includes(item.language)) score += 3;
-    if (levels.includes(item.level)) score += 2;
-    const genreMatches = (item.genres || []).filter((g) =>
-      genres.includes(g),
-    ).length;
-    score += 2 * genreMatches;
-    score += Math.log(1 + (item.likes ?? 0));
-    item._score = score;
+  const model = await loadRecommendationModel();
+
+  if (model) {
+    for (const item of candidates) {
+      const features = buildFeatures(item, profile);
+      item._score = predictProb(features, model);
+    }
+  } else {
+    for (const item of candidates) {
+      let score = 0;
+      if (languages.includes(item.language)) score += 3;
+      if (levels.includes(item.level)) score += 2;
+      const genreMatches = (item.genres || []).filter((g) =>
+        genres.includes(g),
+      ).length;
+      score += 2 * genreMatches;
+      score += Math.log(1 + (item.likes ?? 0));
+      item._score = score;
+    }
   }
 
   candidates.sort((a, b) => (b._score ?? 0) - (a._score ?? 0));
@@ -226,9 +242,8 @@ router.post("/submitMedia", async (req, res) => {
 router.get("/recommendations", async (req, res) => {
   if (!req.session?.user)
     return res.status(401).json({ error: "Not authenticated" });
-  console.log(req.session.user.id);
   try {
-    const list = await recommend(req.session.user.id, 5);
+    const list = await recommend(req.session.user.id, 3);
     res.json(list);
   } catch (e) {
     console.error(e);

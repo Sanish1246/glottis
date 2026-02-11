@@ -2,30 +2,11 @@
 import { connectToDb } from "../db.js";
 import User from "../models/user.js";
 import Immersion from "../models/immersion.js";
+import { FEATURE_ORDER, buildFeatures } from "../utils/recommendationModel.js";
 import fs from "fs/promises";
 import path from "path";
-import { fileURLToPath } from "url";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-const FEATURE_ORDER = [
-  "language_match",
-  "level_match",
-  "type_match",
-  "log_likes",
-]; //Giving an explicit definition for the order of features
 const NEGATIVES_PER_POSITIVE = 2; //For every liked item, sample 2 items without like
-
-//Function to get the features by converting a media and user profile into a vector
-function buildFeatures(item, profile) {
-  const { languages, levels, types } = profile; //Content based profiling
-  //Matching the features
-  const language_match = languages.includes(item.language) ? 1 : 0;
-  const level_match = levels.includes(item.level) ? 1 : 0;
-  const type_match = types.includes(item.type) ? 1 : 0;
-  const log_likes = Math.log(1 + (item.likes ?? 0));
-  return [language_match, level_match, type_match, log_likes];
-}
 
 async function run() {
   await connectToDb();
