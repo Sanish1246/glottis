@@ -26,6 +26,8 @@ jobs:
         run: node scripts/export-recommendation-data.js
 
       - name: Train model
+        env:
+          TRAIN_RANDOM_STATE: ${{ secrets.TRAIN_RANDOM_STATE }}
         run: node scripts/train-recommendation-model.js
 
       - name: Upload model artifact
