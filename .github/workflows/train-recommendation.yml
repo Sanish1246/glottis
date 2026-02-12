@@ -1,0 +1,37 @@
+name: Train recommendation model
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch: 
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Export training data
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        run: node scripts/export-recommendation-data.js
+
+      - name: Train model
+        run: node scripts/train-recommendation-model.js
+
+      - name: Upload model artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: recommendation-model
+          path: |
+            data/recommendation-model.json
+            data/eval-metrics.json

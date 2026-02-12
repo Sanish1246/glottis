@@ -1,0 +1,15 @@
+{
+  "featureOrder": [
+    "language_match",
+    "level_match",
+    "type_match",
+    "log_likes"
+  ],
+  "intercept": -1.5174137219195587,
+  "coefficients": [
+    0.6603702896638202,
+    0.4685593115545192,
+    0.13526500817474915,
+    0.05424400054840793
+  ]
+}

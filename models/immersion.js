@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const immersionSchema = new mongoose.Schema(
   {
-    title: { type: String, required: true, unique: true },
+    title: { type: String, required: true,unique:true },
     description: { type: String, required: true },
     language: { type: String, required: true },
     likes: { type: Number, default: 0, required: true },
@@ -15,7 +15,7 @@ const immersionSchema = new mongoose.Schema(
     link: { type: String },
     status: { type: String },
   },
-  { collection: "immersion" }
+  { collection: "immersion" },
 );
 
 export default mongoose.model("immersion", immersionSchema);
