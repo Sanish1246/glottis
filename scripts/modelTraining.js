@@ -1,6 +1,8 @@
 import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
+import dotenv from "dotenv";
+dotenv.config();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -78,11 +80,23 @@ function computeAUC(scores) {
   return (sum - (positives * (positives + 1)) / 2) / (positives * negatives);
 }
 
-//Shuffling users to ensure a truly random order when testing
-function shuffle(arr) {
+//Seeded PRNG (Mulberry32) for reproducible train/val/test splits
+function seededRandom(seed) {
+  return function () {
+    seed |= 0;
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+//Shuffling users to ensure a truly random order when testing (optional seeded rng for reproducibility)
+function shuffle(arr, rng = null) {
+  const random = rng ?? (() => Math.random());
   const out = [...arr];
   for (let i = out.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [out[i], out[j]] = [out[j], out[i]];
   }
   return out;
@@ -136,8 +150,15 @@ async function run() {
     byUser.get(uid).push({ features: s.features, label: s.label });
   }
 
-  //Splitting dataset
-  const userIds = shuffle([...byUser.keys()]);
+  //Splitting dataset (optional TRAIN_RANDOM_STATE env for reproducible splits)
+  const randomState =
+    process.env.TRAIN_RANDOM_STATE != null
+      ? parseInt(process.env.TRAIN_RANDOM_STATE, 10)
+      : null;
+  const userIds = shuffle(
+    [...byUser.keys()],
+    randomState != null ? seededRandom(randomState) : null,
+  );
   const nUsers = userIds.length;
   const trainSet = Math.max(0, Math.floor(TRAIN * nUsers));
   const valSet = Math.max(0, Math.floor(VAL * nUsers));
