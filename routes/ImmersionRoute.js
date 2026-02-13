@@ -13,18 +13,19 @@ import {
 const router = express.Router();
 
 async function recommend(userId, limit = 3) {
-  const user = await User.findById(userId).lean();
+  const user = await User.findById(userId).lean(); //Finding the current user
   if (!user || !user.likes || !user.likes.length) return [];
 
   const titles = user.likes.map((i) => i.title);
+  //Getting the items liked by the user
   const likedItems = await Immersion.find({ title: { $in: titles } })
-    .select("language level type genres")
+    .select("language level type")
     .lean();
 
+  //Building profile for the current user
   const languages = [...new Set(likedItems.map((p) => p.language))];
   const levels = [...new Set(likedItems.map((p) => p.level))];
   const types = [...new Set(likedItems.map((p) => p.type).filter(Boolean))];
-  const genres = [...new Set(likedItems.map((p) => p.genres).flat())];
 
   const profile = { languages, levels, types };
 
@@ -32,14 +33,14 @@ async function recommend(userId, limit = 3) {
     title: { $nin: titles },
     status: { $nin: ["Rejected", "Pending"] },
     $or: [
-      { genres: { $in: genres } },
       { language: { $in: languages } },
       { level: { $in: levels } },
       { type: { $in: types } },
     ],
   };
 
-  const candidateLimit = 50;
+  //Getting candidates from available media
+  const candidateLimit = 75;
   const candidates = await Immersion.find(query)
     .select("-__v")
     .limit(candidateLimit)
@@ -53,6 +54,7 @@ async function recommend(userId, limit = 3) {
       item._score = predictProb(features, model);
     }
   } else {
+    // If model not available, we use simple heurstic points
     for (const item of candidates) {
       let score = 0;
       if (languages.includes(item.language)) score += 3;
@@ -66,6 +68,7 @@ async function recommend(userId, limit = 3) {
     }
   }
 
+  // Sorting candidates and getting the top ones
   candidates.sort((a, b) => (b._score ?? 0) - (a._score ?? 0));
   const top = candidates.slice(0, limit);
   top.forEach((item) => delete item._score);

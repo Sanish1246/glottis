@@ -17,7 +17,7 @@ function sigmoid(z) {
 }
 
 function trainModel(samples, featureOrder, options = {}) {
-  const { epochs = 500, lr = 0.05 } = options; //600 epochs and learning rate 0.1
+  const { epochs = 500, lr = 0.05 } = options; //500 epochs and learning rate 0.05
   const numFeatures = featureOrder.length;
 
   //Initizlizing with 0 weights
@@ -150,7 +150,8 @@ async function run() {
     byUser.get(uid).push({ features: s.features, label: s.label });
   }
 
-  //Splitting dataset (optional TRAIN_RANDOM_STATE env for reproducible splits)
+  //Splitting dataset in test-validation-train
+  // TRAIN_RANDOM_STATE used for reproducible splits
   const randomState =
     process.env.TRAIN_RANDOM_STATE != null
       ? parseInt(process.env.TRAIN_RANDOM_STATE, 10)
@@ -159,6 +160,8 @@ async function run() {
     [...byUser.keys()],
     randomState != null ? seededRandom(randomState) : null,
   );
+
+  //Splitting 70-15-15
   const nUsers = userIds.length;
   const trainSet = Math.max(0, Math.floor(TRAIN * nUsers));
   const valSet = Math.max(0, Math.floor(VAL * nUsers));

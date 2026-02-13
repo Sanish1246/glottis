@@ -80,7 +80,7 @@ router.post("/", async (req, res) => {
         const prePrompt =
           " You are a language learning expert chatbot. Your tasks are: 1. Identify the language of the user's message. 2. Check for any grammatical, spelling, or usage errors. 3. If there are errors, point them out briefly and clearly, with a short explanation in english. 4. If there are no errors, confirm that the message is correct. 5. Then answer the user's question fully and naturally in the same language, keeping your tone friendly and supportive. In your answer, you can start directly from the correction of the error, if any";
         // Gemini Api call
-        const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
         const result = await model.generateContent(
           prePrompt + " The user's message is: " + userMessage,
         );

@@ -33,6 +33,7 @@ const io = new Server(server, {
   },
 });
 
+// CORS setup to communicate with frontend
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -54,6 +55,7 @@ const __dirname = path.dirname(__filename);
 // Static files
 app.use(express.static(path.join(__dirname)));
 
+//Session data
 app.use(
   session({
     secret: "Sanish12",
@@ -63,6 +65,7 @@ app.use(
   }),
 );
 
+// Express routes
 app.use("/", userRoutes);
 app.use("/", authRoutes);
 app.use("/chatbot", chatbotRoutes);

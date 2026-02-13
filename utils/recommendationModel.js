@@ -1,7 +1,7 @@
 import fs from "fs/promises";
 import path from "path";
 
-/** Feature order must match training data and saved model. */
+// Feature order matchestraining data and saved model.
 export const FEATURE_ORDER = [
   "language_match",
   "level_match",
@@ -12,7 +12,7 @@ export const FEATURE_ORDER = [
 /**
  * Build feature vector for one item given user profile (from liked items).
  * @param {Object} item - Media item with language, level, type, likes
- * @param {Object} profile - { languages: string[], levels: string[], types: string[] }
+ * @param {Object} profile - Using the user profile
  * @returns {number[]} - Vector in FEATURE_ORDER order
  */
 export function buildFeatures(item, profile) {
@@ -51,7 +51,11 @@ let cachedModel = null;
  */
 export async function loadRecommendationModel() {
   if (cachedModel) return cachedModel;
-  const modelPath = path.join(process.cwd(), "data", "recommendation-model.json");
+  const modelPath = path.join(
+    process.cwd(),
+    "data",
+    "recommendation-model.json",
+  );
   try {
     const raw = await fs.readFile(modelPath, "utf-8");
     cachedModel = JSON.parse(raw);
