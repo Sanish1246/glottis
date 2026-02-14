@@ -28,7 +28,7 @@ dist-ssr
 lessons
 immersionJSON
 frenchLessons
-coverage
+/coverage/
 
 # Playwright
 /test-results/
