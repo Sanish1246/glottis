@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { uploadMediaSchema, type UploadMediaSchema } from "@/lib/schemas";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -20,24 +20,6 @@ import { Label } from "@/components/ui/label";
 import { useUser } from "@/components/context/UserContext";
 import { Textarea } from "../ui/textarea";
 import Combobox from "../ui/Combobox";
-
-const formSchema = z.object({
-  title: z.string().min(1, {
-    message: "Title cannot be empty!.",
-  }),
-  description: z.string().min(8, {
-    message: "Description must be at least 8 characters long.",
-  }),
-  author: z.string().min(1, {
-    message: "Author cannot be empty!.",
-  }),
-  language: z.string().min(1, {
-    message: "Language cannot be empty!.",
-  }),
-  link: z.string().optional(),
-  genres: z.array(z.string()).optional(),
-  coverImage: z.instanceof(File).optional(),
-});
 
 type UploadProps = {
   onClose?: () => void;
@@ -116,8 +98,8 @@ const UploadMediaForm = ({ onClose }: UploadProps) => {
   const [mediaType, setMediaType] = useState("Book");
   const [fileName, setFileName] = useState("");
   const [file, setFile] = useState<File | null>(null);
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<UploadMediaSchema>({
+    resolver: zodResolver(uploadMediaSchema),
     defaultValues: {
       title: "",
       description: "",
@@ -135,7 +117,7 @@ const UploadMediaForm = ({ onClose }: UploadProps) => {
     }
   };
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: UploadMediaSchema) {
     try {
       const formData = new FormData();
       const metadata = {

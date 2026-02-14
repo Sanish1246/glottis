@@ -8,6 +8,7 @@ import {
   loadRecommendationModel,
   buildFeatures,
   predictProb,
+  computeFallbackScore,
 } from "../utils/recommendationModel.js";
 
 const router = express.Router();
@@ -54,17 +55,8 @@ async function recommend(userId, limit = 3) {
       item._score = predictProb(features, model);
     }
   } else {
-    // If model not available, we use simple heurstic points
     for (const item of candidates) {
-      let score = 0;
-      if (languages.includes(item.language)) score += 3;
-      if (levels.includes(item.level)) score += 2;
-      const genreMatches = (item.genres || []).filter((g) =>
-        genres.includes(g),
-      ).length;
-      score += 2 * genreMatches;
-      score += Math.log(1 + (item.likes ?? 0));
-      item._score = score;
+      item._score = computeFallbackScore(item, profile);
     }
   }
 

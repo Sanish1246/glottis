@@ -4,7 +4,8 @@ import { useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { createDeckSchema, type CreateDeckSchema } from "@/lib/schemas";
+import { isValidDeckEntry } from "@/lib/deckUtils";
 import { toast } from "sonner";
 import {
   Table,
@@ -25,17 +26,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Combobox from "../ui/Combobox";
-
-const formSchema = z.object({
-  word: z.string(),
-  english: z.string(),
-  category: z.string().min(1, {
-    message: "This field cannot be empty!",
-  }),
-  language: z.string().min(1, {
-    message: "This field cannot be empty!",
-  }),
-});
 
 interface FlashCardProps {
   word: string;
@@ -78,8 +68,8 @@ const CreateDeck = () => {
   const [level, setLevel] = useState("Beginner");
   const [newDeck, setNewDeck] = useState([]);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<CreateDeckSchema>({
+    resolver: zodResolver(createDeckSchema),
     defaultValues: {
       category: "",
       language: "",
@@ -88,8 +78,8 @@ const CreateDeck = () => {
     },
   });
 
-  const addToDeck = (values: z.infer<typeof formSchema>) => {
-    if (values.word == "" || values.english == "") {
+  const addToDeck = (values: CreateDeckSchema) => {
+    if (!isValidDeckEntry(values)) {
       toast.error("Both a word and english translation must be included", {
         action: {
           label: "Close",
@@ -113,7 +103,7 @@ const CreateDeck = () => {
     }
   };
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: CreateDeckSchema) {
     if (newDeck.length == 0) {
       toast.error("Cannot submit empty deck!", {
         action: {

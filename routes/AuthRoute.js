@@ -2,6 +2,8 @@ import express from "express";
 import User from "../models/user.js";
 import bcrypt from "bcrypt";
 import dayjs from "dayjs";
+import { computeStreakUpdate } from "../utils/streakUtils.js";
+
 const router = express.Router();
 
 router.post("/register", async (req, res) => {
@@ -83,31 +85,20 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ error: "Invalid password" });
     }
 
-    //If logging in on the following day, increase streak
-    if (
-      newUser.streakData.endDate ==
-      dayjs(Date.now(), "DD-MM-YYYY").subtract(1, "day").format("DD-MM-YYYY")
-    ) {
-      newUser.streakData.currentDuration++;
-      newUser.streakData.endDate = dayjs(Date.now(), "DD-MM-YYYY").format(
-        "DD-MM-YYYY",
-      );
-    } else {
-      newUser.streakData.currentDuration = 1;
-      newUser.streakData.startDate = dayjs(Date.now(), "DD-MM-YYYY").format(
-        "DD-MM-YYYY",
-      );
-      newUser.streakData.endDate = dayjs(Date.now(), "DD-MM-YYYY").format(
-        "DD-MM-YYYY",
-      );
-    }
-
-    if (newUser.streakData.currentDuration > newUser.streakData.maxDuration) {
-      newUser.streakData.maxEndDate = dayjs(Date.now(), "DD-MM-YYYY").format(
-        "DD-MM-YYYY",
-      );
-      newUser.streakData.maxStartDate = newUser.streakData.startDate;
-      newUser.streakData.maxDuration = newUser.streakData.currentDuration;
+    const today = dayjs().format("DD-MM-YYYY");
+    const streakUpdate = computeStreakUpdate(
+      newUser.streakData,
+      today,
+    );
+    if (streakUpdate) {
+      newUser.streakData.currentDuration = streakUpdate.currentDuration;
+      newUser.streakData.startDate = streakUpdate.startDate;
+      newUser.streakData.endDate = streakUpdate.endDate;
+      if (streakUpdate.maxDuration != null) {
+        newUser.streakData.maxDuration = streakUpdate.maxDuration;
+        newUser.streakData.maxStartDate = streakUpdate.maxStartDate;
+        newUser.streakData.maxEndDate = streakUpdate.maxEndDate;
+      }
     }
     req.session.user = {
       id: newUser._id,

@@ -1,6 +1,7 @@
 import express from "express";
 import User from "../models/user.js";
 import Immersion from "../models/immersion.js";
+import { gradeToRevisionField } from "../utils/flashcardUtils.js";
 
 const router = express.Router();
 
@@ -152,26 +153,7 @@ router.put("/user_decks/:language", async (req, res) => {
   const card = req.body.updatedCard;
   const grade = req.body.grade;
   const language = req.params.language;
-  let targetGrade = "very_easy";
-
-  switch (grade) {
-    case 1:
-      targetGrade = "forgotten";
-      break;
-    case 2:
-      targetGrade = "hard";
-      break;
-    case 3:
-      targetGrade = "medium";
-      break;
-    case 4:
-      targetGrade = "easy";
-      break;
-    case 5:
-      targetGrade = "very_easy";
-      break;
-  }
-
+  const targetGrade = gradeToRevisionField(grade);
   const incField = `revisionData.${targetGrade}`;
   const update = {
     $set: { "decks.$[deck].items.$[item]": card },
