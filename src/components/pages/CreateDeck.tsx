@@ -37,6 +37,17 @@ type Options = {
   label: string;
 };
 
+const languages: Options[] = [
+  {
+    value: "italian",
+    label: "Italian",
+  },
+  {
+    value: "french",
+    label: "French",
+  },
+];
+
 const levels: Options[] = [
   {
     value: "Beginner",
@@ -66,13 +77,13 @@ const levels: Options[] = [
 
 const CreateDeck = () => {
   const [level, setLevel] = useState("Beginner");
+  const [language, setLanguage] = useState("italian");
   const [newDeck, setNewDeck] = useState([]);
 
   const form = useForm<CreateDeckSchema>({
     resolver: zodResolver(createDeckSchema),
     defaultValues: {
       category: "",
-      language: "",
       word: "",
       english: "",
     },
@@ -98,7 +109,6 @@ const CreateDeck = () => {
         word: "",
         english: "",
         category: values.category,
-        language: values.language,
       });
     }
   };
@@ -116,7 +126,7 @@ const CreateDeck = () => {
     } else {
       const submitDeck = {
         category: values.category,
-        language: values.language.toLowerCase(),
+        language: language.toLowerCase(),
         level: level,
         items: newDeck,
         noOfCards: newDeck.length,
@@ -165,7 +175,7 @@ const CreateDeck = () => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="justify-center text-center space-y-6 border-2 rounded-lg mx-auto w-[75%]"
         >
-          <div className="flex flex-row mx-auto justify-center gap-2">
+          <div className="flex flex-row mx-auto justify-center gap-1 p-2">
             <FormField
               control={form.control}
               name="category"
@@ -184,25 +194,16 @@ const CreateDeck = () => {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="language"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className=" mx-auto mt-5">Language</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Type the language here..."
-                      {...field}
-                      className="w-full mx-auto"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="flex flex-col gap-1 mx-auto items-center justify-center">
+              <p>Language:</p>
+              <Combobox
+                choices={languages}
+                filter={language}
+                setFilter={setLanguage}
+              ></Combobox>
+            </div>
 
-            <div className="flex flex-row items-center gap-1">
+            <div className="flex flex-col items-center gap-1">
               <p>Level:</p>
               <Combobox
                 choices={levels}
@@ -285,8 +286,8 @@ const CreateDeck = () => {
                   setNewDeck(
                     newDeck.filter(
                       (item: FlashCardProps) =>
-                        item.word !== w.word && item.english !== w.english
-                    )
+                        item.word !== w.word && item.english !== w.english,
+                    ),
                   );
                 }}
               >

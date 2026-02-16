@@ -27,9 +27,6 @@ export const createDeckSchema = z.object({
   category: z.string().min(1, {
     message: "This field cannot be empty!",
   }),
-  language: z.string().min(1, {
-    message: "This field cannot be empty!",
-  }),
 });
 
 export const uploadMediaSchema = z.object({
@@ -41,9 +38,6 @@ export const uploadMediaSchema = z.object({
   }),
   author: z.string().min(1, {
     message: "Author cannot be empty!.",
-  }),
-  language: z.string().min(1, {
-    message: "Language cannot be empty!.",
   }),
   link: z.string().optional(),
   genres: z.array(z.string()).optional(),

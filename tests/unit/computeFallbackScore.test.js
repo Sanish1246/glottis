@@ -1,23 +1,39 @@
 import { describe, it, expect } from "vitest";
 import { computeFallbackScore } from "../../utils/recommendationModel.js";
 
+// Testing fallback scores for when the model is not available
 describe("computeFallbackScore", () => {
   it("adds 3 for language match", () => {
-    const item = { language: "italian", level: "Beginner", type: "movie", likes: 0 };
+    const item = {
+      language: "italian",
+      level: "Beginner",
+      type: "movie",
+      likes: 0,
+    };
     const profile = { languages: ["italian"], levels: [], types: [] };
     const score = computeFallbackScore(item, profile);
     expect(score).toBeGreaterThanOrEqual(3);
   });
 
   it("adds 2 for level match", () => {
-    const item = { language: "french", level: "Intermediate", type: "book", likes: 0 };
+    const item = {
+      language: "french",
+      level: "Intermediate",
+      type: "book",
+      likes: 0,
+    };
     const profile = { languages: [], levels: ["Intermediate"], types: [] };
     const score = computeFallbackScore(item, profile);
     expect(score).toBeGreaterThanOrEqual(2);
   });
 
   it("adds 2 for type match", () => {
-    const item = { language: "french", level: "Advanced", type: "Movie", likes: 0 };
+    const item = {
+      language: "french",
+      level: "Advanced",
+      type: "Movie",
+      likes: 0,
+    };
     const profile = { languages: [], levels: [], types: ["Movie"] };
     const score = computeFallbackScore(item, profile);
     expect(score).toBeGreaterThanOrEqual(2);
@@ -45,8 +61,19 @@ describe("computeFallbackScore", () => {
   });
 
   it("adds genre matches when profile has genres", () => {
-    const item = { language: "x", level: "y", type: "z", likes: 0, genres: ["Comedy", "Drama"] };
-    const profile = { languages: [], levels: [], types: [], genres: ["Comedy"] };
+    const item = {
+      language: "x",
+      level: "y",
+      type: "z",
+      likes: 0,
+      genres: ["Comedy", "Drama"],
+    };
+    const profile = {
+      languages: [],
+      levels: [],
+      types: [],
+      genres: ["Comedy"],
+    };
     const score = computeFallbackScore(item, profile);
     expect(score).toBe(2);
   });

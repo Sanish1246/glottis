@@ -12,8 +12,15 @@ const SpeechButton: React.FC<SpeechButtonProps> = ({
   voiceName,
 }) => {
   const [voice, setVoice] = useState<SpeechSynthesisVoice | null>(null);
+  const [supported, setSupported] = useState(false);
 
   useEffect(() => {
+    setSupported(typeof window !== "undefined" && "speechSynthesis" in window);
+  }, []);
+
+  useEffect(() => {
+    if (!supported) return;
+    const synth = window.speechSynthesis;
     const loadVoices = () => {
       const voices = speechSynthesis.getVoices();
 
@@ -34,22 +41,18 @@ const SpeechButton: React.FC<SpeechButtonProps> = ({
       //   console.warn("No suitable voice found, fallback failed");
       // }
     };
-
     loadVoices();
-
-    speechSynthesis.onvoiceschanged = loadVoices;
-
+    synth.onvoiceschanged = loadVoices;
     return () => {
-      speechSynthesis.onvoiceschanged = null;
+      synth.onvoiceschanged = null;
     };
   }, [lang, voiceName]);
 
   const handleSpeak = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
-    if (!text) return;
-
-    speechSynthesis.cancel();
-
+    if (!text || !supported) return;
+    const synth = window.speechSynthesis;
+    synth.cancel();
     const utter = new SpeechSynthesisUtterance(text);
     utter.lang = lang;
     if (voice) utter.voice = voice;
@@ -57,9 +60,10 @@ const SpeechButton: React.FC<SpeechButtonProps> = ({
     utter.pitch = 1;
     utter.volume = 1;
 
-    speechSynthesis.speak(utter);
+    synth.speak(utter);
   };
 
+  if (!supported) return null;
   return (
     <button
       onClick={handleSpeak}

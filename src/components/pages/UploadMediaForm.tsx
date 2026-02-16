@@ -30,6 +30,17 @@ type Options = {
   label: string;
 };
 
+const languages: Options[] = [
+  {
+    value: "italian",
+    label: "Italian",
+  },
+  {
+    value: "french",
+    label: "French",
+  },
+];
+
 const levels: Options[] = [
   {
     value: "Beginner",
@@ -94,6 +105,7 @@ const genresOptions: Options[] = [
 ];
 
 const UploadMediaForm = ({ onClose }: UploadProps) => {
+  const [language, setLanguage] = useState("italian");
   const [level, setLevel] = useState("Beginner");
   const [mediaType, setMediaType] = useState("Book");
   const [fileName, setFileName] = useState("");
@@ -104,7 +116,6 @@ const UploadMediaForm = ({ onClose }: UploadProps) => {
       title: "",
       description: "",
       author: "",
-      language: "",
       genres: [],
     },
   });
@@ -123,6 +134,7 @@ const UploadMediaForm = ({ onClose }: UploadProps) => {
       const metadata = {
         ...values,
         likes: 0,
+        language: language,
         level: level,
         type: mediaType,
       };
@@ -151,6 +163,7 @@ const UploadMediaForm = ({ onClose }: UploadProps) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
+        onSubmitCapture={() => console.log("form submit captured")}
         className="justify-center text-center space-y-6 "
       >
         <h1 className="text-xl font-bold">Enter Details</h1>
@@ -211,26 +224,17 @@ const UploadMediaForm = ({ onClose }: UploadProps) => {
               )}
             />
           </div>
-          <div className="flex flex-col w-[50%] gap-2">
-            <FormField
-              control={form.control}
-              name="language"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className=" mx-auto mt-5">Language</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter your language..."
-                      {...field}
-                      className="w-[80%] mx-auto"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <div className="flex flex-col w-[50%] gap-3">
+            <div className="flex flex-row gap-1 mx-auto items-center justify-center">
+              <p>Language:</p>
+              <Combobox
+                choices={languages}
+                filter={language}
+                setFilter={setLanguage}
+              ></Combobox>
+            </div>
 
-            <div className="flex flex-row gap-1 mx-auto items-center justify-center mt-5">
+            <div className="flex flex-row gap-1 mx-auto items-center justify-center">
               <p>Level:</p>
               <Combobox
                 choices={levels}

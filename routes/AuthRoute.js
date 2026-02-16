@@ -44,6 +44,11 @@ router.post("/register", async (req, res) => {
         easy: 0,
         very_easy: 0,
       },
+      lessonsCompleted: {
+        italian: 0,
+        french: 0,
+        custom: 0,
+      },
     });
 
     req.session.user = {
@@ -86,10 +91,7 @@ router.post("/login", async (req, res) => {
     }
 
     const today = dayjs().format("DD-MM-YYYY");
-    const streakUpdate = computeStreakUpdate(
-      newUser.streakData,
-      today,
-    );
+    const streakUpdate = computeStreakUpdate(newUser.streakData, today);
     if (streakUpdate) {
       newUser.streakData.currentDuration = streakUpdate.currentDuration;
       newUser.streakData.startDate = streakUpdate.startDate;
@@ -125,6 +127,29 @@ router.delete("/logout", (req, res) => {
     if (err) return res.status(500).json({ error: "Logout failed" });
     res.status(200).json({ message: "User logged out successfully" });
   });
+});
+
+router.post("/test/cleanup/user", async (req, res) => {
+  // allowed when NODE_ENV === 'test' OR caller provides TEST_API_KEY via x-test-key
+  if (
+    process.env.NODE_ENV !== "test" &&
+    req.headers["x-test-key"] !== process.env.TEST_API_KEY
+  ) {
+    return res.status(404).json({ error: "Not available" });
+  }
+
+  try {
+    const { username, email } = req.body || {};
+    const filter = {};
+    if (username) filter.username = username;
+    if (email) filter.email = email;
+
+    const result = await User.deleteMany(filter);
+    return res.json({ deletedCount: result.deletedCount || 0 });
+  } catch (err) {
+    console.error("Test user cleanup failed:", err);
+    return res.status(500).json({ error: "Server error during test cleanup" });
+  }
 });
 
 export default router;

@@ -188,6 +188,7 @@ router.get("/searchMedia/:page", async (req, res) => {
 const __filename = fileURLToPath(import.meta.url);
 
 router.post("/submitMedia", async (req, res) => {
+  console.log("request received");
   try {
     if (!req.session?.user) {
       return res.status(401).json({ error: "Not authenticated" });

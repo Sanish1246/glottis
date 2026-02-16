@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { isValidDeckEntry } from "../../src/lib/deckUtils";
 
+// Tests for adding new cards to a deck during deck creation
 describe("isValidDeckEntry", () => {
   it("returns true when word and english are non-empty", () => {
     expect(isValidDeckEntry({ word: "hello", english: "hola" })).toBe(true);

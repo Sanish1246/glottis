@@ -205,10 +205,7 @@ const DeckReview = () => {
               ? `Cards to review today: ${remaining}`
               : `No cards to review today`}
             {late > 0 ? (
-              <span className="text-red-500 font-semibold">
-                {" "}
-                (Late: {late})
-              </span>
+              <span className="text-red-500 font-semibold">(Late: {late})</span>
             ) : null}
           </h3>
           <Button
