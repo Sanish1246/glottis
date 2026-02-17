@@ -62,7 +62,8 @@ const CreateLesson = () => {
   };
 
   const updateLesson = (updatedLessonData) => {
-    setLessonData(updatedLessonData);
+    // merge into previous state to avoid overwriting fields set by other updates
+    setLessonData((prev) => ({ ...prev, ...updatedLessonData }));
   };
 
   return (

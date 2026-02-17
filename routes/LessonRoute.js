@@ -26,10 +26,6 @@ router.get("/existing/:title/:language", async (req, res) => {
   const checkLang = req.params.language;
 
   try {
-    if (req.session?.user.role !== "admin") {
-      return res.status(401).json({ error: "You don't have permissions!" });
-    }
-
     const lessons = await Lesson.find({
       language: checkLang,
       title: checkTitle,
@@ -52,7 +48,7 @@ router.put("/approve/:id", async (req, res) => {
     const deck = await Lesson.findByIdAndUpdate(
       id,
       { status: "Approved" },
-      { new: true }
+      { new: true },
     );
     if (!deck) {
       return res.status(404).json({ error: "Lesson not found" });
@@ -73,7 +69,7 @@ router.put("/reject/:id", async (req, res) => {
     const deck = await Lesson.findByIdAndUpdate(
       id,
       { status: "Rejected" },
-      { new: true }
+      { new: true },
     );
     if (!deck) {
       return res.status(404).json({ error: "Lesson not found" });
@@ -157,9 +153,6 @@ router.post("/submit", async (req, res) => {
         : [req.files.dialogueImages]
       : [];
 
-    console.log("Files received:", files.length);
-    console.log("Dialogues:", lesson.introduction?.dialogues.length);
-
     const uploadDir = path.join(process.cwd(), "public", "customLessons");
     await fs.mkdir(uploadDir, { recursive: true });
 
@@ -194,6 +187,8 @@ router.post("/submit", async (req, res) => {
       status: "Pending",
     };
 
+    console.log(lesson);
+
     await Lesson.create(newLesson);
     res.json({ message: "Lesson submitted successfully!" });
   } catch (err) {
@@ -227,6 +222,31 @@ router.get("/:lang", async (req, res) => {
   } catch (err) {
     console.error("Unable to get lessons:", err);
     res.status(500).json({ error: "Server while fetching lessons" });
+  }
+});
+
+router.post("/test/cleanup/lesson", async (req, res) => {
+  // allowed when NODE_ENV === 'test' OR caller provides TEST_API_KEY via x-test-key
+  if (
+    process.env.NODE_ENV !== "test" &&
+    req.headers["x-test-key"] !== process.env.TEST_API_KEY
+  ) {
+    return res.status(404).json({ error: "Not available" });
+  }
+
+  try {
+    const { title, language } = req.body || {};
+    const filter = {};
+    if (title) filter.title = title;
+    if (language) filter.language = language;
+
+    const result = await Lesson.deleteMany(filter);
+    return res.json({ deletedCount: result.deletedCount || 0 });
+  } catch (err) {
+    console.error("Test lesson cleanup failed:", err);
+    return res
+      .status(500)
+      .json({ error: "Server error during lesson cleanup" });
   }
 });
 

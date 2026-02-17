@@ -8,6 +8,7 @@ import {
   loadRecommendationModel,
   buildFeatures,
   predictProb,
+  computeFallbackScore,
 } from "../utils/recommendationModel.js";
 
 const router = express.Router();
@@ -54,17 +55,8 @@ async function recommend(userId, limit = 3) {
       item._score = predictProb(features, model);
     }
   } else {
-    // If model not available, we use simple heurstic points
     for (const item of candidates) {
-      let score = 0;
-      if (languages.includes(item.language)) score += 3;
-      if (levels.includes(item.level)) score += 2;
-      const genreMatches = (item.genres || []).filter((g) =>
-        genres.includes(g),
-      ).length;
-      score += 2 * genreMatches;
-      score += Math.log(1 + (item.likes ?? 0));
-      item._score = score;
+      item._score = computeFallbackScore(item, profile);
     }
   }
 
@@ -196,6 +188,7 @@ router.get("/searchMedia/:page", async (req, res) => {
 const __filename = fileURLToPath(import.meta.url);
 
 router.post("/submitMedia", async (req, res) => {
+  console.log("request received");
   try {
     if (!req.session?.user) {
       return res.status(401).json({ error: "Not authenticated" });
@@ -251,6 +244,61 @@ router.get("/recommendations", async (req, res) => {
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: "Server error" });
+  }
+});
+
+router.post("/test/cleanup/media", async (req, res) => {
+  // allowed when NODE_ENV === 'test' OR caller provides TEST_API_KEY via x-test-key
+  if (
+    process.env.NODE_ENV !== "test" &&
+    req.headers["x-test-key"] !== process.env.TEST_API_KEY
+  ) {
+    return res.status(404).json({ error: "Not available" });
+  }
+
+  try {
+    const { title } = req.body || {};
+    const filter = {};
+    if (title) filter.title = title;
+
+    const result = await Immersion.deleteMany(filter);
+    return res.json({ deletedCount: result.deletedCount || 0 });
+  } catch (err) {
+    console.error("Test media cleanup failed:", err);
+    return res.status(500).json({ error: "Server error during test cleanup" });
+  }
+});
+
+router.post("/test/insert/media", async (req, res) => {
+
+  const defaultTestMedia = {
+  title: "testImmersion",
+  description: "This is a test media upload",
+  language: "italian",
+  level: "Beginner",
+  type: "Book",
+  genres: ["Short Stories"],
+  author: "newUser",
+  uploader: "newUser",
+  link: "https://www.google.com/",
+  likes: 0,
+  img_path: "/immersion/no-image.jpg",
+  status: "Pending",
+};
+  if (
+    process.env.NODE_ENV !== "test" &&
+    req.headers["x-test-key"] !== process.env.TEST_API_KEY
+  ) {
+    return res.status(404).json({ error: "Not available" });
+  }
+
+  try {
+    const media = defaultTestMedia;
+    const created = await Immersion.create(media);
+    return res.status(201).json(created);
+  } catch (err) {
+    console.error("Test media insert failed:", err);
+    return res.status(500).json({ error: "Server error during media insert" });
   }
 });
 

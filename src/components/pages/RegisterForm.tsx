@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { registerSchema, type RegisterSchema } from "@/lib/schemas";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -40,18 +40,6 @@ const roles: Options[] = [
   },
 ];
 
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  email: z.email({
-    message: "Invalid email format.",
-  }),
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
-  }),
-});
-
 const RegisterForm = ({
   setIsLoggedIn,
   setIsLoginOpen,
@@ -60,8 +48,8 @@ const RegisterForm = ({
   const { setUser } = useUser();
   const [currentRole, setCurrentRole] = useState("student");
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<RegisterSchema>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       username: "",
       email: "",
@@ -69,7 +57,7 @@ const RegisterForm = ({
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: RegisterSchema) {
     const userData = { ...values, role: currentRole };
     fetch("http://localhost:8000/register", {
       method: "POST",

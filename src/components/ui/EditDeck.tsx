@@ -47,18 +47,14 @@ const EditDeck = ({ deck, setFullDeck, setDeck, setRemaining }: EditProps) => {
           },
           credentials: "include",
           body: JSON.stringify(card),
-        }
+        },
       );
       const data = await res.json();
-      setUser({
-        username: data.user.username,
-        email: data.user.email,
-        decks: data.user.decks,
-      });
+      setUser(data.user);
       setFullDeck(data.newDeck);
       const reviewDeck = data.newDeck.items.filter(
         (c: FlashCardProps) =>
-          c.dueDate <= dayjs(Date.now()).format("DD-MM-YYYY")
+          c.dueDate <= dayjs(Date.now()).format("DD-MM-YYYY"),
       );
       setRemaining(reviewDeck.length);
       setDeck({ language: data.newDeck.language, items: reviewDeck });

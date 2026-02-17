@@ -30,6 +30,26 @@ function sigmoid(z) {
 }
 
 /**
+ * Fallback heuristic score when ML model is unavailable.
+ * @param {Object} item - Media item with language, level, type, genres?, likes?
+ * @param {Object} profile - { languages, levels, types }
+ * @returns {number} - Heuristic score (higher = more likely to like)
+ */
+export function computeFallbackScore(item, profile) {
+  const { languages = [], levels = [], types = [] } = profile;
+  let score = 0;
+  if (languages.includes(item.language)) score += 3;
+  if (levels.includes(item.level)) score += 2;
+  if (types.includes(item.type)) score += 2;
+  const genreMatches = (item.genres || []).filter((g) =>
+    (profile.genres || []).includes(g),
+  ).length;
+  score += 2 * genreMatches;
+  score += Math.log(1 + (item.likes ?? 0));
+  return score;
+}
+
+/**
  * Predict P(like) for a feature vector using the saved logistic regression model.
  * @param {number[]} features - Vector in model.featureOrder order
  * @param {Object} model - { featureOrder, intercept, coefficients }

@@ -44,7 +44,7 @@ router.put("/approve/:id", async (req, res) => {
     const deck = await FlashcardDeck.findByIdAndUpdate(
       id,
       { status: "Approved" },
-      { new: true }
+      { new: true },
     );
     if (!deck) {
       return res.status(404).json({ error: "Deck not found" });
@@ -65,7 +65,7 @@ router.put("/reject/:id", async (req, res) => {
     const deck = await FlashcardDeck.findByIdAndUpdate(
       id,
       { status: "Rejected" },
-      { new: true }
+      { new: true },
     );
     if (!deck) {
       return res.status(404).json({ error: "Deck not found" });
@@ -127,6 +127,56 @@ router.get("/customDecks/:lang/:level", async (req, res) => {
   } catch (err) {
     console.error("Unable to get flashcard decks:", err);
     res.status(500).json({ error: "Server while fetching decks" });
+  }
+});
+
+router.post("/test/cleanup/deck", async (req, res) => {
+  // allowed when NODE_ENV === 'test' OR caller provides TEST_API_KEY via x-test-key
+  if (
+    process.env.NODE_ENV !== "test" &&
+    req.headers["x-test-key"] !== process.env.TEST_API_KEY
+  ) {
+    return res.status(404).json({ error: "Not available" });
+  }
+
+  try {
+    const { category } = req.body || {};
+    const filter = {};
+    if (category) filter.category = category;
+
+    const result = await FlashcardDeck.deleteMany(filter);
+    return res.json({ deletedCount: result.deletedCount || 0 });
+  } catch (err) {
+    console.error("Test deck cleanup failed:", err);
+    return res.status(500).json({ error: "Server error during deck cleanup" });
+  }
+});
+
+router.post("/test/insert/deck", async (req, res) => {
+  const defaultTestDeck = {
+    category: "testDeck",
+    language: "italian",
+    level: "Beginner",
+    items: [{ word: "testWord", english: "testEnglish" }],
+    noOfCards: 1,
+    likes: 0,
+    author: "newUser",
+    status: "Pending",
+  };
+  if (
+    process.env.NODE_ENV !== "test" &&
+    req.headers["x-test-key"] !== process.env.TEST_API_KEY
+  ) {
+    return res.status(404).json({ error: "Not available" });
+  }
+
+  try {
+    const deck = defaultTestDeck;
+    const created = await FlashcardDeck.create(deck);
+    return res.status(201).json(created);
+  } catch (err) {
+    console.error("Test deck insert failed:", err);
+    return res.status(500).json({ error: "Server error during deck insert" });
   }
 });
 

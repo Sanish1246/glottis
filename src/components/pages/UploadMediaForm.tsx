@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { uploadMediaSchema, type UploadMediaSchema } from "@/lib/schemas";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -21,24 +21,6 @@ import { useUser } from "@/components/context/UserContext";
 import { Textarea } from "../ui/textarea";
 import Combobox from "../ui/Combobox";
 
-const formSchema = z.object({
-  title: z.string().min(1, {
-    message: "Title cannot be empty!.",
-  }),
-  description: z.string().min(8, {
-    message: "Description must be at least 8 characters long.",
-  }),
-  author: z.string().min(1, {
-    message: "Author cannot be empty!.",
-  }),
-  language: z.string().min(1, {
-    message: "Language cannot be empty!.",
-  }),
-  link: z.string().optional(),
-  genres: z.array(z.string()).optional(),
-  coverImage: z.instanceof(File).optional(),
-});
-
 type UploadProps = {
   onClose?: () => void;
 };
@@ -47,6 +29,17 @@ type Options = {
   value: string;
   label: string;
 };
+
+const languages: Options[] = [
+  {
+    value: "italian",
+    label: "Italian",
+  },
+  {
+    value: "french",
+    label: "French",
+  },
+];
 
 const levels: Options[] = [
   {
@@ -112,17 +105,17 @@ const genresOptions: Options[] = [
 ];
 
 const UploadMediaForm = ({ onClose }: UploadProps) => {
+  const [language, setLanguage] = useState("italian");
   const [level, setLevel] = useState("Beginner");
   const [mediaType, setMediaType] = useState("Book");
   const [fileName, setFileName] = useState("");
   const [file, setFile] = useState<File | null>(null);
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<UploadMediaSchema>({
+    resolver: zodResolver(uploadMediaSchema),
     defaultValues: {
       title: "",
       description: "",
       author: "",
-      language: "",
       genres: [],
     },
   });
@@ -135,12 +128,13 @@ const UploadMediaForm = ({ onClose }: UploadProps) => {
     }
   };
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: UploadMediaSchema) {
     try {
       const formData = new FormData();
       const metadata = {
         ...values,
         likes: 0,
+        language: language,
         level: level,
         type: mediaType,
       };
@@ -169,6 +163,7 @@ const UploadMediaForm = ({ onClose }: UploadProps) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
+        onSubmitCapture={() => console.log("form submit captured")}
         className="justify-center text-center space-y-6 "
       >
         <h1 className="text-xl font-bold">Enter Details</h1>
@@ -229,26 +224,17 @@ const UploadMediaForm = ({ onClose }: UploadProps) => {
               )}
             />
           </div>
-          <div className="flex flex-col w-[50%] gap-2">
-            <FormField
-              control={form.control}
-              name="language"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className=" mx-auto mt-5">Language</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter your language..."
-                      {...field}
-                      className="w-[80%] mx-auto"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <div className="flex flex-col w-[50%] gap-3">
+            <div className="flex flex-row gap-1 mx-auto items-center justify-center">
+              <p>Language:</p>
+              <Combobox
+                choices={languages}
+                filter={language}
+                setFilter={setLanguage}
+              ></Combobox>
+            </div>
 
-            <div className="flex flex-row gap-1 mx-auto items-center justify-center mt-5">
+            <div className="flex flex-row gap-1 mx-auto items-center justify-center">
               <p>Level:</p>
               <Combobox
                 choices={levels}
