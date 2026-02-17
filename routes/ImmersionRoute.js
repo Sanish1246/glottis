@@ -247,4 +247,26 @@ router.get("/recommendations", async (req, res) => {
   }
 });
 
+router.post("/test/cleanup/media", async (req, res) => {
+  // allowed when NODE_ENV === 'test' OR caller provides TEST_API_KEY via x-test-key
+  if (
+    process.env.NODE_ENV !== "test" &&
+    req.headers["x-test-key"] !== process.env.TEST_API_KEY
+  ) {
+    return res.status(404).json({ error: "Not available" });
+  }
+
+  try {
+    const { title } = req.body || {};
+    const filter = {};
+    if (title) filter.title = title;
+
+    const result = await Immersion.deleteMany(filter);
+    return res.json({ deletedCount: result.deletedCount || 0 });
+  } catch (err) {
+    console.error("Test media cleanup failed:", err);
+    return res.status(500).json({ error: "Server error during test cleanup" });
+  }
+});
+
 export default router;

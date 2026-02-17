@@ -10,8 +10,7 @@ test('italian lesson completed', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Password' }).fill('newPassword');
   await page.getByRole('button', { name: 'Submit' }).click();
   await page.locator('#radix-_r_n_').click();
-  await page.getByRole('link', { name: 'Lessons', exact: true }).click();
-  await page.locator('html').click();
+await page.getByRole('menuitem', { name: 'Lessons', exact: true }).click();
   await page.getByRole('link', { name: 'Lesson 1 Greetings and' }).click();
   await page.getByRole('textbox', { name: 'Answer Answer Answer Answer' }).scrollIntoViewIfNeeded();
   await page.getByRole('textbox', { name: 'Answer Answer Answer Answer' }).fill('sono');
@@ -65,13 +64,15 @@ test('french lesson completed', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Password' }).fill('newPassword');
   await page.getByRole('button', { name: 'Submit' }).click();
   await page.locator('#radix-_r_n_').click();
-  await page.getByRole('link', { name: 'Lessons', exact: true }).click();
-  await page.locator('html').click();
+await page.getByRole('menuitem', { name: 'Lessons', exact: true }).click();
   await page.getByText('Italian', { exact: true }).click();
   await page.getByRole('option', { name: 'French' }).click();
   await page.getByRole('link', { name: 'Lesson 1 Greetings and' }).click();
+  await page.getByRole('textbox', { name: 'Answer Answer Answer Answer' }).scrollIntoViewIfNeeded();
   await page.getByRole('textbox', { name: 'Answer Answer Answer Answer' }).fill('Salut');
   await page.getByRole('button', { name: 'Check' }).click();
+   await page.getByRole('textbox', { name: 'Type your answer…' }).click();
+  await page.getByRole('textbox', { name: 'Type your answer…' }).fill('vous');
   await page.getByRole('textbox', { name: 'Type your answer…' }).fill('vous');
   await page.getByRole('button', { name: 'Check' }).click();
   await page.getByRole('textbox', { name: 'Type your answer…' }).fill('suis');

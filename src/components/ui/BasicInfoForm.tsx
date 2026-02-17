@@ -38,6 +38,17 @@ const levels: Options[] = [
   },
 ];
 
+const languages: Options[] = [
+  {
+    value: "italian",
+    label: "Italian",
+  },
+  {
+    value: "french",
+    label: "French",
+  },
+];
+
 const BasicInfoForm = ({ data, onChange, setCurrentStep }: any) => {
   const updateField = (field, value) => {
     onChange({ ...data, [field]: value });
@@ -45,6 +56,7 @@ const BasicInfoForm = ({ data, onChange, setCurrentStep }: any) => {
   const [level, setLevel] = useState("Beginner");
 
   const [newObjective, setNewObjective] = useState("");
+  const [language, setLanguage] = useState("italian");
 
   const addObjective = () => {
     if (newObjective.trim()) {
@@ -56,21 +68,22 @@ const BasicInfoForm = ({ data, onChange, setCurrentStep }: any) => {
   };
 
   useEffect(() => {
-    updateField("level", level);
-  }, [level]);
+    onChange({ ...data, level, language });
+  }, [level, language]);
 
   const checkExisting = async () => {
     const fields = {
       title: data.title,
-      language: data.language,
+      language: language,
     };
+
     try {
       const res = await fetch(
         `http://localhost:8000/lessons/existing/${fields.title}/${fields.language}`,
         {
           method: "GET",
           credentials: "include",
-        }
+        },
       );
       const data = await res.json();
       console.log(data);
@@ -86,7 +99,7 @@ const BasicInfoForm = ({ data, onChange, setCurrentStep }: any) => {
                 toast.dismiss();
               },
             },
-          }
+          },
         );
       }
     } catch (error) {
@@ -111,12 +124,20 @@ const BasicInfoForm = ({ data, onChange, setCurrentStep }: any) => {
               value={data.title}
               onChange={(e) => updateField("title", e.target.value)}
             />
-            <Input
-              placeholder="Lesson Language"
-              value={data.language}
-              onChange={(e) => updateField("language", e.target.value)}
-            />
-            <Combobox choices={levels} filter={level} setFilter={setLevel} />
+            <div className="flex flex-row gap-2 mx-auto items-center">
+              <label>Language</label>
+              <Combobox
+                choices={languages}
+                filter={language}
+                setFilter={setLanguage}
+              />
+            </div>
+
+            <div className="flex flex-row gap-2 mx-auto items-center">
+              <label>Level</label>
+              <Combobox choices={levels} filter={level} setFilter={setLevel} />
+            </div>
+
             <div className="flex flex-row gap-3">
               <Input
                 id="objective"

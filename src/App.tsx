@@ -150,16 +150,12 @@ function App() {
                   </DropdownMenuTrigger>
                   <span className="sr-only">Lessons</span>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem>
-                      <Link to="lessons" className="hover:underline">
-                        Lessons
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Link to="customLessons" className="hover:underline">
-                        Custom Lessons
-                      </Link>
-                    </DropdownMenuItem>
+                    <Link to="lessons">
+                      <DropdownMenuItem>Lessons</DropdownMenuItem>
+                    </Link>
+                    <Link to="customLessons">
+                      <DropdownMenuItem>Custom Lessons</DropdownMenuItem>
+                    </Link>
                     {user.role != "student" ? (
                       <Link to="create_lesson">
                         <DropdownMenuItem>Create Lesson</DropdownMenuItem>
@@ -184,26 +180,18 @@ function App() {
                   </DropdownMenuTrigger>
                   <span className="sr-only">Biblíon</span>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem>
-                      <Link to="decks" className="hover:underline">
-                        Decks
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Link to="review" className="hover:underline">
-                        Review
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Link to="createDeck" className="hover:underline">
-                        Create Deck
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Link to="customDecks" className="hover:underline">
-                        Custom decks
-                      </Link>
-                    </DropdownMenuItem>
+                    <Link to="decks">
+                      <DropdownMenuItem>Decks</DropdownMenuItem>
+                    </Link>
+                    <Link to="review">
+                      <DropdownMenuItem>Review</DropdownMenuItem>
+                    </Link>
+                    <Link to="createDeck">
+                      <DropdownMenuItem>Create Deck</DropdownMenuItem>
+                    </Link>
+                    <Link to="customDecks">
+                      <DropdownMenuItem>Custom decks</DropdownMenuItem>
+                    </Link>
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (

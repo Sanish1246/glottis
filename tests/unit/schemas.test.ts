@@ -90,7 +90,6 @@ describe("createDeckSchema", () => {
       word: "hello",
       english: "hola",
       category: "greetings",
-      language: "spanish",
     };
     expect(createDeckSchema.parse(valid)).toEqual(valid);
   });
@@ -101,28 +100,16 @@ describe("createDeckSchema", () => {
         word: "hello",
         english: "hola",
         category: "",
-        language: "spanish",
       }),
     ).toThrow();
   });
 
-  it("rejects empty language", () => {
-    expect(() =>
-      createDeckSchema.parse({
-        word: "hello",
-        english: "hola",
-        category: "greetings",
-        language: "",
-      }),
-    ).toThrow();
-  });
 
   it("accepts empty word and english (schema allows; addToDeck validates)", () => {
     const data = {
       word: "",
       english: "",
       category: "x",
-      language: "y",
     };
     expect(createDeckSchema.parse(data)).toEqual(data);
   });
@@ -134,7 +121,6 @@ describe("uploadMediaSchema", () => {
       title: "My Book",
       description: "A wonderful read with many pages.",
       author: "Jane Doe",
-      language: "english",
     };
     expect(uploadMediaSchema.parse(valid)).toEqual(valid);
   });
@@ -145,7 +131,6 @@ describe("uploadMediaSchema", () => {
         title: "",
         description: "At least 8 chars.",
         author: "Author",
-        language: "en",
       }),
     ).toThrow();
   });
@@ -156,7 +141,6 @@ describe("uploadMediaSchema", () => {
         title: "Title",
         description: "short",
         author: "Author",
-        language: "en",
       }),
     ).toThrow();
   });
@@ -167,7 +151,6 @@ describe("uploadMediaSchema", () => {
         title: "Title",
         description: "Description here.",
         author: "",
-        language: "en",
       }),
     ).toThrow();
   });
@@ -177,7 +160,6 @@ describe("uploadMediaSchema", () => {
       title: "Title",
       description: "Description here.",
       author: "Author",
-      language: "en",
       link: "https://example.com",
       genres: ["Comedy", "Drama"],
     };
