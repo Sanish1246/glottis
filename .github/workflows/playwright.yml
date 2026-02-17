@@ -17,7 +17,6 @@ jobs:
         run: npm ci
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
-              - name: Start dev server and wait
       - name: Start dev server and wait
         run: |
           npm run dev > /tmp/dev.log 2>&1 &
