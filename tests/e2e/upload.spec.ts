@@ -11,7 +11,6 @@ test('immersion media upload', async ({ page,request }) => {
   await page.getByRole('link', { name: 'Immersion', exact: true }).click();
   await page.getByRole('button', { name: 'Upload' }).click();
   await page.getByRole('textbox', { name: 'Title' }).fill('testImmersion');
-  await page.getByRole('textbox', { name: 'Description' }).click();
   await page.getByRole('textbox', { name: 'Description' }).fill('This is a test media upload');
   await page.getByRole('textbox', { name: 'Author' }).fill('newUser');
   await page.getByRole('textbox', { name: 'Link' }).fill('https://www.google.com/');
@@ -23,6 +22,24 @@ test('immersion media upload', async ({ page,request }) => {
     data: { title: 'testImmersion' },
     headers: process.env.TEST_API_KEY ? { 'x-test-key': process.env.TEST_API_KEY } : undefined,
   });
+});
+
+test('media upload with no title', async ({ page}) => {
+  await page.goto('http://localhost:5173/');
+  await page.locator('#radix-_r_3_').click();
+  await page.getByRole('menuitem', { name: 'Login' }).click();
+  await page.getByRole('textbox', { name: 'Username' }).fill('newUser');
+  await page.getByRole('textbox', { name: 'Password' }).fill('newPassword');
+  await page.getByRole('button', { name: 'Submit' }).click();
+  await page.getByRole('link', { name: 'Immersion', exact: true }).click();
+  await page.getByRole('button', { name: 'Upload' }).click();
+  await page.getByRole('textbox', { name: 'Description' }).fill('This is a test media upload');
+  await page.getByRole('textbox', { name: 'Author' }).fill('newUser');
+  await page.getByRole('textbox', { name: 'Link' }).fill('https://www.google.com/');
+  await page.getByRole('checkbox', { name: 'Short Stories' }).check();
+  await page.getByRole('button', { name: 'Submit' }).click();
+  await expect(page.getByText('Title cannot be empty!')).toBeVisible()
+
 });
 
 test('flashcard deck upload', async ({ page,request }) => {

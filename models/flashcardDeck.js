@@ -13,7 +13,6 @@ const flashcardDeckSchema = new mongoose.Schema({
   number: { type: Number },
   noOfCards: { type: Number },
   author: { type: String },
-  likes: { type: Number },
   items: [VocabularyItemSchema],
   status: { type: String },
 });

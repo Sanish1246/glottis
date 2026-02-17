@@ -65,8 +65,10 @@ test('french lesson completed', async ({ page }) => {
   await page.getByRole('button', { name: 'Submit' }).click();
   await page.locator('#radix-_r_n_').click();
 await page.getByRole('menuitem', { name: 'Lessons', exact: true }).click();
+await page.waitForTimeout(3000)
   await page.getByText('Italian', { exact: true }).click();
   await page.getByRole('option', { name: 'French' }).click();
+  await page.waitForTimeout(500)
   await page.getByRole('link', { name: 'Lesson 1 Greetings and' }).click();
   await page.getByRole('textbox', { name: 'Answer Answer Answer Answer' }).scrollIntoViewIfNeeded();
   await page.getByRole('textbox', { name: 'Answer Answer Answer Answer' }).fill('Salut');

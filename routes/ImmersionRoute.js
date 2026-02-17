@@ -269,4 +269,37 @@ router.post("/test/cleanup/media", async (req, res) => {
   }
 });
 
+router.post("/test/insert/media", async (req, res) => {
+
+  const defaultTestMedia = {
+  title: "testImmersion",
+  description: "This is a test media upload",
+  language: "italian",
+  level: "Beginner",
+  type: "Book",
+  genres: ["Short Stories"],
+  author: "newUser",
+  uploader: "newUser",
+  link: "https://www.google.com/",
+  likes: 0,
+  img_path: "/immersion/no-image.jpg",
+  status: "Pending",
+};
+  if (
+    process.env.NODE_ENV !== "test" &&
+    req.headers["x-test-key"] !== process.env.TEST_API_KEY
+  ) {
+    return res.status(404).json({ error: "Not available" });
+  }
+
+  try {
+    const media = defaultTestMedia;
+    const created = await Immersion.create(media);
+    return res.status(201).json(created);
+  } catch (err) {
+    console.error("Test media insert failed:", err);
+    return res.status(500).json({ error: "Server error during media insert" });
+  }
+});
+
 export default router;

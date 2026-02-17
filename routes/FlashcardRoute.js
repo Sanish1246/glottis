@@ -152,4 +152,32 @@ router.post("/test/cleanup/deck", async (req, res) => {
   }
 });
 
+router.post("/test/insert/deck", async (req, res) => {
+  const defaultTestDeck = {
+    category: "testDeck",
+    language: "italian",
+    level: "Beginner",
+    items: [{ word: "testWord", english: "testEnglish" }],
+    noOfCards: 1,
+    likes: 0,
+    author: "newUser",
+    status: "Pending",
+  };
+  if (
+    process.env.NODE_ENV !== "test" &&
+    req.headers["x-test-key"] !== process.env.TEST_API_KEY
+  ) {
+    return res.status(404).json({ error: "Not available" });
+  }
+
+  try {
+    const deck = defaultTestDeck;
+    const created = await FlashcardDeck.create(deck);
+    return res.status(201).json(created);
+  } catch (err) {
+    console.error("Test deck insert failed:", err);
+    return res.status(500).json({ error: "Server error during deck insert" });
+  }
+});
+
 export default router;
