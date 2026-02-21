@@ -28,7 +28,7 @@ jobs:
       - name: Train model
         env:
           TRAIN_RANDOM_STATE: ${{ secrets.TRAIN_RANDOM_STATE }}
-        run: node scripts/trainModel.js
+        run: node scripts/modelTraining.js
 
       - name: Upload model artifact
         uses: actions/upload-artifact@v4
