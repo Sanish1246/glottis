@@ -16,8 +16,17 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 
 const AIDashboard = () => {
+  useGSAP(() => {
+    gsap.fromTo(
+      ".model-stat",
+      { opacity: 0, y: 1000 },
+      { opacity: 1, y: 0, stagger: 0.2, ease: "power1.inOut", duration: 1 },
+    );
+  }, []);
   const chartData = modelData.test.rocCurve;
   const aucScore = modelData.test.auc * 100;
 
@@ -32,8 +41,13 @@ const AIDashboard = () => {
 
   return (
     <>
+      <div className="mb-5">
+        <h1 className="text-2xl font-bold tracking-tight text-center">
+          Model info
+        </h1>
+      </div>
       <div className="flex flex-col lg:flex-row gap-3 mb-5 mx-auto">
-        <Card className="stat-card flex flex-col lg:w-[50%] shadow-lg">
+        <Card className="model-stat flex flex-col lg:w-[50%] shadow-lg">
           <CardHeader className="items-center pb-0">
             <CardTitle>AUR-ROC score</CardTitle>
             <CardDescription>
@@ -51,7 +65,7 @@ const AIDashboard = () => {
             </div>
           </CardFooter>
         </Card>
-        <Card className="stat-card flex flex-col lg:w-[50%] shadow-lg">
+        <Card className="model-stat flex flex-col lg:w-[50%] shadow-lg">
           <CardHeader className="items-center pb-0">
             <CardTitle>Number of samples</CardTitle>
             <CardDescription>
@@ -69,7 +83,7 @@ const AIDashboard = () => {
           </CardFooter>
         </Card>
       </div>
-      <Card>
+      <Card className="model-stat">
         <CardHeader>
           <CardTitle>ROC Curve</CardTitle>
           <CardDescription>Model Performance</CardDescription>
