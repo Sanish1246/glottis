@@ -82,11 +82,16 @@ function App() {
                           <DropdownMenuItem>Dashboard</DropdownMenuItem>
                         </Link>
                         {user.role == "admin" ? (
-                          <Link to="approvals">
-                            <DropdownMenuItem>
-                              Pending approvals
-                            </DropdownMenuItem>
-                          </Link>
+                          <>
+                            <Link to="approvals">
+                              <DropdownMenuItem>
+                                Pending approvals
+                              </DropdownMenuItem>
+                            </Link>
+                            <Link to="aiDashboard">
+                              <DropdownMenuItem>AI Dashboard</DropdownMenuItem>
+                            </Link>
+                          </>
                         ) : null}
                         <hr></hr>
                         <DialogTrigger asChild>
