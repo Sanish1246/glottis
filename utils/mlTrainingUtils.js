@@ -24,11 +24,13 @@ export function trainModel(samples, featureOrder, options = {}) {
 
     for (const { features, label } of samples) {
       const z =
-        intercept + coefficients.reduce((s, w, i) => s + w * (features[i] ?? 0), 0);
+        intercept +
+        coefficients.reduce((s, w, i) => s + w * (features[i] ?? 0), 0);
       const p = sigmoid(z);
       const err = p - label;
       gradIntercept += err;
-      for (let i = 0; i < numFeatures; i++) gradCoef[i] += err * (features[i] ?? 0);
+      for (let i = 0; i < numFeatures; i++)
+        gradCoef[i] += err * (features[i] ?? 0);
     }
 
     const n = samples.length;
@@ -48,13 +50,15 @@ export function predictProb(features, model) {
 }
 
 export function evaluateModel(samples, model) {
-  const scores = [];
-  for (const { features, label } of samples) {
-    const prob = predictProb(features, model);
-    scores.push({ prob, label });
-  }
-  const auc = Math.max(0, Math.min(1, computeAUC(scores)));
-  return auc;
+  const scores = samples.map(({ features, label }) => ({
+    prob: predictProb(features, model),
+    label,
+  }));
+
+  const rocCurve = computeROC(scores);
+  const auc = computeAUC(scores);
+
+  return { auc, rocCurve };
 }
 
 export function computeAUC(scores) {
@@ -67,6 +71,36 @@ export function computeAUC(scores) {
     if (scores[i].label === 1) sum += i + 1;
   }
   return (sum - (positives * (positives + 1)) / 2) / (positives * negatives);
+}
+
+export function computeROC(scores) {
+  // Sort descending by predicted probability
+  const sorted = [...scores].sort((a, b) => b.prob - a.prob);
+
+  const P = sorted.filter((s) => s.label === 1).length;
+  const N = sorted.filter((s) => s.label === 0).length;
+
+  if (P === 0 || N === 0)
+    return [
+      { fpr: 0, tpr: 0 },
+      { fpr: 1, tpr: 1 },
+    ];
+
+  let tp = 0,
+    fp = 0;
+  const rocPoints = [];
+
+  for (const { label } of sorted) {
+    if (label === 1) tp++;
+    else fp++;
+    rocPoints.push({ fpr: fp / N, tpr: tp / P });
+  }
+
+  // Add start and end points for a full curve
+  rocPoints.unshift({ fpr: 0, tpr: 0 });
+  rocPoints.push({ fpr: 1, tpr: 1 });
+
+  return rocPoints;
 }
 
 export function seededRandom(seed) {

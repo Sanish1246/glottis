@@ -54,6 +54,7 @@ async function run() {
     );
     console.log("Wrote", outPath);
     process.exit(0);
+    me;
     return;
   }
 
@@ -112,14 +113,17 @@ async function run() {
   await fs.writeFile(outPath, JSON.stringify(model, null, 2));
   console.log("Model saved to", outPath);
 
-  const metrics = { train: {}, val: {}, test: {} };
+  const metrics = { test: {} };
   if (!skipEval) {
-    if (trainSamples.length)
-      metrics.train = { auc: evaluateModel(trainSamples, model) };
-    if (valSamples.length)
-      metrics.val = { auc: evaluateModel(trainSamples, model) };
-    if (testSamples.length)
-      metrics.test = { auc: evaluateModel(trainSamples, model) };
+    if (testSamples.length) {
+      const { auc, rocCurve } = evaluateModel(trainSamples, model);
+      metrics.test = {
+        auc: auc.toFixed(2),
+        rocCurve: rocCurve,
+        users: nUsers,
+        samples: samples.length,
+      };
+    }
   }
 
   const hasEval =
@@ -132,7 +136,7 @@ async function run() {
     if (testSamples.length) {
       console.log(`Test:  ${testSamples.length} samples (${testSet} users)`);
       console.log("\nTest set metrics:");
-      console.log("  AUC-ROC:  ", metrics.test.auc.toFixed(4));
+      console.log("  AUC-ROC:  ", metrics.test.auc);
     }
     const metricsPath = path.join(process.cwd(), "data", "eval-metrics.json");
     await fs.writeFile(metricsPath, JSON.stringify(metrics, null, 2));
