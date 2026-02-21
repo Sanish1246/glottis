@@ -24,6 +24,7 @@ import CustomLessons from "./components/pages/CustomLessons.tsx";
 import Approvals from "./components/pages/Approvals.tsx";
 import CreateLesson from "./components/pages/CreateLesson.tsx";
 import UserDashboard from "./components/pages/UserDashboard.tsx";
+import AIDashboard from "./components/pages/AIDashboard.tsx";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,7 @@ const router = createBrowserRouter([
       { path: "approvals", element: <Approvals /> },
       { path: "create_lesson", element: <CreateLesson /> },
       { path: "dashboard", element: <UserDashboard /> },
+      { path: "aiDashboard", element: <AIDashboard /> },
     ],
   },
 ]);
