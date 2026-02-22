@@ -15,7 +15,6 @@ export async function sendFlashcardReminders() {
   const users = await User.find({
     "decks.items.dueDate": { $exists: true },
   }).lean();
-  console.log(users.length);
   for (const user of users) {
     let dueCount = 0;
     for (const deck of user.decks || []) {
@@ -23,16 +22,12 @@ export async function sendFlashcardReminders() {
         console.log(card);
         if (!card.dueDate) continue;
 
-        const due = dayjs(card.dueDate); // ISO YYYY-MM-DD
-        console.log(
-          due.isValid() &&
-            (due.isBefore(today, "day") || due.isSame(today, "day")),
-        );
+        const due = dayjs(card.dueDate);
+
         if (
           due.isValid() &&
           (due.isBefore(today, "day") || due.isSame(today, "day"))
         ) {
-          console.log(dueCount + 1, "cards due for the user");
           dueCount++;
         }
       }
