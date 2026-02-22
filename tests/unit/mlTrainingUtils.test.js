@@ -128,13 +128,13 @@ describe("mlTrainingUtils", () => {
         { features: [1, 0], label: 1 },
         { features: [0, 0], label: 0 },
       ];
-      const auc = evaluateModel(samples, model);
+      const { auc } = evaluateModel(samples, model);
       expect(auc).toBeGreaterThanOrEqual(0);
       expect(auc).toBeLessThanOrEqual(1);
     });
 
     it("handles empty samples", () => {
-      const auc = evaluateModel([], model);
+      const { auc } = evaluateModel([], model);
       expect(auc).toBe(0.5);
     });
 
@@ -145,8 +145,8 @@ describe("mlTrainingUtils", () => {
       ];
       const randomModel = { intercept: 0, coefficients: [0, 0] };
       const goodModel = { intercept: 0, coefficients: [5, 0] };
-      const aucRandom = evaluateModel(perfectSamples, randomModel);
-      const aucGood = evaluateModel(perfectSamples, goodModel);
+      const { auc: aucRandom } = evaluateModel(perfectSamples, randomModel);
+      const { auc: aucGood } = evaluateModel(perfectSamples, goodModel);
       expect(aucGood).toBeGreaterThanOrEqual(aucRandom);
     });
   });
