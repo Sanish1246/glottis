@@ -56,7 +56,7 @@ const Lesson = () => {
         interval: 0,
         repetition: 0,
         efactor: 2.5,
-        dueDate: dayjs(Date.now()).format("DD-MM-YYYY"),
+        dueDate: dayjs(Date.now()).format("YYYY-MM-DD"),
       };
       const res = await fetch(
         `http://localhost:8000/add_card/${languagePath}`,

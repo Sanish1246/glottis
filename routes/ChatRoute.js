@@ -10,7 +10,6 @@ router.post("/message", async (req, res) => {
       { $push: { messages: message } },
       { new: true },
     );
-    console.log(chat);
 
     if (!chat) {
       return res.status(409).json({ error: "Chat room not found!" });
@@ -26,7 +25,6 @@ router.get("/:room", async (req, res) => {
   const room = req.params.room;
   try {
     const chat = await Chat.findOne({ room: room });
-    console.log(chat);
     res.json(chat);
   } catch (err) {
     console.error("Unable to get chat:", err);

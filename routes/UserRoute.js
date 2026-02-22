@@ -86,9 +86,6 @@ router.post("/add_card/:language", async (req, res) => {
         { new: true },
       );
     }
-
-    console.log(updatedUser);
-
     res.status(201).json({
       message: "Card added successfully",
       user: updatedUser,

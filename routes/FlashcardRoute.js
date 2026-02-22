@@ -92,7 +92,6 @@ router.get("/:id", async (req, res) => {
 
 router.post("/submit", async (req, res) => {
   const deck = req.body;
-  console.log(req.body);
   try {
     if (!req.session?.user) {
       return res.status(401).json({ error: "Not authenticated" });

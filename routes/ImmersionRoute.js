@@ -188,7 +188,6 @@ router.get("/searchMedia/:page", async (req, res) => {
 const __filename = fileURLToPath(import.meta.url);
 
 router.post("/submitMedia", async (req, res) => {
-  console.log("request received");
   try {
     if (!req.session?.user) {
       return res.status(401).json({ error: "Not authenticated" });
@@ -270,21 +269,20 @@ router.post("/test/cleanup/media", async (req, res) => {
 });
 
 router.post("/test/insert/media", async (req, res) => {
-
   const defaultTestMedia = {
-  title: "testImmersion",
-  description: "This is a test media upload",
-  language: "italian",
-  level: "Beginner",
-  type: "Book",
-  genres: ["Short Stories"],
-  author: "newUser",
-  uploader: "newUser",
-  link: "https://www.google.com/",
-  likes: 0,
-  img_path: "/immersion/no-image.jpg",
-  status: "Pending",
-};
+    title: "testImmersion",
+    description: "This is a test media upload",
+    language: "italian",
+    level: "Beginner",
+    type: "Book",
+    genres: ["Short Stories"],
+    author: "newUser",
+    uploader: "newUser",
+    link: "https://www.google.com/",
+    likes: 0,
+    img_path: "/immersion/no-image.jpg",
+    status: "Pending",
+  };
   if (
     process.env.NODE_ENV !== "test" &&
     req.headers["x-test-key"] !== process.env.TEST_API_KEY

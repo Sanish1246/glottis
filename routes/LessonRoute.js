@@ -112,28 +112,6 @@ router.get("/content/:id", async (req, res) => {
   }
 });
 
-// router.post("/submit", async (req, res) => {
-//   const lesson = req.body;
-//   try {
-//     if (!req.session?.user) {
-//       return res.status(401).json({ error: "Not authenticated" });
-//     }
-
-//     const newLesson = {
-//       ...lesson,
-//       author: req.session.user.username,
-//       status: "Pending",
-//     };
-
-//     const created = await Lesson.create(newLesson);
-//     console.log(newLesson);
-//     res.json({ message: "Lesson submitted successfully!" });
-//   } catch (err) {
-//     console.error("Unable to submit lesson:", err);
-//     res.status(500).json({ error: "Server error while submitting" });
-//   }
-// });
-
 router.post("/submit", async (req, res) => {
   try {
     if (!req.session?.user) {
@@ -186,8 +164,6 @@ router.post("/submit", async (req, res) => {
       author: req.session.user.username,
       status: "Pending",
     };
-
-    console.log(lesson);
 
     await Lesson.create(newLesson);
     res.json({ message: "Lesson submitted successfully!" });
