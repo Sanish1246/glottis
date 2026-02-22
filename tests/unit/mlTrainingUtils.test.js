@@ -87,7 +87,9 @@ describe("mlTrainingUtils", () => {
         { features: [1], label: 1 },
         { features: [0, 0], label: 0 },
       ];
-      const result = trainModel(samplesWithUndefined, featureOrder, { epochs: 10 });
+      const result = trainModel(samplesWithUndefined, featureOrder, {
+        epochs: 10,
+      });
       expect(result).toHaveProperty("intercept");
       expect(result.coefficients).toHaveLength(2);
     });
