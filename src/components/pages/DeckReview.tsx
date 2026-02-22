@@ -87,10 +87,10 @@ const DeckReview = () => {
         const today = dayjs(Date.now()).startOf("day");
 
         const reviewDeck = data.items.filter(
-          (c) => dayjs(c.dueDate, "DD-MM-YYYY").startOf("day") <= today,
+          (c) => dayjs(c.dueDate, "YYYY-MM-DD").startOf("day") <= today,
         );
         const lateDeck = data.items.filter(
-          (c) => dayjs(c.dueDate, "DD-MM-YYYY").startOf("day") < today,
+          (c) => dayjs(c.dueDate, "YYYY-MM-DD").startOf("day") < today,
         );
 
         setLate(lateDeck.length);
@@ -102,7 +102,7 @@ const DeckReview = () => {
           { length: 7 },
           (_, i) =>
             data.items.filter(
-              (c) => c.dueDate === today.add(i + 1, "day").format("DD-MM-YYYY"),
+              (c) => c.dueDate === today.add(i + 1, "day").format("YYYY-MM-DD"),
             ).length,
         );
         setNextCards(forecast);
@@ -138,7 +138,7 @@ const DeckReview = () => {
           { length: 7 },
           (_, i) =>
             data.items.filter(
-              (c) => c.dueDate === today.add(i + 1, "day").format("DD-MM-YYYY"),
+              (c) => c.dueDate === today.add(i + 1, "day").format("YYYY-MM-DD"),
             ).length,
         );
         setNextCards(forecast);
@@ -157,7 +157,7 @@ const DeckReview = () => {
 
       const dueDate = dayjs(Date.now())
         .add(interval, "day")
-        .format("DD-MM-YYYY");
+        .format("YYYY-MM-DD");
 
       const updatedCard = {
         ...currentCard,

@@ -22,7 +22,6 @@ router.post("/ask", async (req, res) => {
   // Process the user message and generate a response
   const response = await result.response;
   const text = response.text();
-  console.log(text);
   res.json({ response: text });
 });
 export default router;
