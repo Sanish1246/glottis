@@ -21,7 +21,7 @@ router.get("/:lang/:level", async (req, res) => {
 
 router.get("/pending", async (req, res) => {
   try {
-    if (req.session?.user.role !== "admin") {
+    if (req.session?.user?.role !== "admin") {
       return res.status(401).json({ error: "You don't have permissions!" });
     }
     const targetStatus = "Pending";
