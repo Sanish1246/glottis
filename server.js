@@ -1,11 +1,7 @@
 import dotenv from "dotenv";
 import axios from "axios";
-import session from "express-session";
-import express from "express";
-import fileUpload from "express-fileupload";
 import ngrok from "ngrok";
 import path from "path";
-import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
 import { fileURLToPath } from "url";
@@ -13,17 +9,11 @@ import cron from "node-cron";
 import { connectToDb } from "./db.js";
 import { sendFlashcardReminders } from "./jobs/flashcardReminder.js";
 import whatsappRoutes from "./routes/WhatsappRoute.js";
-import chatbotRoutes from "./routes/ChatbotRoute.js";
-import userRoutes from "./routes/UserRoute.js";
-import lessonRoutes from "./routes/LessonRoute.js";
-import flashcardRoutes from "./routes/FlashcardRoute.js";
-import authRoutes from "./routes/AuthRoute.js";
-import immersionRoutes from "./routes/ImmersionRoute.js";
-import chatRoutes from "./routes/ChatRoute.js";
+import { app } from "./app.js";
 
 dotenv.config();
 
-const app = express();
+app.use("/webhook", whatsappRoutes);
 
 const server = http.createServer(app);
 
@@ -35,52 +25,12 @@ const io = new Server(server, {
   },
 });
 
-// CORS setup to communicate with frontend
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  }),
-);
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(fileUpload());
-
 const PORT = process.env.PORT || 8000;
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN || "my_verify_token";
 const APP_ID = process.env.APP_ID;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-// Static files
-app.use(express.static(path.join(__dirname)));
-
-//Session data
-app.use(
-  session({
-    secret: "Sanish12",
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false },
-  }),
-);
-
-// Express routes
-app.use("/", userRoutes);
-app.use("/", authRoutes);
-app.use("/chatbot", chatbotRoutes);
-app.use("/chat", chatRoutes);
-app.use("/webhook", whatsappRoutes);
-app.use("/lessons", lessonRoutes);
-app.use("/flashcards", flashcardRoutes);
-app.use("/immersion", immersionRoutes);
-
-// serving the main html file
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
-});
 
 // Socket.io configuration
 io.on("connection", (socket) => {
