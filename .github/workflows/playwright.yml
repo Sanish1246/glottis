@@ -18,11 +18,16 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Start dev server and wait
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
         run: |
           npm run dev > /tmp/dev.log 2>&1 &
-          npx wait-on http://localhost:5173 http://localhost:8000  -t 60
+          npx wait-on http://localhost:5173 http://localhost:8000 -t 60
       - name: Run Playwright tests
         run: npx playwright test tests/e2e/functional
+      - name: Show dev server log on failure
+        if: failure()
+        run: cat /tmp/dev.log
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
