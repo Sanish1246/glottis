@@ -1,28 +1,19 @@
 
-//  Performance test: NFR7 - Flashcard review response time
+//  Performance test: Flashcard review response time
 
-//  NFR7: The system shall load flashcard review interfaces within 2 seconds
-//         under normal network conditions.
- 
-//   This script exercises the API endpoints used by the flashcard review UI:
-//   - GET /flashcards/:lang/:level  — list decks for review selection
-//   - GET /flashcards/:id           — load a specific deck for review
- 
-//   Run: k6 run tests/performance/flashcard-review-nfr7.js
-//        BASE_URL=http://localhost:8000 k6 run tests/performance/flashcard-review-nfr7.js
  
 
 import http from "k6/http";
 import { check, sleep } from "k6";
 
 const BASE_URL = __ENV.BASE_URL || "http://localhost:8000";
-const MAX_RESPONSE_TIME_MS = 2000; // NFR7: load within 2 seconds
+const MAX_RESPONSE_TIME_MS = 2000; //load within 2 seconds
 
 export const options = {
   vus: 5,
   duration: "30s",
   thresholds: {
-    // NFR7: 95% of flashcard review requests must complete within 2 seconds
+    //  95% of flashcard review requests must complete within 2 seconds
     "http_req_duration{name:flashcard_review}": ["p(95)<2000"],
     "http_req_failed": ["rate<0.01"],
   },
