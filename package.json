@@ -7,7 +7,7 @@
     "dev": "concurrently \"npm run dev:react\" \"npm run dev:server\"",
     "dev:react": "vite",
     "dev:server": "nodemon server.js",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",

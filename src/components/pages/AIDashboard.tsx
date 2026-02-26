@@ -83,7 +83,7 @@ const AIDashboard = () => {
           </CardFooter>
         </Card>
       </div>
-      <Card className="model-stat">
+      <Card className="model-stat w-[80%] h-[80%] mx-auto">
         <CardHeader>
           <CardTitle>ROC Curve</CardTitle>
           <CardDescription>Model Performance</CardDescription>

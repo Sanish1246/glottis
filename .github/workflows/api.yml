@@ -20,6 +20,7 @@ jobs:
       - name: Start dev server and wait
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           node server.js > /tmp/server.log 2>&1 &
           npx wait-on  http://localhost:8000 -t 60
