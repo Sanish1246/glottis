@@ -14,24 +14,28 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,png,svg,ico}'] 
       },
       manifest: {
-        name: "Glottis",
-        short_name: "Glottis",
-        description: "Language learning platform",
-        start_url: "/",
-        scope: "/",
-        display: "standalone",
-        background_color: "#ffffff",
-        theme_color: "#1976d2",
-        orientation: "portrait-or-landscape",
-        icons: [
-          {
-            src: "/glottis.svg",
-            sizes: "192x192",
-            type: "image/svg+xml",
-            purpose: "any"
-          }
-        ]
-      }
+  "id": "/",
+  "name": "Glottis",
+  "short_name": "Glottis",
+  "description": "Language learning platform",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1976d2",
+  "icons": [
+    {
+      "src": "/glottis.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/glottis.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
     })
   ],
   resolve: {
