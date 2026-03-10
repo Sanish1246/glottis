@@ -30,7 +30,7 @@ export default function () {
 
   check(listRes, {
     "deck list status 200": (r) => r.status === 200,
-    "deck list within 2s (NFR7)": (r) => r.timings.duration <= MAX_RESPONSE_TIME_MS,
+    "deck list within 2s ": (r) => r.timings.duration <= MAX_RESPONSE_TIME_MS,
   });
 
   if (listRes.status !== 200) {
