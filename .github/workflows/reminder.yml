@@ -1,0 +1,30 @@
+name: Email reminder job
+on:
+  schedule:
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    env:
+      MONGODB_URI: ${{ secrets.MONGODB_URI }}
+      EMAIL_USER: ${{ secrets.EMAIL_USER }}
+      EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install dependencies
+        run: npm ci
+      - name: Start dev server and wait
+        run: |
+          node server.js > /tmp/server.log 2>&1 &
+          npx wait-on  http://localhost:8000 -t 60
+      - name: Run Email reminder script
+        run: node jobs/flashcardReminder.js
+      - name: Show dev server log on failure
+        if: failure()
+        run: cat /tmp/server.log

@@ -38,15 +38,7 @@ const levels: Options[] = [
   {
     value: "B2",
     label: "B2",
-  },
-  {
-    value: "C1",
-    label: "C1",
-  },
-  {
-    value: "C2",
-    label: "C2",
-  },
+  }
 ];
 
 interface FlashCardProps {
