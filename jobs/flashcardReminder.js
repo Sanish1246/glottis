@@ -45,3 +45,13 @@ async function sendReminderEmail(email, dueCount) {
     text: `You have ${dueCount} flashcards due today!`,
   });
 }
+
+sendFlashcardReminders()
+  .then(() => {
+    console.log("Reminder job completed");
+    process.exit(0);
+  })
+  .catch((err) => {
+    console.error("Reminder job failed:", err);
+    process.exit(1);
+  });
