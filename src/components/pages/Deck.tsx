@@ -151,7 +151,7 @@ const Deck = () => {
         >
           Back
         </Button>
-        <h1>{deck.category}</h1>
+        <h1 className="font-bold text-xl ml-5">{deck.category}</h1>
       </div>
 
       <FlashcardList

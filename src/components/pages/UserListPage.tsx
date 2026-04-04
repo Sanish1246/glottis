@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
-import { MessageSquareMore, Search } from "lucide-react";
+import { MessageSquareMore, Search, GraduationCap, School } from "lucide-react";
 import { useUser } from "../context/UserContext";
 import Combobox from "../ui/Combobox";
 import { Input } from "../ui/input";
@@ -62,7 +62,7 @@ const UserListPage = () => {
         {
           method: "GET",
           credentials: "include",
-        }
+        },
       );
       const data = await res.json();
       setSearching(true);
@@ -84,8 +84,6 @@ const UserListPage = () => {
     setSearchTerm("");
     setSearching(false);
   };
-
-
 
   useEffect(() => {
     const filterUsers = async () => {
@@ -147,8 +145,7 @@ const UserListPage = () => {
       <div>
         {!searching ? (
           <>
-            <h1>List of users</h1>
-            <div className="flex flex-row items-center gap-1">
+            <div className="flex flex-row items-center gap-1 my-3">
               <p>Filter by:</p>
               <Combobox
                 choices={userFilters}
@@ -156,13 +153,22 @@ const UserListPage = () => {
                 setFilter={setFilter}
               ></Combobox>
             </div>
+            <h1 className="font-bold text-xl text-center">List of users</h1>
             {usersArray.map((nextUser: any, index: number) => {
               return (
                 <div
                   key={index}
-                  className="border-2 rounded-lg p-3 mb-5 mt-1 shadow-sm  hover:translate-1 flex flex-row"
+                  className="border-2 rounded-lg p-3 mb-5 mt-1 shadow-sm  hover:translate-1 flex flex-row w-[50%] mx-auto justify-between"
                 >
-                  {nextUser.username}
+                  <div className="flex flex-row gap-4">
+                    {nextUser.username}
+                    {nextUser.role == "student" ? (
+                      <GraduationCap />
+                    ) : (
+                      <School />
+                    )}
+                  </div>
+
                   <Link
                     to={`/chat`}
                     state={{

@@ -290,7 +290,9 @@ const Immersion = () => {
           </div>
           {recs.length > 0 ? (
             <div>
-              <h2>Recommendations</h2>
+              <h2 className="font-bold text-xl text-center mb-3">
+                Recommendations
+              </h2>
               <Carousel className="max-w-95 mx-auto">
                 <CarouselContent>
                   {recs.map((r, index) => (
@@ -305,7 +307,7 @@ const Immersion = () => {
             </div>
           ) : null}
 
-          <h2>List of medias</h2>
+          <h2 className="font-bold text-xl text-center">List of medias</h2>
           <div className="grid md:grid-cols-3 grid-cols-1 mx-auto mt-5 items-center justify-items-center media">
             {medias.map((m, index) => (
               <MediaCard key={index} media={m} onLikeChange={filterMedia} />

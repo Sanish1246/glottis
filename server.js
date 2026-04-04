@@ -5,9 +5,7 @@ import path from "path";
 import http from "http";
 import { Server } from "socket.io";
 import { fileURLToPath } from "url";
-import cron from "node-cron";
 import { connectToDb } from "./db.js";
-import { sendFlashcardReminders } from "./jobs/flashcardReminder.js";
 import whatsappRoutes from "./routes/WhatsappRoute.js";
 import { app } from "./app.js";
 
@@ -53,11 +51,6 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("User disconnected", socket.id);
   });
-});
-
-cron.schedule("0 8 * * *", async () => {
-  console.log("Running daily flashcard reminder job...");
-  await sendFlashcardReminders();
 });
 
 async function startServer() {
