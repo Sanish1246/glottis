@@ -25,6 +25,7 @@ import Approvals from "./components/pages/Approvals.tsx";
 import CreateLesson from "./components/pages/CreateLesson.tsx";
 import UserDashboard from "./components/pages/UserDashboard.tsx";
 import AIDashboard from "./components/pages/AIDashboard.tsx";
+import { RequireAuth } from "./components/RequireAuth.tsx";
 
 const router = createBrowserRouter([
   {
@@ -32,24 +33,29 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       { index: true, element: <Landing /> },
-      { path: "lessons", element: <LessonsList /> },
-      { path: "lessons/:lessonId", element: <Lesson /> },
       { path: "athena", element: <Athena /> },
-      { path: "decks", element: <FlashCardDeckList /> },
-      { path: "deck/:deckId", element: <Deck /> },
-      { path: "review", element: <UserDeckList /> },
-      { path: "review/:language", element: <DeckReview /> },
-      { path: "users", element: <UserListPage /> },
-      { path: "chat", element: <ChatPage /> },
-      { path: "immersion", element: <Immersion /> },
-      { path: "media", element: <MediaInfo /> },
-      { path: "createDeck", element: <CreateDeck /> },
-      { path: "customDecks", element: <CustomDecks /> },
-      { path: "customLessons", element: <CustomLessons /> },
-      { path: "approvals", element: <Approvals /> },
-      { path: "create_lesson", element: <CreateLesson /> },
-      { path: "dashboard", element: <UserDashboard /> },
-      { path: "aiDashboard", element: <AIDashboard /> },
+      {
+        element: <RequireAuth />,
+        children: [
+          { path: "lessons", element: <LessonsList /> },
+          { path: "lessons/:lessonId", element: <Lesson /> },
+          { path: "decks", element: <FlashCardDeckList /> },
+          { path: "deck/:deckId", element: <Deck /> },
+          { path: "review", element: <UserDeckList /> },
+          { path: "review/:language", element: <DeckReview /> },
+          { path: "users", element: <UserListPage /> },
+          { path: "chat", element: <ChatPage /> },
+          { path: "immersion", element: <Immersion /> },
+          { path: "media", element: <MediaInfo /> },
+          { path: "createDeck", element: <CreateDeck /> },
+          { path: "customDecks", element: <CustomDecks /> },
+          { path: "customLessons", element: <CustomLessons /> },
+          { path: "approvals", element: <Approvals /> },
+          { path: "create_lesson", element: <CreateLesson /> },
+          { path: "dashboard", element: <UserDashboard /> },
+          { path: "aiDashboard", element: <AIDashboard /> },
+        ],
+      },
     ],
   },
 ]);

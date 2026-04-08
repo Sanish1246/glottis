@@ -106,6 +106,14 @@ router.post("/login", async (req, res) => {
     }
     await newUser.save();
 
+    req.session.user = {
+      id: newUser._id,
+      username: newUser.username,
+      email: newUser.email,
+      decks: newUser.decks,
+      role: newUser.role,
+    };
+
     res.json({
       message: "Login successful",
       user: newUser,
