@@ -18,6 +18,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+//Server
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -29,6 +30,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(fileUpload());
 
+//Creatinng session cookies
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "Sanish12",
@@ -48,6 +50,7 @@ app.use("/lessons", lessonRoutes);
 app.use("/flashcards", flashcardRoutes);
 app.use("/immersion", immersionRoutes);
 
+//Serve index.html
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });

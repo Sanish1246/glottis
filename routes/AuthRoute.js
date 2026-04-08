@@ -6,6 +6,7 @@ import { computeStreakUpdate } from "../utils/streakUtils.js";
 
 const router = express.Router();
 
+//POST register request
 router.post("/register", async (req, res) => {
   try {
     const { username, email, password, role } = req.body;
@@ -69,6 +70,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
+//POST login request
 router.post("/login", async (req, res) => {
   try {
     const { username, password, role } = req.body;
@@ -129,6 +131,7 @@ router.delete("/logout", (req, res) => {
   });
 });
 
+//Cleanup endpoint to remove credentials created during tests
 router.post("/test/cleanup/user", async (req, res) => {
   // allowed when NODE_ENV === 'test' OR caller provides TEST_API_KEY via x-test-key
   if (
@@ -139,6 +142,7 @@ router.post("/test/cleanup/user", async (req, res) => {
   }
 
   try {
+    //Searching for th created user credentials
     const { username, email } = req.body || {};
     const filter = {};
     if (username) filter.username = username;

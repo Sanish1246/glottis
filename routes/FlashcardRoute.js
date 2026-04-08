@@ -2,6 +2,7 @@ import express from "express";
 import FlashcardDeck from "../models/flashcardDeck.js";
 const router = express.Router();
 
+//GET requst to find all flashcard decks of a specifc langauge and level
 router.get("/:lang/:level", async (req, res) => {
   try {
     const lang = req.params.lang;
@@ -19,6 +20,7 @@ router.get("/:lang/:level", async (req, res) => {
   }
 });
 
+// GET request to find all flashcard decks pending for approval
 router.get("/pending", async (req, res) => {
   try {
     if (req.session?.user?.role !== "admin") {
@@ -35,6 +37,7 @@ router.get("/pending", async (req, res) => {
   }
 });
 
+//PUT request to approve a flashcard deck
 router.put("/approve/:id", async (req, res) => {
   const id = req.params.id;
   try {
@@ -56,6 +59,7 @@ router.put("/approve/:id", async (req, res) => {
   }
 });
 
+//PUT request to reject a flashcard deck
 router.put("/reject/:id", async (req, res) => {
   const id = req.params.id;
   try {
@@ -77,6 +81,7 @@ router.put("/reject/:id", async (req, res) => {
   }
 });
 
+//GET request to get all flashcards of a specific deck
 router.get("/:id", async (req, res) => {
   try {
     const deck = await FlashcardDeck.findById(req.params.id);
@@ -90,6 +95,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+//POST request to submit a deck for approval
 router.post("/submit", async (req, res) => {
   const deck = req.body;
   try {
@@ -111,6 +117,7 @@ router.post("/submit", async (req, res) => {
   }
 });
 
+//GET request to get all custom decks
 router.get("/customDecks/:lang/:level", async (req, res) => {
   try {
     const lang = req.params.lang;
@@ -129,6 +136,7 @@ router.get("/customDecks/:lang/:level", async (req, res) => {
   }
 });
 
+//Cleanup enpoint to remove decks created during tests
 router.post("/test/cleanup/deck", async (req, res) => {
   // allowed when NODE_ENV === 'test' OR caller provides TEST_API_KEY via x-test-key
   if (
@@ -151,6 +159,7 @@ router.post("/test/cleanup/deck", async (req, res) => {
   }
 });
 
+//Test endpoint to create a deck
 router.post("/test/insert/deck", async (req, res) => {
   const defaultTestDeck = {
     category: "testDeck",

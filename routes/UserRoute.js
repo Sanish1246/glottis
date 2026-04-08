@@ -5,6 +5,7 @@ import { gradeToRevisionField } from "../utils/flashcardUtils.js";
 
 const router = express.Router();
 
+//POST request to remove a flashcard from a user deck
 router.post("/remove_card/:language", async (req, res) => {
   if (!req.session?.user) {
     return res.status(401).json({ error: "Not authenticated" });
@@ -44,6 +45,7 @@ router.post("/remove_card/:language", async (req, res) => {
   }
 });
 
+//POST request to add a flashcard to a user deck
 router.post("/add_card/:language", async (req, res) => {
   if (!req.session?.user) {
     return res.status(401).json({ error: "Not authenticated" });
@@ -59,6 +61,7 @@ router.post("/add_card/:language", async (req, res) => {
       "decks.language": language,
     });
 
+    //Checking if there is an exsting user deck for the target langauge
     if (userWithDeck) {
       updatedUser = await User.findOneAndUpdate(
         {
@@ -73,6 +76,7 @@ router.post("/add_card/:language", async (req, res) => {
         { new: true },
       );
     } else {
+      //Create a deck for the langauge if not already present
       updatedUser = await User.findOneAndUpdate(
         { username: req.session.user.username },
         {
@@ -96,6 +100,7 @@ router.post("/add_card/:language", async (req, res) => {
   }
 });
 
+//GET request to fetch user decks
 router.get("/user_decks", async (req, res) => {
   if (!req.session?.user) {
     return res.status(401).json({ error: "Not authenticated" });
@@ -114,6 +119,7 @@ router.get("/user_decks", async (req, res) => {
   }
 });
 
+//GET request to fetch a specific user deck
 router.get("/user_decks/:language", async (req, res) => {
   if (!req.session?.user) {
     return res.status(401).json({ error: "Not authenticated" });
@@ -143,6 +149,7 @@ router.get("/user_decks/:language", async (req, res) => {
   }
 });
 
+//PUT request to update deck flashcards after revision
 router.put("/user_decks/:language", async (req, res) => {
   if (!req.session?.user) {
     return res.status(401).json({ error: "Not authenticated" });
@@ -186,6 +193,7 @@ router.put("/user_decks/:language", async (req, res) => {
   }
 });
 
+//GET request to fetch all users
 router.get("/users", async (req, res) => {
   try {
     if (!req.session?.user) {
@@ -205,6 +213,7 @@ router.get("/users", async (req, res) => {
   }
 });
 
+//GET request to filter users by role
 router.get("/users/:role", async (req, res) => {
   const role = req.params.role;
   try {
@@ -226,6 +235,7 @@ router.get("/users/:role", async (req, res) => {
   }
 });
 
+//GET request to search for users be username
 router.get("/userSearch", async (req, res) => {
   const searchName = req.query.u;
   try {
@@ -246,6 +256,7 @@ router.get("/userSearch", async (req, res) => {
   }
 });
 
+//PUT request to like a media
 router.put("/like", async (req, res) => {
   if (!req.session?.user) {
     return res.status(401).json({ error: "Not authenticated" });
@@ -284,6 +295,7 @@ router.put("/like", async (req, res) => {
   }
 });
 
+//PUT request to remove like from a media
 router.put("/removeLike", async (req, res) => {
   if (!req.session?.user) {
     return res.status(401).json({ error: "Not authenticated" });
@@ -333,6 +345,7 @@ router.put("/removeLike", async (req, res) => {
   }
 });
 
+//PUT request to mark a lesson as completed
 router.put("/complete_lesson/:lang", async (req, res) => {
   if (!req.session?.user) {
     return res.status(401).json({ error: "Not authenticated" });

@@ -2,6 +2,7 @@ import express from "express";
 import Chat from "../models/chat.js";
 const router = express.Router();
 
+//POST request to send a message in the chat
 router.post("/message", async (req, res) => {
   const message = req.body;
   try {
@@ -21,6 +22,7 @@ router.post("/message", async (req, res) => {
   }
 });
 
+//GET request to find an existing chatroom
 router.get("/:room", async (req, res) => {
   const room = req.params.room;
   try {
@@ -32,6 +34,7 @@ router.get("/:room", async (req, res) => {
   }
 });
 
+//POST request to create a new chatroom
 router.post("/:room", async (req, res) => {
   const room = req.params.room;
   try {

@@ -49,6 +49,7 @@ async function recommend(userId, limit = 3) {
 
   const model = await loadRecommendationModel();
 
+  //Calculating predicted score for all candidates using the model
   if (model) {
     for (const item of candidates) {
       const features = buildFeatures(item, profile);
@@ -56,6 +57,7 @@ async function recommend(userId, limit = 3) {
     }
   } else {
     for (const item of candidates) {
+      //Using a fallback heuristic score in case the model is absent
       item._score = computeFallbackScore(item, profile);
     }
   }
@@ -67,6 +69,7 @@ async function recommend(userId, limit = 3) {
   return top;
 }
 
+// GET request to find all medias of a specifc langauge and level and using pagination
 router.get("/:lang/:level/:page", async (req, res) => {
   try {
     const lang = req.params.lang;
@@ -78,6 +81,7 @@ router.get("/:lang/:level/:page", async (req, res) => {
 
     let medias;
     if (level == "none") {
+      //level "none" will display all medias in the order in which they were added to the DB
       medias = await Immersion.find({
         language: lang,
         status: { $nin: ["Rejected", "Pending"] },
@@ -101,6 +105,7 @@ router.get("/:lang/:level/:page", async (req, res) => {
   }
 });
 
+//GET request for pending media submission
 router.get("/pending", async (req, res) => {
   try {
     if (req.session?.user?.role !== "admin") {
@@ -116,6 +121,7 @@ router.get("/pending", async (req, res) => {
   }
 });
 
+//PUT request to approve a a submitted media
 router.put("/approve/:id", async (req, res) => {
   const id = req.params.id;
   try {
@@ -137,6 +143,7 @@ router.put("/approve/:id", async (req, res) => {
   }
 });
 
+//PUT request to reject a submitted media
 router.put("/reject/:id", async (req, res) => {
   const id = req.params.id;
   try {
@@ -158,6 +165,7 @@ router.put("/reject/:id", async (req, res) => {
   }
 });
 
+//GET search media endpoint
 router.get("/searchMedia/:page", async (req, res) => {
   const searchTitle = req.query.m;
   const page = req.params.page;
@@ -187,12 +195,14 @@ router.get("/searchMedia/:page", async (req, res) => {
 
 const __filename = fileURLToPath(import.meta.url);
 
+//POST request to submit media
 router.post("/submitMedia", async (req, res) => {
   try {
     if (!req.session?.user) {
       return res.status(401).json({ error: "Not authenticated" });
     }
 
+    // saving media as a JSON object
     const mediaField = req.body?.media;
     const media = mediaField
       ? typeof mediaField === "string"
@@ -200,6 +210,7 @@ router.post("/submitMedia", async (req, res) => {
         : mediaField
       : {};
 
+    // saving files
     const files = req.files?.coverImage
       ? Array.isArray(req.files.coverImage)
         ? req.files.coverImage
@@ -209,6 +220,7 @@ router.post("/submitMedia", async (req, res) => {
     const uploadDir = path.join(process.cwd(), "public", "immersion");
     await fs.mkdir(uploadDir, { recursive: true });
 
+    //Storing each file to the immersion folder
     const savedFiles = [];
     for (const file of files) {
       const fileName = `${Date.now()}-${file.name}`;
@@ -222,7 +234,7 @@ router.post("/submitMedia", async (req, res) => {
       uploader: req.session.user.username,
       img_path: savedFiles.length
         ? savedFiles[0].path
-        : "/immersion/no-image.jpg",
+        : "/immersion/no-image.jpg", //Placeholder image as a fallback
       status: "Pending",
     };
 
@@ -234,6 +246,7 @@ router.post("/submitMedia", async (req, res) => {
   }
 });
 
+//GET request to display recommendations
 router.get("/recommendations", async (req, res) => {
   if (!req.session?.user)
     return res.status(401).json({ error: "Not authenticated" });
@@ -246,6 +259,7 @@ router.get("/recommendations", async (req, res) => {
   }
 });
 
+//Cleanup endpoint to remove media created during tests
 router.post("/test/cleanup/media", async (req, res) => {
   // allowed when NODE_ENV === 'test' OR caller provides TEST_API_KEY via x-test-key
   if (
@@ -268,6 +282,7 @@ router.post("/test/cleanup/media", async (req, res) => {
   }
 });
 
+//Insert test media
 router.post("/test/insert/media", async (req, res) => {
   const defaultTestMedia = {
     title: "testImmersion",

@@ -15,6 +15,7 @@ app.use("/webhook", whatsappRoutes);
 
 const server = http.createServer(app);
 
+//Creating a Socket.io instance
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:5173",
@@ -56,6 +57,7 @@ io.on("connection", (socket) => {
 async function startServer() {
   await connectToDb();
   // Starting server + ngrok for the whatsapp cloud api
+  // ngrok is needed to expose the localhost server to create a webhook
   server.listen(PORT, async () => {
     console.log(`🚀 Server listening on http://localhost:${PORT}`);
 

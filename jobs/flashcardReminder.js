@@ -2,8 +2,9 @@ import dayjs from "dayjs";
 import mongoose from "mongoose";
 import User from "../models/user.js";
 import nodemailer from "nodemailer";
-import { connectToDb } from "./db.js";
+import { connectToDb } from "../db.js";
 
+//Create transporter to send the mail
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -14,12 +15,12 @@ const transporter = nodemailer.createTransport({
 
 export async function sendFlashcardReminders() {
   await connectToDb();
-  
+
   const today = dayjs().startOf("day");
   const users = await User.find({
     "decks.items.dueDate": { $exists: true },
   }).lean();
-  
+
   for (const user of users) {
     let dueCount = 0;
     for (const deck of user.decks || []) {

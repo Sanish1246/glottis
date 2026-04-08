@@ -6,6 +6,7 @@ import fs from "fs/promises";
 
 const router = express.Router();
 
+//GET request for pending lessons
 router.get("/pending", async (req, res) => {
   try {
     if (req.session?.user?.role !== "admin") {
@@ -21,6 +22,7 @@ router.get("/pending", async (req, res) => {
   }
 });
 
+//GET request for existing lessons
 router.get("/existing/:title/:language", async (req, res) => {
   const checkTitle = req.params.title;
   const checkLang = req.params.language;
@@ -39,6 +41,7 @@ router.get("/existing/:title/:language", async (req, res) => {
   }
 });
 
+//PUT request to approve a submitted lesson
 router.put("/approve/:id", async (req, res) => {
   const id = req.params.id;
   try {
@@ -60,6 +63,7 @@ router.put("/approve/:id", async (req, res) => {
   }
 });
 
+//PUT request to reject a submitted lesson
 router.put("/reject/:id", async (req, res) => {
   const id = req.params.id;
   try {
@@ -81,6 +85,7 @@ router.put("/reject/:id", async (req, res) => {
   }
 });
 
+//GET request to get the contents of a lesson using language and lesson number
 router.get("/content/:lang/:no", async (req, res) => {
   try {
     const lesson = await Lesson.findOne({
@@ -99,6 +104,7 @@ router.get("/content/:lang/:no", async (req, res) => {
   }
 });
 
+//GET request to get the contents of a lesson using id
 router.get("/content/:id", async (req, res) => {
   try {
     const lesson = await Lesson.findById(req.params.id);
@@ -112,12 +118,14 @@ router.get("/content/:id", async (req, res) => {
   }
 });
 
+//POST request to submit a new lesson
 router.post("/submit", async (req, res) => {
   try {
     if (!req.session?.user) {
       return res.status(401).json({ error: "Not authenticated" });
     }
 
+    // Get the lesson from the request
     const lessonField = req.body?.lesson;
     const lesson = lessonField
       ? typeof lessonField === "string"
@@ -173,6 +181,7 @@ router.post("/submit", async (req, res) => {
   }
 });
 
+//GET request to fetch custom lessons
 router.get("/customLessons/:level", async (req, res) => {
   try {
     // const lang = req.params.lang;
@@ -189,6 +198,7 @@ router.get("/customLessons/:level", async (req, res) => {
   }
 });
 
+//GET request to fetch all lessons of a specific language
 router.get("/:lang", async (req, res) => {
   try {
     const lang = req.params.lang;
@@ -201,6 +211,7 @@ router.get("/:lang", async (req, res) => {
   }
 });
 
+//Endpoint to remove custom lessons created during tests
 router.post("/test/cleanup/lesson", async (req, res) => {
   // allowed when NODE_ENV === 'test' OR caller provides TEST_API_KEY via x-test-key
   if (

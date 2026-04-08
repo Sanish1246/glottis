@@ -126,6 +126,7 @@ async function run() {
     }
   }
 
+  // Model evaluation
   const hasEval =
     !skipEval && (valSamples.length > 0 || testSamples.length > 0);
   if (hasEval) {

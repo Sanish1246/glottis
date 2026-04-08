@@ -17,9 +17,9 @@ const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN;
 
 router.get("/qr", async (req, res) => {
   try {
-    const waNumber = "15551446393"; //Phone number of the chatbot
+    const waNumber = process.env.WHATSAPP_NUM; //Phone number of the chatbot
     const chatLink = `https://wa.me/${waNumber}`;
-    const qr = await QRCode.toDataURL(chatLink);
+    const qr = await QRCode.toDataURL(chatLink); //Generate QR code
     res.json({ qr });
   } catch (err) {
     console.error("❌ Error while generating QR:", err);
@@ -50,6 +50,7 @@ async function sendWhatsAppMessage(to, text) {
   }
 }
 
+//Verify Meta Webhook
 router.get("/", (req, res) => {
   const mode = req.query["hub.mode"];
   const token = req.query["hub.verify_token"];
@@ -67,6 +68,7 @@ router.get("/", (req, res) => {
   }
 });
 
+//POST request to send messages
 router.post("/", async (req, res) => {
   try {
     const body = req.body;
@@ -76,9 +78,17 @@ router.post("/", async (req, res) => {
       const from = msg.from;
       const userMessage = msg.text?.body;
 
+      if (!userMessage) {
+        await sendWhatsAppMessage(
+          from,
+          "Sorry, I can only process text messages for now.",
+        );
+        return;
+      }
+
       if (userMessage) {
         const prePrompt =
-          " You are a language learning expert chatbot. Your tasks are: 1. Identify the language of the user's message. 2. Check for any grammatical, spelling, or usage errors. 3. If there are errors, point them out briefly and clearly, with a short explanation in english. 4. If there are no errors, confirm that the message is correct. 5. Then answer the user's question fully and naturally in the same language, keeping your tone friendly and supportive. In your answer, you can start directly from the correction of the error, if any";
+          " You are a language learning expert chatbot called Athena, for the website Glottis. Your tasks are: 1. Identify the language of the user's message. 2. Check for any grammatical, spelling, or usage errors. 3. If there are errors, point them out briefly and clearly, with a short explanation in english. 4. If there are no errors, confirm that the message is correct. 5. Then answer the user's question fully and naturally in the same language, keeping your tone friendly and supportive. In your answer, you can start directly from the correction of the error, if any";
         // Gemini Api call
         const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
         const result = await model.generateContent(
