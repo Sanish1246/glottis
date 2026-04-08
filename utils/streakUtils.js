@@ -2,7 +2,7 @@
  * Computes updated streak data when user logs in.
  * @param {Object} streakData - Current streak { endDate, currentDuration, maxDuration, maxStartDate, maxEndDate, startDate }
  * @param {string} today - Today's date in DD-MM-YYYY format
- * @returns {Object} - Updated streak fields { currentDuration, startDate, endDate, maxDuration?, maxStartDate?, maxEndDate? }
+ * @returns {Object|null} - Updated streak fields, or null if no change (e.g. already logged in today)
  */
 export function computeStreakUpdate(streakData, today) {
   const parts = today.split("-");
@@ -18,6 +18,11 @@ export function computeStreakUpdate(streakData, today) {
   const format = (dt) =>
     `${pad(dt.getDate())}-${pad(dt.getMonth() + 1)}-${dt.getFullYear()}`;
   const yesterdayStr = format(yesterday);
+
+  // Same calendar day as last activity — streak already updated, do nothing
+  if (streakData?.endDate === today) {
+    return null;
+  }
 
   const result = {
     currentDuration: 1,

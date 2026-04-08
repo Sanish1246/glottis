@@ -2,6 +2,19 @@ import { describe, it, expect } from "vitest";
 import { computeStreakUpdate } from "../../utils/streakUtils.js";
 
 describe("computeStreakUpdate", () => {
+  it("returns null when last activity was already today", () => {
+    const today = "08-04-2026";
+    const streakData = {
+      endDate: "08-04-2026",
+      startDate: "08-04-2026",
+      currentDuration: 1,
+      maxDuration: 5,
+      maxStartDate: "01-01-2026",
+      maxEndDate: "10-01-2026",
+    };
+    expect(computeStreakUpdate(streakData, today)).toBeNull();
+  });
+
   it("continues streak when logging in day after last login", () => {
     const today = "14-02-2025";
     const streakData = {

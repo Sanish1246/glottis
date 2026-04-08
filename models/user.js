@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const immersionSchema = new mongoose.Schema({
-  title: { type: String, required: true},
+  title: { type: String, required: true },
   description: { type: String, required: true },
   language: { type: String, required: true },
   likes: { type: Number, default: 0, required: true },
@@ -33,12 +33,12 @@ const lessonsCompletedSchema = new mongoose.Schema({
 });
 
 const streakDataSchema = new mongoose.Schema({
-  startDate: { type: String, default: "", required: true },
-  endDate: { type: String, default: "", required: true },
+  startDate: { type: String, default: "", required: false },
+  endDate: { type: String, default: "", required: false },
   currentDuration: { type: Number, default: 0, required: true },
-  maxStartDate: { type: String, default: "", required: true },
-  maxEndDate: { type: String, default: "", required: true },
-  maxDuration: { type: Number, default: 0, required: true },
+  maxStartDate: { type: String, default: "", required: false },
+  maxEndDate: { type: String, default: "", required: false },
+  maxDuration: { type: Number, default: 0, required: false },
 });
 
 const revisionDataSchema = new mongoose.Schema({
