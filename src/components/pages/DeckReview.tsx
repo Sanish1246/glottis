@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { Button } from "../ui/button";
@@ -62,6 +62,7 @@ const DeckReview = () => {
   const [remaining, setRemaining] = useState(999);
   const { language } = useParams<{ language: string }>();
   const [reviewing, setReviewing] = useState(false);
+  const navigate = useNavigate();
   const location = useLocation();
   const initialDeck =
     (location.state as { deck?: DeckProp } | null)?.deck || null;
@@ -198,6 +199,21 @@ const DeckReview = () => {
 
   return (
     <div>
+      <div className="flex items-center gap-3">
+      <Button
+              variant="secondary"
+              onClick={() => {
+                navigate(-1);
+              }}
+            >
+              Back
+            </Button>
+              <h1 className="text-2xl font-bold tracking-tight text-center">
+          Review
+        </h1>
+        </div>
+            
+
       {!reviewing ? (
         <div>
           <h3>

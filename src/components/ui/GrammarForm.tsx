@@ -48,10 +48,10 @@ const AddCardForm = ({ grammarPoint, onChange }) => {
   };
 
   return (
-    <Card className="p-4 space-y-4">
-      <div className="flex justify-between items-center">
-        <div className="grid grid-cols-2 gap-2 flex-1">
-          <Label htmlFor="title" className="mx-auto">
+    <Card className="p-3 sm:p-4 space-y-4 min-w-0 overflow-hidden">
+      <div className="flex flex-col gap-4 lg:flex-row lg:justify-between lg:items-start">
+        <div className="grid grid-cols-1 gap-3 w-full min-w-0 lg:grid-cols-2 lg:gap-2 lg:flex-1">
+          <Label htmlFor="title" className="lg:mx-auto text-sm font-medium">
             Grammar point title:
           </Label>
           <Input
@@ -61,13 +61,19 @@ const AddCardForm = ({ grammarPoint, onChange }) => {
             onChange={(e) =>
               onChange({ ...grammarPoint, title: e.target.value })
             }
+            className="min-w-0"
           />
           <Input
             placeholder="Add a note"
             value={newNote}
             onChange={(e) => setNewNote(e.target.value)}
+            className="min-w-0"
           />
-          <Button onClick={addNote} className="w-[50%]">
+          <Button
+            type="button"
+            onClick={addNote}
+            className="w-full lg:w-[50%] lg:justify-self-start"
+          >
             Add Note
           </Button>
           <Input
@@ -76,6 +82,7 @@ const AddCardForm = ({ grammarPoint, onChange }) => {
             onChange={(e) =>
               setNewPoint({ ...newPoint, point: e.target.value })
             }
+            className="min-w-0"
           />
 
           <Input
@@ -84,6 +91,7 @@ const AddCardForm = ({ grammarPoint, onChange }) => {
             onChange={(e) =>
               setNewPoint({ ...newPoint, english: e.target.value })
             }
+            className="min-w-0"
           />
           <Input
             placeholder="Example"
@@ -91,8 +99,14 @@ const AddCardForm = ({ grammarPoint, onChange }) => {
             onChange={(e) =>
               setNewPoint({ ...newPoint, example: e.target.value })
             }
+            className="min-w-0"
           />
-          <Button size="icon" onClick={addPoint}>
+          <Button
+            type="button"
+            size="icon"
+            onClick={addPoint}
+            className="h-10 w-full lg:size-10 lg:w-10 lg:justify-self-start"
+          >
             <Plus className="h-4 w-4" />
           </Button>
         </div>
@@ -122,9 +136,9 @@ const GrammarForm = ({ data, onChange, setCurrentStep }) => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full min-w-0">
       {data.map((point, idx) => (
-        <div key={idx}>
+        <div key={idx} className="min-w-0">
           {idx + 1 == currentPage ? (
             <>
               <AddCardForm
@@ -132,6 +146,7 @@ const GrammarForm = ({ data, onChange, setCurrentStep }) => {
                 onChange={(updated) => updateGrammar(idx, updated)}
               />
               <Button
+                type="button"
                 variant="destructive"
                 size="icon"
                 onClick={() => {
@@ -141,8 +156,11 @@ const GrammarForm = ({ data, onChange, setCurrentStep }) => {
               >
                 <Trash2 className="h-4 w-4" />
               </Button>
-              <h2>List of grammar points</h2>
-              <Table className="w-[50%] mx-auto text-center">
+              <h2 className="font-semibold text-lg mt-4">
+                List of grammar points
+              </h2>
+              <div className="w-full overflow-x-auto mt-2 -mx-1 px-1">
+                <Table className="w-full min-w-[320px] text-center lg:w-[50%] lg:mx-auto">
                 <TableHeader>
                   <TableRow>
                     <TableHead className="text-center">Word</TableHead>
@@ -161,19 +179,24 @@ const GrammarForm = ({ data, onChange, setCurrentStep }) => {
                   ))}
                 </TableBody>
               </Table>
-              <h2>Notes:</h2>
+              </div>
+              <h2 className="font-semibold text-lg mt-4">Notes:</h2>
 
-              <ul className="list-disc">
+              <ul className="list-disc pl-5 space-y-2 mt-2 break-words">
                 {point.notes.map((note, index) => (
-                  <li key={index}>{note}</li>
+                  <li key={index} className="break-words">
+                    {note}
+                  </li>
                 ))}
               </ul>
             </>
           ) : null}
         </div>
       ))}
-      <div className="flex justify-between">
+      <div className="flex flex-col gap-2 w-full lg:flex-row lg:flex-wrap lg:justify-between lg:gap-2">
         <Button
+          type="button"
+          className="w-full lg:w-auto"
           onClick={() => {
             setCurrentStep((prevCurrent: number) => prevCurrent - 1);
           }}
@@ -182,6 +205,8 @@ const GrammarForm = ({ data, onChange, setCurrentStep }) => {
         </Button>
 
         <Button
+          type="button"
+          className="w-full lg:w-auto"
           onClick={() => {
             setCurrentPage((prevPage: number) => prevPage - 1);
           }}
@@ -190,6 +215,8 @@ const GrammarForm = ({ data, onChange, setCurrentStep }) => {
           Previous Table
         </Button>
         <Button
+          type="button"
+          className="w-full lg:w-auto"
           onClick={() => {
             addGrammar();
             if (data.length > 1) {
@@ -201,6 +228,8 @@ const GrammarForm = ({ data, onChange, setCurrentStep }) => {
           <Plus className="mr-2 h-4 w-4" /> Add Grammar table
         </Button>
         <Button
+          type="button"
+          className="w-full lg:w-auto"
           onClick={() => {
             setCurrentPage((prevPage: number) => prevPage + 1);
           }}
@@ -210,6 +239,8 @@ const GrammarForm = ({ data, onChange, setCurrentStep }) => {
         </Button>
 
         <Button
+          type="button"
+          className="w-full lg:w-auto"
           onClick={() => {
             setCurrentStep((prevCurrent: number) => prevCurrent + 1);
           }}

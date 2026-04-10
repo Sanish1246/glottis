@@ -30,7 +30,9 @@ const UserDeckList = () => {
   }, []);
   return (
     <div>
-      <h2>Review</h2>
+        <h1 className="text-2xl font-bold tracking-tight text-center">
+          Review
+        </h1>
       {userDecks.length == 0 ? <p>No decks present yet</p> : null}
       {userDecks.map((deck: any) => (
         <div className="border-2 rounded-lg p-3 mb-5 mt-1 shadow-sm hover:cursor-pointer hover:translate-1">

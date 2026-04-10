@@ -28,20 +28,24 @@ const AddCardForm = ({ deck, onChange }) => {
   };
 
   return (
-    <Card className="p-4 space-y-4">
-      <div className="flex justify-between items-center">
-        <div className="grid grid-cols-2 gap-2 flex-1">
-          <Label htmlFor="title">Deck title:</Label>
+    <Card className="p-3 sm:p-4 space-y-4 min-w-0 overflow-hidden">
+      <div className="flex flex-col gap-4 lg:flex-row lg:justify-between lg:items-start">
+        <div className="grid grid-cols-1 gap-3 w-full min-w-0 lg:grid-cols-2 lg:gap-2 lg:flex-1">
+          <Label htmlFor="title" className="lg:mx-auto text-sm font-medium">
+            Deck title:
+          </Label>
           <Input
             id="title"
             placeholder="Deck title"
             value={deck.category}
             onChange={(e) => onChange({ ...deck, category: e.target.value })}
+            className="min-w-0"
           />
           <Input
             placeholder="Card word"
             value={newCard.word}
             onChange={(e) => setNewCard({ ...newCard, word: e.target.value })}
+            className="min-w-0"
           />
 
           <Input
@@ -50,9 +54,15 @@ const AddCardForm = ({ deck, onChange }) => {
             onChange={(e) =>
               setNewCard({ ...newCard, english: e.target.value })
             }
+            className="min-w-0"
           />
         </div>
-        <Button size="icon" onClick={addCard} className="mt-10 ml-2">
+        <Button
+          type="button"
+          size="icon"
+          onClick={addCard}
+          className="h-10 w-full shrink-0 lg:size-10 lg:w-10 lg:mt-10 lg:ml-2"
+        >
           <Plus className="h-4 w-4" />
         </Button>
       </div>
@@ -79,9 +89,9 @@ const VocabForm = ({ data, onChange, setCurrentStep }) => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full min-w-0">
       {data.map((deck, idx) => (
-        <div key={idx}>
+        <div key={idx} className="min-w-0">
           {idx + 1 == currentPage ? (
             <>
               <AddCardForm
@@ -89,6 +99,7 @@ const VocabForm = ({ data, onChange, setCurrentStep }) => {
                 onChange={(updated) => updateDeck(idx, updated)}
               />
               <Button
+                type="button"
                 variant="destructive"
                 size="icon"
                 onClick={() => {
@@ -98,8 +109,9 @@ const VocabForm = ({ data, onChange, setCurrentStep }) => {
               >
                 <Trash2 className="h-4 w-4" />
               </Button>
-              <h2>Cards in the deck:</h2>
-              <Table className="w-[50%] mx-auto text-center">
+              <h2 className="font-semibold text-lg mt-4">Cards in the deck:</h2>
+              <div className="w-full overflow-x-auto mt-2 -mx-1 px-1">
+                <Table className="w-full min-w-[280px] text-center lg:w-[50%] lg:mx-auto">
                 <TableHeader>
                   <TableRow>
                     <TableHead className="text-center">Word</TableHead>
@@ -129,12 +141,15 @@ const VocabForm = ({ data, onChange, setCurrentStep }) => {
                   ))}
                 </TableBody>
               </Table>
+              </div>
             </>
           ) : null}
         </div>
       ))}
-      <div className="flex justify-between">
+      <div className="flex flex-col gap-2 w-full lg:flex-row lg:flex-wrap lg:justify-between lg:gap-2">
         <Button
+          type="button"
+          className="w-full lg:w-auto"
           onClick={() => {
             setCurrentStep((prevCurrent: number) => prevCurrent - 1);
           }}
@@ -143,6 +158,8 @@ const VocabForm = ({ data, onChange, setCurrentStep }) => {
         </Button>
 
         <Button
+          type="button"
+          className="w-full lg:w-auto"
           onClick={() => {
             setCurrentPage((prevPage: number) => prevPage - 1);
           }}
@@ -151,6 +168,8 @@ const VocabForm = ({ data, onChange, setCurrentStep }) => {
           Previous Deck
         </Button>
         <Button
+          type="button"
+          className="w-full lg:w-auto"
           onClick={() => {
             addDeck();
             if (data.length > 1) {
@@ -162,6 +181,8 @@ const VocabForm = ({ data, onChange, setCurrentStep }) => {
           <Plus className="mr-2 h-4 w-4" /> Add Deck
         </Button>
         <Button
+          type="button"
+          className="w-full lg:w-auto"
           onClick={() => {
             setCurrentPage((prevPage: number) => prevPage + 1);
           }}
@@ -171,6 +192,8 @@ const VocabForm = ({ data, onChange, setCurrentStep }) => {
         </Button>
 
         <Button
+          type="button"
+          className="w-full lg:w-auto"
           onClick={() => {
             setCurrentStep((prevCurrent: number) => prevCurrent + 1);
           }}

@@ -122,8 +122,8 @@ const DashboardInfo = ({ user }) => {
   return (
     <>
       <h1 className="text-center text-xl font-bold mb-2">Stats</h1>
-      <div className="flex flex-row gap-2">
-        <Card className="stat-card flex flex-col w-[33%] shadow-lg ">
+      <div className="flex lg:flex-row flex-col gap-2">
+        <Card className="stat-card flex flex-col lg:w-[33%] w-full shadow-lg ">
           <CardHeader className="items-center pb-0">
             <CardTitle>Italian lesson progress</CardTitle>
             <CardDescription>
@@ -155,7 +155,7 @@ const DashboardInfo = ({ user }) => {
             </div>
           </CardFooter>
         </Card>
-        <Card className="stat-card flex flex-col w-[33%] shadow-lg ">
+        <Card className="stat-card flex flex-col lg:w-[33%] w-full shadow-lg ">
           <CardHeader className="items-center pb-0">
             <CardTitle>French lesson progress</CardTitle>
             <CardDescription>
@@ -187,7 +187,7 @@ const DashboardInfo = ({ user }) => {
             </div>
           </CardFooter>
         </Card>
-        <Card className="stat-card flex flex-col w-[33%] shadow-lg">
+        <Card className="stat-card flex flex-col lg:w-[33%] w-full shadow-lg">
           <CardHeader className="items-center pb-0">
             <CardTitle>Current Login Streak</CardTitle>
             <CardDescription>

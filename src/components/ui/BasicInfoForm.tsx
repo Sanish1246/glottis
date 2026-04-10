@@ -115,17 +115,18 @@ const BasicInfoForm = ({ data, onChange, setCurrentStep }: any) => {
   };
 
   return (
-    <div>
-      <Card className="p-4 space-y-4">
-        <div className="flex justify-between items-center">
-          <div className="grid grid-cols-2 gap-2 flex-1">
+    <div className="w-full min-w-0 space-y-4">
+      <Card className="p-3 sm:p-4 space-y-4 min-w-0 overflow-hidden">
+        <div className="flex flex-col gap-4 lg:flex-row lg:justify-between lg:items-start">
+          <div className="grid grid-cols-1 gap-3 w-full min-w-0 lg:grid-cols-2 lg:gap-2 lg:flex-1">
             <Input
               placeholder="Lesson Title"
               value={data.title}
               onChange={(e) => updateField("title", e.target.value)}
+              className="min-w-0"
             />
-            <div className="flex flex-row gap-2 mx-auto items-center">
-              <label>Language</label>
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center min-w-0 [&_button]:w-full lg:[&_button]:w-[200px]">
+              <label className="text-sm font-medium shrink-0">Language</label>
               <Combobox
                 choices={languages}
                 filter={language}
@@ -133,22 +134,24 @@ const BasicInfoForm = ({ data, onChange, setCurrentStep }: any) => {
               />
             </div>
 
-            <div className="flex flex-row gap-2 mx-auto items-center">
-              <label>Level</label>
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center min-w-0 [&_button]:w-full lg:[&_button]:w-[200px]">
+              <label className="text-sm font-medium shrink-0">Level</label>
               <Combobox choices={levels} filter={level} setFilter={setLevel} />
             </div>
 
-            <div className="flex flex-row gap-3">
+            <div className="flex flex-col gap-2 min-w-0 lg:flex-row lg:items-center lg:gap-3 lg:col-span-2">
               <Input
                 id="objective"
                 placeholder="Enter an objective"
                 value={newObjective}
-                className="w-[80%]"
+                className="w-full min-w-0 lg:w-[80%]"
                 onChange={(e) => {
                   setNewObjective(e.target.value);
                 }}
               />
               <Button
+                type="button"
+                className="w-full shrink-0 lg:w-auto"
                 onClick={() => {
                   addObjective();
                 }}
@@ -159,16 +162,22 @@ const BasicInfoForm = ({ data, onChange, setCurrentStep }: any) => {
           </div>
         </div>
       </Card>
-      <div>
-        <h2>Objectives</h2>
-        <ul className="list-disc">
+      <div className="min-w-0">
+        <h2 className="font-semibold text-lg">Objectives</h2>
+        <ul className="list-disc pl-5 space-y-1 mt-2 break-words">
           {data.objectives.map((obj: string, index: number) => {
-            return <li key={index}>{obj}</li>;
+            return (
+              <li key={index} className="break-words">
+                {obj}
+              </li>
+            );
           })}
         </ul>
       </div>
-      <div className="flex justify-end">
+      <div className="flex flex-col gap-2 w-full lg:flex-row lg:justify-end">
         <Button
+          type="button"
+          className="w-full lg:w-auto"
           onClick={() => {
             if (
               data.title == "" ||

@@ -121,19 +121,19 @@ const MediaCard = ({ media, onLikeChange }: MediaCardProps) => {
         media,
       }}
     >
-      <div className="text-center mb-50 rounded-xl  shadow-md border-black dark:border-white dark:shadow-white dark:shadow-sm w-95 h-75">
+      <div className="text-center mb-50 rounded-xl shadow-md border border-black dark:border-white dark:shadow-white dark:shadow-sm w-full max-w-md min-w-0 mx-auto lg:w-95 lg:h-75 lg:max-w-none lg:mx-0">
         <div>
           <img
             src={media.img_path}
             alt="Media image"
-            className="rounded-tl-xl rounded-tr-xl w-100 h-[300px]"
+            className="rounded-tl-xl rounded-tr-xl w-full h-[200px] sm:h-[240px] md:h-[260px] max-lg:object-cover lg:w-100 lg:h-[300px]"
           />
         </div>
-        <div className="flex flex-row justify-around border-b border-t border p-3 border-black dark:border-white">
-          <p className="font-bold"> {media.title}</p>
-          <p className="text-md">❤️{media.likes}</p>
+        <div className="flex flex-col gap-2 border-b border-t border p-3 border-black dark:border-white sm:flex-row sm:items-center sm:justify-between lg:flex-row lg:justify-around">
+          <p className="font-bold break-words px-1 lg:px-0"> {media.title}</p>
+          <p className="text-md shrink-0">❤️{media.likes}</p>
         </div>
-        <div className="flex flex-row justify-around border-b border-t border p-3 border-black dark:border-white">
+        <div className="flex flex-wrap justify-center gap-2 border-b border-t border p-3 border-black dark:border-white lg:flex-nowrap lg:justify-around lg:gap-0">
           <Badge variant="default">{media.language}</Badge>
           <Badge variant="default">{media.level}</Badge>
         </div>

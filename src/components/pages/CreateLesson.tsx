@@ -68,21 +68,25 @@ const CreateLesson = () => {
 
   return (
     <>
-      <Button
-        onClick={() => {
-          navigate(-1);
-        }}
-      >
-        Back
-      </Button>
-      <div className=" mx-auto p-6">
-        <Progress value={(currentStep + 1) * (100 / steps.length)} />
+      <div className="w-full min-w-0 max-w-5xl mx-auto px-3 py-4 sm:px-4 lg:p-6">
+        <Button
+          type="button"
+          onClick={() => {
+            navigate(-1);
+          }}
+        >
+          Back
+        </Button>
+        <Progress
+          className="mt-4 lg:mt-6"
+          value={(currentStep + 1) * (100 / steps.length)}
+        />
 
-        <Card className="mt-6">
-          <CardHeader>
-            <CardTitle>{steps[currentStep]}</CardTitle>
+        <Card className="mt-4 lg:mt-6 min-w-0 overflow-hidden">
+          <CardHeader className="min-w-0 space-y-1">
+            <CardTitle className="break-words">{steps[currentStep]}</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="min-w-0">
             {currentStep === 0 && (
               <BasicInfoForm
                 data={lessonData}
