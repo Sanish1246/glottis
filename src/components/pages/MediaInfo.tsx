@@ -23,12 +23,23 @@ interface MediaProps {
 const MediaInfo = () => {
   const location = useLocation();
   const { user, setUser } = useUser();
-  const { media } = location.state || null;
+  const navigate = useNavigate();
+  const { media } = (location.state as { media?: MediaProps } | null) ?? {};
+
+  if (!media) {
+    return (
+      <div className="w-full max-w-lg mx-auto px-4 py-8">
+        <Button type="button" onClick={() => navigate(-1)}>
+          Back
+        </Button>
+        <p className="mt-4 text-muted-foreground">No media selected.</p>
+      </div>
+    );
+  }
 
   const liked = (user?.likes ?? []).some(
     (userMedia: MediaProps) => userMedia.title === media.title,
   );
-  const navigate = useNavigate();
 
   const likeMedia = async () => {
     try {
@@ -111,33 +122,42 @@ const MediaInfo = () => {
     }
   };
   return (
-    <div>
-      <div className="mt-5 ml-5">
-        <Button onClick={() => navigate(-1)}>Back</Button>
-        <h1 className="font-bold text-3xl text-center">Media information</h1>
+    <div className="w-full min-w-0 max-w-6xl mx-auto px-3 sm:px-4 pb-10">
+      <div className="mt-4 sm:mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+        <Button type="button" onClick={() => navigate(-1)}>
+          Back
+        </Button>
+        <h1 className="font-bold text-2xl sm:text-3xl text-center sm:text-left flex-1 min-w-0">
+          Media information
+        </h1>
       </div>
 
-      <div className="flex flex-row w-[80%] mx-auto mt-10">
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 w-full mt-6 sm:mt-10 items-start">
         <img
           src={media.img_path}
-          alt="Media image"
-          className="w-100 h-100 rounded-lg shadow-md border-black dark:border-white dark:shadow-white dark:shadow-sm"
+          alt=""
+          className="w-full max-w-md mx-auto lg:mx-0 shrink-0 rounded-lg shadow-md border border-black dark:border-white dark:shadow-white dark:shadow-sm max-h-[min(55vh,28rem)] max-lg:object-cover lg:max-h-none lg:w-100 lg:h-100"
         />
-        <div className="w-full p-1 ml-2">
-          <h1 className="text-xl font-bold text-center">{media.title}</h1>
-          <hr className="h-2 mt-5 justify-center"></hr>
-          <p className="text-center text-md">{media.description}</p>
-          <div className="flex flex-row justify-center mt-10 gap-5 items-center">
-            <p>
+        <div className="w-full min-w-0 flex-1 lg:pl-2">
+          <h2 className="text-lg sm:text-xl font-bold text-center lg:text-left">
+            {media.title}
+          </h2>
+          <hr className="my-4 sm:my-5 border-border" />
+          <p className="text-center lg:text-left text-sm sm:text-base text-pretty">
+            {media.description}
+          </p>
+          <div className="flex flex-col sm:flex-row sm:flex-wrap justify-center lg:justify-start gap-3 sm:gap-4 mt-6 sm:mt-8 items-stretch sm:items-center">
+            <p className="text-center sm:text-left">
               <b>Level: </b>
               {media.level}
             </p>
-            <p>
+            <p className="text-center sm:text-left">
               <b>Language: </b>
               {media.language}
             </p>
-            <div className="flex flex-row items-center gap-1">
+            <div className="flex flex-row items-center justify-center gap-2">
               <Button
+                type="button"
                 className="bg-red-500"
                 onClick={() => {
                   if (liked) {
@@ -151,17 +171,19 @@ const MediaInfo = () => {
               >
                 {liked ? <HeartMinus /> : <Heart />}
               </Button>
-
               <p>{media.likes}</p>
             </div>
-            <div className="p-2 border rounded-lg bg-black text-white flex flex-row gap-1 hover:cursor-pointer hover:bg-transparent">
-              <a href={media.link} target="_blank">
-                Buy/Access Now
-              </a>
-              <ExternalLink />
-            </div>
+            <a
+              href={media.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 border rounded-lg bg-black text-white flex flex-row gap-2 items-center justify-center hover:cursor-pointer hover:bg-transparent hover:text-foreground transition-colors w-full sm:w-auto min-h-10"
+            >
+              Buy/Access Now
+              <ExternalLink className="size-4 shrink-0" aria-hidden />
+            </a>
           </div>
-          <div className="flex flex-row gap-2 mt-5 items-center justify-center">
+          <div className="flex flex-row flex-wrap gap-2 mt-5 items-center justify-center lg:justify-start">
             {media.genres.map((g: string, index: number) => {
               return <Badge key={index}>{g}</Badge>;
             })}

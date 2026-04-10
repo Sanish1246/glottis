@@ -12,6 +12,11 @@ type Options = {
   label: string;
 };
 
+type UserSummary = {
+  username: string;
+  role?: string;
+};
+
 const userFilters: Options[] = [
   {
     value: "student",
@@ -27,12 +32,32 @@ const userFilters: Options[] = [
   },
 ];
 
+function userListFromResponse(
+  res: Response,
+  data: unknown,
+): { users: unknown[]; errorMessage: string | null } {
+  if (!res.ok) {
+    const msg =
+      data &&
+      typeof data === "object" &&
+      "error" in data &&
+      typeof (data as { error: unknown }).error === "string"
+        ? (data as { error: string }).error
+        : `Request failed (${res.status})`;
+    return { users: [], errorMessage: msg };
+  }
+  if (Array.isArray(data)) {
+    return { users: data, errorMessage: null };
+  }
+  return { users: [], errorMessage: "Invalid response from server" };
+}
+
 const UserListPage = () => {
   const { user } = useUser();
-  const [usersArray, setUsersArray] = useState([]);
+  const [usersArray, setUsersArray] = useState<UserSummary[]>([]);
   const [filter, setFilter] = useState("none");
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResult, setSearchResult] = useState([]);
+  const [searchResult, setSearchResult] = useState<UserSummary[]>([]);
   const [searching, setSearching] = useState(false);
 
   const fetchUsers = async () => {
@@ -42,8 +67,18 @@ const UserListPage = () => {
         credentials: "include",
       });
       const data = await res.json();
-      setUsersArray(data);
+      const { users, errorMessage } = userListFromResponse(res, data);
+      setUsersArray(users as UserSummary[]);
+      if (errorMessage) {
+        toast.error(errorMessage, {
+          action: {
+            label: "Close",
+            onClick: () => toast.dismiss(),
+          },
+        });
+      }
     } catch (error) {
+      setUsersArray([]);
       toast.error(String(error), {
         action: {
           label: "Close",
@@ -58,16 +93,28 @@ const UserListPage = () => {
   const searchUsers = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8000/userSearch?u=${searchTerm}`,
+        `http://localhost:8000/userSearch?u=${encodeURIComponent(searchTerm)}`,
         {
           method: "GET",
           credentials: "include",
         },
       );
       const data = await res.json();
+      const { users, errorMessage } = userListFromResponse(res, data);
+      if (errorMessage) {
+        setSearchResult([]);
+        toast.error(errorMessage, {
+          action: {
+            label: "Close",
+            onClick: () => toast.dismiss(),
+          },
+        });
+        return;
+      }
       setSearching(true);
-      setSearchResult(data);
+      setSearchResult(users as UserSummary[]);
     } catch (error) {
+      setSearchResult([]);
       toast.error(String(error), {
         action: {
           label: "Close",
@@ -92,13 +139,21 @@ const UserListPage = () => {
           // Fetch all users
           fetchUsers();
         } else {
-          // Fetch filtered users
           const res = await fetch(`http://localhost:8000/users/${filter}`, {
             method: "GET",
             credentials: "include",
           });
           const data = await res.json();
-          setUsersArray(data);
+          const { users, errorMessage } = userListFromResponse(res, data);
+          setUsersArray(users as UserSummary[]);
+          if (errorMessage) {
+            toast.error(errorMessage, {
+              action: {
+                label: "Close",
+                onClick: () => toast.dismiss(),
+              },
+            });
+          }
         }
       } catch (error) {
         toast.error(String(error), {
@@ -117,7 +172,7 @@ const UserListPage = () => {
 
   return (
     <div>
-      <div className="flex flex-row gap-2 max-w-[50%] mx-auto">
+      <div className="flex flex-row gap-2 lg:max-w-[50%] w-full mx-auto mt-2">
         <Input
           id="search"
           placeholder="Search for a user..."
@@ -154,11 +209,11 @@ const UserListPage = () => {
               ></Combobox>
             </div>
             <h1 className="font-bold text-xl text-center">List of users</h1>
-            {usersArray.map((nextUser: any, index: number) => {
+            {usersArray.map((nextUser, index) => {
               return (
                 <div
-                  key={index}
-                  className="border-2 rounded-lg p-3 mb-5 mt-1 shadow-sm  hover:translate-1 flex flex-row w-[50%] mx-auto justify-between"
+                  key={nextUser.username ?? index}
+                  className="border-2 rounded-lg p-3 mb-5 mt-1 shadow-sm  hover:translate-1 flex flex-row lg:w-[50%] w-fullmx-auto justify-between"
                 >
                   <div className="flex flex-row gap-4">
                     {nextUser.username}
@@ -186,9 +241,12 @@ const UserListPage = () => {
           <>
             <h1>Search results</h1>
             {searchResult.length == 0 ? <p>No result found!</p> : null}
-            {searchResult.map((nextUser: any, index: number) => {
+            {searchResult.map((nextUser, index) => {
               return (
-                <div key={index} className="flex flex-row">
+                <div
+                  key={nextUser.username ?? index}
+                  className="flex flex-row"
+                >
                   {nextUser.username}
                   <Link
                     to={`/chat`}

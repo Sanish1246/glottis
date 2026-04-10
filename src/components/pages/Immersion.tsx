@@ -199,56 +199,63 @@ const Immersion = () => {
   }, []);
 
   return (
-    <div>
-      <div className="flex flex-row gap-2 max-w-[50%] mx-auto mt-3">
+    <div className="w-full min-w-0 max-w-7xl mx-auto px-3 sm:px-4 pb-10">
+      <div className="flex flex-col gap-3 mt-3 sm:flex-row sm:flex-wrap sm:items-stretch sm:gap-2">
         <Input
           id="search"
           placeholder="Search for a media title..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          className="min-w-0 sm:flex-1 sm:min-w-[12rem]"
         />
-        <Button
-          onClick={() => {
-            searchMedia();
-          }}
-        >
-          <Search />
-          Search
-        </Button>
-        <Button
-          variant="destructive"
-          onClick={() => {
-            clearSearch();
-          }}
-        >
-          Clear
-        </Button>
-        <Dialog open={uploadOpen} onOpenChange={setUploadOpen}>
-          <DialogTrigger asChild>
-            <Button variant="secondary" onClick={() => {}}>
-              <Upload />
-              Upload
-            </Button>
-          </DialogTrigger>
-          <DialogContent className=" max-w-4xl">
-            <UploadMediaForm onClose={() => setUploadOpen(false)} />
-          </DialogContent>
-        </Dialog>
+        <div className="flex flex-wrap gap-2 sm:shrink-0">
+          <Button
+            className="flex-1 sm:flex-initial min-w-[6rem]"
+            onClick={() => {
+              searchMedia();
+            }}
+          >
+            <Search />
+            Search
+          </Button>
+          <Button
+            variant="destructive"
+            className="flex-1 sm:flex-initial min-w-[6rem]"
+            onClick={() => {
+              clearSearch();
+            }}
+          >
+            Clear
+          </Button>
+          <Dialog open={uploadOpen} onOpenChange={setUploadOpen}>
+            <DialogTrigger asChild>
+              <Button variant="secondary" className="flex-1 sm:flex-initial min-w-[6rem]">
+                <Upload />
+                Upload
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-4xl w-[calc(100vw-1.5rem)] sm:w-full max-h-[90dvh] overflow-y-auto">
+              <UploadMediaForm onClose={() => setUploadOpen(false)} />
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
       {searching ? (
-        <div className="mt-5">
-          <h3 className="text-center text-xl font-bold">
+        <div className="mt-5 w-full min-w-0">
+          <h3 className="text-center text-lg sm:text-xl font-bold px-2">
             {searchResult.length == 0 ? "No media found!" : "Search Results"}
           </h3>
-          <div className="grid md:grid-cols-3 grid-cols-1 gap-3 mx-auto mt-5 items-center justify-items-center media">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 mx-auto mt-5 w-full justify-items-stretch media">
             {searchResult.map((m, index) => (
-              <MediaCard key={index} media={m} onLikeChange={filterMedia} />
+              <div key={index} className="min-w-0 w-full flex justify-center">
+                <MediaCard media={m} onLikeChange={filterMedia} />
+              </div>
             ))}
           </div>
           {searchResult.length == 0 ? null : (
-            <div className="mt-6 ">
+            <div className="mt-6 w-full overflow-x-auto">
               <Pagination>
-                <PaginationContent>
+                <PaginationContent className="flex-wrap justify-center gap-2">
                   <PaginationItem>
                     <PaginationPrevious
                       href="#"
@@ -274,48 +281,61 @@ const Immersion = () => {
         </div>
       ) : (
         <>
-          <div className="flex flex-row items-center gap-1 mt-5">
-            <p>Language:</p>
-            <Combobox
-              choices={languages}
-              filter={languagePath}
-              setFilter={setLanguagePath}
-            ></Combobox>
-            <p>Level:</p>
-            <Combobox
-              choices={levels}
-              filter={levelFilter}
-              setFilter={setLevelFilter}
-            ></Combobox>
+          <div className="flex flex-col gap-3 mt-5 sm:flex-row sm:flex-wrap sm:items-end sm:gap-x-4 sm:gap-y-2 w-full">
+            <div className="flex flex-col gap-1.5 min-w-0 w-full sm:w-auto sm:min-w-[10rem] [&_button]:w-full sm:[&_button]:w-[200px]">
+              <p className="text-sm font-medium">Language</p>
+              <Combobox
+                choices={languages}
+                filter={languagePath}
+                setFilter={setLanguagePath}
+              />
+            </div>
+            <div className="flex flex-col gap-1.5 min-w-0 w-full sm:w-auto sm:min-w-[12rem] [&_button]:w-full sm:[&_button]:w-[200px]">
+              <p className="text-sm font-medium">Level</p>
+              <Combobox
+                choices={levels}
+                filter={levelFilter}
+                setFilter={setLevelFilter}
+              />
+            </div>
           </div>
           {recs.length > 0 ? (
-            <div>
-              <h2 className="font-bold text-xl text-center mb-3">
+            <div className="mt-6 w-full min-w-0">
+              <h2 className="font-bold text-lg sm:text-xl text-center mb-3 px-2">
                 Recommendations
               </h2>
-              <Carousel className="max-w-95 mx-auto">
-                <CarouselContent>
+              <Carousel className="relative w-full max-w-full mx-auto px-10 sm:px-12 md:px-14 lg:max-w-5xl">
+                <CarouselContent className="-ml-2 sm:-ml-4">
                   {recs.map((r, index) => (
-                    <CarouselItem key={index} className="rounded-xl">
-                      <MediaCard media={r} onLikeChange={filterMedia} />
+                    <CarouselItem
+                      key={index}
+                      className="pl-2 sm:pl-4 basis-full min-w-0"
+                    >
+                      <div className="flex justify-center min-w-0">
+                        <MediaCard media={r} onLikeChange={filterMedia} />
+                      </div>
                     </CarouselItem>
                   ))}
                 </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
+                <CarouselPrevious className="left-0 sm:left-1 md:-left-2 lg:-left-12" />
+                <CarouselNext className="right-0 sm:right-1 md:-right-2 lg:-right-12" />
               </Carousel>
             </div>
           ) : null}
 
-          <h2 className="font-bold text-xl text-center">List of medias</h2>
-          <div className="grid md:grid-cols-3 grid-cols-1 mx-auto mt-5 items-center justify-items-center media">
+          <h2 className="font-bold text-lg sm:text-xl text-center mt-6 sm:mt-8 px-2">
+            List of medias
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 mx-auto mt-5 w-full justify-items-stretch media">
             {medias.map((m, index) => (
-              <MediaCard key={index} media={m} onLikeChange={filterMedia} />
+              <div key={index} className="min-w-0 w-full flex justify-center">
+                <MediaCard media={m} onLikeChange={filterMedia} />
+              </div>
             ))}
           </div>
-          <div className="mt-6 ">
+          <div className="mt-6 w-full overflow-x-auto">
             <Pagination>
-              <PaginationContent>
+              <PaginationContent className="flex-wrap justify-center gap-2">
                 <PaginationItem>
                   <PaginationPrevious
                     href="#"

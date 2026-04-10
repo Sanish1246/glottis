@@ -32,10 +32,10 @@ const AddFibForm = ({ data, onChange }) => {
   };
 
   return (
-    <Card className="p-4 space-y-4">
-      <div className="flex justify-between items-center">
-        <div className="grid grid-cols-2 gap-2 flex-1">
-          <Label htmlFor="question" className="mx-auto">
+    <Card className="p-3 sm:p-4 space-y-4 min-w-0 overflow-hidden">
+      <div className="flex flex-col gap-4 lg:flex-row lg:justify-between lg:items-start">
+        <div className="grid grid-cols-1 gap-3 w-full min-w-0 lg:grid-cols-2 lg:gap-2 lg:flex-1">
+          <Label htmlFor="question" className="lg:mx-auto text-sm font-medium">
             Question:
           </Label>
           <Input
@@ -43,11 +43,13 @@ const AddFibForm = ({ data, onChange }) => {
             placeholder="Question"
             value={ques.text}
             onChange={(e) => setQues({ ...ques, text: e.target.value })}
+            className="min-w-0"
           />
           <Input
             placeholder="Add the answer"
             value={ques.answer}
             onChange={(e) => setQues({ ...ques, answer: e.target.value })}
+            className="min-w-0"
           />
           <Input
             placeholder="Option 1"
@@ -59,6 +61,7 @@ const AddFibForm = ({ data, onChange }) => {
                 return updated;
               })
             }
+            className="min-w-0"
           />
           <Input
             placeholder="Option 2"
@@ -70,6 +73,7 @@ const AddFibForm = ({ data, onChange }) => {
                 return updated;
               })
             }
+            className="min-w-0"
           />
           <Input
             placeholder="Option 3"
@@ -81,8 +85,14 @@ const AddFibForm = ({ data, onChange }) => {
                 return updated;
               })
             }
+            className="min-w-0"
           />
-          <Button size="icon" onClick={addQues}>
+          <Button
+            type="button"
+            size="icon"
+            onClick={addQues}
+            className="h-10 w-full lg:size-10 lg:w-10 lg:justify-self-start"
+          >
             <Plus className="h-4 w-4" />
           </Button>
         </div>
@@ -98,23 +108,25 @@ const CreateFIB = ({ data, onChange, setCurrentStep }) => {
   };
 
   return (
-    <div className="space-y-6">
-      <div>
+    <div className="space-y-6 w-full min-w-0">
+      <div className="min-w-0">
         <AddFibForm data={data} onChange={onChange} />
 
-        <h2>Questions:</h2>
+        <h2 className="text-lg font-semibold mt-4">Questions:</h2>
 
-        <ul className="list-disc">
+        <ul className="list-disc pl-5 space-y-4 min-w-0">
           {data.map((ques, idx) => (
-            <li key={idx}>
-              {ques.text}:
+            <li key={idx} className="break-words">
+              <span className="font-medium">{ques.text}:</span>{" "}
               {ques.options.map((opt, index) => (
                 <span key={index}>{opt}, </span>
               ))}
-              <span> → {ques.answer}</span>
+              <span> → {ques.answer}</span>{" "}
               <Button
+                type="button"
                 size="icon"
                 variant="ghost"
+                className="align-middle shrink-0 mt-1"
                 onClick={() => removeFib(idx)}
               >
                 <Trash2 className="h-4 w-4" />
@@ -124,8 +136,10 @@ const CreateFIB = ({ data, onChange, setCurrentStep }) => {
         </ul>
       </div>
 
-      <div className="flex justify-between">
+      <div className="flex flex-col-reverse gap-2 w-full lg:flex-row lg:justify-between lg:gap-0">
         <Button
+          type="button"
+          className="w-full lg:w-auto"
           onClick={() => {
             setCurrentStep((prevCurrent: number) => prevCurrent - 1);
           }}
@@ -134,6 +148,8 @@ const CreateFIB = ({ data, onChange, setCurrentStep }) => {
         </Button>
 
         <Button
+          type="button"
+          className="w-full lg:w-auto"
           onClick={() => {
             setCurrentStep((prevCurrent: number) => prevCurrent + 1);
           }}

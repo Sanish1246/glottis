@@ -96,7 +96,10 @@ const FlashCardDeckList = () => {
 
   return (
     <div>
-      <div className="flex flex-row items-center gap-1">
+        <h1 className="text-2xl font-bold tracking-tight text-center">
+          Decks
+        </h1>
+      <div className="flex lg:flex-row mb-2 lg:mb-0 flex-col items-center gap-1">
         <p>Language path:</p>
         <Combobox
           choices={languagePaths}

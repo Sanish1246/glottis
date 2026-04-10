@@ -164,29 +164,31 @@ const CreateDeck = () => {
     }
   }
   return (
-    <div>
-      <h1 className="text-xl font-bold">Create a deck</h1>
-      <p>
-        Add cards to your custom deck and click on "Submit" to submit for
-        approval
+    <div className="w-full min-w-0 max-w-5xl mx-auto px-3 py-4 sm:px-4 lg:py-6">
+      <h1 className="text-xl font-bold break-words">Create a deck</h1>
+      <p className="text-muted-foreground text-sm sm:text-base mt-1 text-pretty max-w-prose">
+        Add cards to your custom deck and click on &quot;Submit&quot; to submit
+        for approval
       </p>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="justify-center text-center space-y-6 border-2 rounded-lg mx-auto w-[75%]"
+          className="justify-center text-center space-y-5 sm:space-y-6 border-2 rounded-lg mx-auto w-full max-w-full min-w-0 p-3 sm:p-4 mt-4 lg:w-[75%] lg:p-2"
         >
-          <div className="flex flex-row mx-auto justify-center gap-1 p-2">
+          <div className="flex flex-col gap-4 mx-auto justify-center p-2 min-w-0 lg:flex-row lg:gap-1 lg:items-start">
             <FormField
               control={form.control}
               name="category"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className=" mx-auto mt-5">Deck Title</FormLabel>
+                <FormItem className="w-full min-w-0 lg:flex-1">
+                  <FormLabel className="mx-auto mt-2 lg:mt-5 block">
+                    Deck Title
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Type the title here..."
                       {...field}
-                      className="w-full mx-auto"
+                      className="w-full min-w-0 mx-auto"
                     />
                   </FormControl>
                   <FormMessage />
@@ -194,36 +196,38 @@ const CreateDeck = () => {
               )}
             />
 
-            <div className="flex flex-col gap-1 mx-auto items-center justify-center">
-              <p>Language:</p>
+            <div className="flex flex-col gap-1 mx-auto items-center justify-center w-full min-w-0 lg:w-auto [&_button]:w-full lg:[&_button]:w-[200px]">
+              <p className="text-sm font-medium">Language:</p>
               <Combobox
                 choices={languages}
                 filter={language}
                 setFilter={setLanguage}
-              ></Combobox>
+              />
             </div>
 
-            <div className="flex flex-col items-center gap-1">
-              <p>Level:</p>
+            <div className="flex flex-col items-center gap-1 w-full min-w-0 lg:w-auto [&_button]:w-full lg:[&_button]:w-[200px]">
+              <p className="text-sm font-medium">Level:</p>
               <Combobox
                 choices={levels}
                 filter={level}
                 setFilter={setLevel}
-              ></Combobox>
+              />
             </div>
           </div>
-          <div className="flex flex-row mx-auto justify-center">
+          <div className="flex flex-col gap-4 mx-auto justify-center px-2 min-w-0 lg:flex-row lg:gap-6">
             <FormField
               control={form.control}
               name="word"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className=" mx-auto mt-5">Word</FormLabel>
+                <FormItem className="w-full min-w-0 lg:flex-1">
+                  <FormLabel className="mx-auto mt-2 lg:mt-5 block">
+                    Word
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Type the word here..."
                       {...field}
-                      className="w-full mx-auto"
+                      className="w-full min-w-0 mx-auto"
                     />
                   </FormControl>
                   <FormMessage />
@@ -235,15 +239,15 @@ const CreateDeck = () => {
               control={form.control}
               name="english"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className=" mx-auto mt-5">
+                <FormItem className="w-full min-w-0 lg:flex-1">
+                  <FormLabel className="mx-auto mt-2 lg:mt-5 block">
                     English translation
                   </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Type the English translation here..."
                       {...field}
-                      className="w-full mx-auto"
+                      className="w-full min-w-0 mx-auto"
                     />
                   </FormControl>
                   <FormMessage />
@@ -252,9 +256,13 @@ const CreateDeck = () => {
             />
           </div>
 
-          <div className="flex flex-row gap-3 mx-auto justify-center mb-5">
-            <Button type="submit">Submit</Button>
+          <div className="flex flex-col gap-2 mx-auto justify-center mb-5 px-2 w-full max-w-md lg:max-w-none lg:flex-row lg:gap-3 lg:w-auto">
+            <Button type="submit" className="w-full lg:w-auto">
+              Submit
+            </Button>
             <Button
+              type="button"
+              className="w-full lg:w-auto"
               onClick={(e) => {
                 e.preventDefault();
                 addToDeck(form.getValues());
@@ -265,8 +273,9 @@ const CreateDeck = () => {
           </div>
         </form>
       </Form>
-      <h2>Cards in the deck:</h2>
-      <Table className="w-[50%] mx-auto text-center">
+      <h2 className="font-semibold text-lg mt-6">Cards in the deck:</h2>
+      <div className="w-full overflow-x-auto mt-2 -mx-1 px-1">
+        <Table className="w-full min-w-[280px] text-center lg:w-[50%] lg:mx-auto">
         <TableHeader>
           <TableRow>
             <TableHead className="text-center">Word</TableHead>
@@ -277,26 +286,35 @@ const CreateDeck = () => {
         <TableBody>
           {newDeck.map((w: FlashCardProps, index: number) => (
             <TableRow key={index}>
-              <TableCell className="font-">{w.word}</TableCell>
+              <TableCell className="font-semibold break-words max-w-[40vw] lg:max-w-none">
+                {w.word}
+              </TableCell>
 
-              <TableCell>{w.english}</TableCell>
-              <Button
-                variant="destructive"
-                onClick={() => {
-                  setNewDeck(
-                    newDeck.filter(
-                      (item: FlashCardProps) =>
-                        item.word !== w.word && item.english !== w.english,
-                    ),
-                  );
-                }}
-              >
-                Delete
-              </Button>
+              <TableCell className="break-words max-w-[40vw] lg:max-w-none">
+                {w.english}
+              </TableCell>
+              <TableCell className="align-middle">
+                <Button
+                  type="button"
+                  variant="destructive"
+                  className="whitespace-nowrap"
+                  onClick={() => {
+                    setNewDeck(
+                      newDeck.filter(
+                        (item: FlashCardProps) =>
+                          item.word !== w.word && item.english !== w.english,
+                      ),
+                    );
+                  }}
+                >
+                  Delete
+                </Button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+      </div>
     </div>
   );
 };
