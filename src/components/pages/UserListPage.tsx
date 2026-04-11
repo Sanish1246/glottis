@@ -32,6 +32,7 @@ const userFilters: Options[] = [
   },
 ];
 
+// Function to handle the response from the server
 function userListFromResponse(
   res: Response,
   data: unknown,
@@ -68,6 +69,7 @@ const UserListPage = () => {
       });
       const data = await res.json();
       const { users, errorMessage } = userListFromResponse(res, data);
+      // Setting the users array
       setUsersArray(users as UserSummary[]);
       if (errorMessage) {
         toast.error(errorMessage, {
@@ -213,10 +215,12 @@ const UserListPage = () => {
               return (
                 <div
                   key={nextUser.username ?? index}
-                  className="border-2 rounded-lg p-3 mb-5 mt-1 shadow-sm  hover:translate-1 flex flex-row lg:w-[50%] w-fullmx-auto justify-between"
+                  className="border-2 rounded-lg p-3 mb-5 mt-1 shadow-sm  hover:translate-1 flex flex-row lg:w-[50%] w-full mx-auto justify-between"
                 >
                   <div className="flex flex-row gap-4">
+                    {/* Displaying the username */}
                     {nextUser.username}
+                    {/* Displaying the role */}
                     {nextUser.role == "student" ? (
                       <GraduationCap />
                     ) : (
@@ -239,15 +243,22 @@ const UserListPage = () => {
           </>
         ) : (
           <>
-            <h1>Search results</h1>
-            {searchResult.length == 0 ? <p>No result found!</p> : null}
+            <h1 className="font-bold text-xl text-center">Search results</h1>
+            {searchResult.length == 0 ? <p className="text-center">No result found!</p> : null}
             {searchResult.map((nextUser, index) => {
               return (
                 <div
                   key={nextUser.username ?? index}
-                  className="flex flex-row"
+                  className="border-2 rounded-lg p-3 mb-5 mt-1 shadow-sm  hover:translate-1 flex flex-row lg:w-[50%] w-full mx-auto justify-between"
                 >
+                  {/* Displaying the username */}
                   {nextUser.username}
+                  {/* Displaying the role */}
+                  {nextUser.role == "student" ? (
+                    <GraduationCap />
+                  ) : (
+                    <School />
+                  )}
                   <Link
                     to={`/chat`}
                     state={{

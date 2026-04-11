@@ -28,20 +28,23 @@ const DialogueBlockEditor = ({ dialogue, onChange, onRemove }) => {
   const [file, setFile] = useState<File | null>(null);
   const [dialogueType, setDialogueType] = useState("formal");
 
+  // Function to update the fields of the dialogue
   const updateField = (field, value) => {
     onChange({ ...dialogue, [field]: value });
   };
 
+  // Function to update the type of the dialogue
   useEffect(() => {
     updateField("type", dialogueType);
   }, [dialogueType]);
 
+  // Function to handle the file change
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const uploadedFile = e.target.files?.[0];
     if (uploadedFile) {
       setFileName(uploadedFile.name);
       setFile(uploadedFile);
-      // Update both file and media in one call
+      // Updating both file and media in one call
       const updated = {
         ...dialogue,
         file: uploadedFile,
@@ -108,13 +111,17 @@ const DialogLinesEditor = ({ data, dialogue, onChange }) => {
     english: "",
   });
 
+  // Function to add a new line
   const addLine = () => {
+    // Validation for empty fields
     if (
       newLine.speaker.trim() &&
       newLine.text.trim() &&
       newLine.english.trim()
     ) {
+      // Updating the lines array
       const updatedLines = [...dialogue.lines, newLine];
+      // Updating the dialogue
       const updatedDialogue = { ...dialogue, lines: updatedLines };
 
       const newDialogues = data.dialogues.map((d, i) =>
@@ -178,7 +185,9 @@ const IntroductionForm = ({ data, onChange, setCurrentStep }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const dialogues = data.dialogues || [];
 
+  // Function to add a new dialogue
   const addDialogue = () => {
+    // Updating the dialogues array
     const newDialogues = [
       ...dialogues,
       {
@@ -193,14 +202,19 @@ const IntroductionForm = ({ data, onChange, setCurrentStep }) => {
     onChange({ ...data, dialogues: newDialogues });
     setCurrentPage(newDialogues.length);
   };
+
+  // Function to update a dialogue
   const updateDialogue = (index, updatedDialogue) => {
+    // Updating the dialogues array
     const newDialogues = dialogues.map((dialogue, i) =>
       i === index ? updatedDialogue : dialogue
     );
-    onChange({ ...data, dialogues: newDialogues }); // FIX: Pass full data object
+    onChange({ ...data, dialogues: newDialogues }); //Pass full data object
   };
 
+  // Function to remove a dialogue
   const removeDialogue = (index) => {
+    // Filtering the dialogues array to remove the dialogue at the specified index
     const newDialogues = dialogues.filter((_, i) => i !== index);
     onChange({ ...data, dialogues: newDialogues });
     // Reset to first page if we deleted the current page

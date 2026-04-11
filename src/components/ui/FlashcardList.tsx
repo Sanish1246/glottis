@@ -49,6 +49,7 @@ const FlashcardList = ({
       stagger: 0.2,
     });
   }, []);
+  
   return (
     <div className="grid grid-cols-1 gap-4 mt-6 mb-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {cardList.map((card, i) => (

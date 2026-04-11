@@ -9,7 +9,9 @@ import { toast } from "sonner";
 const AddNotesForm = ({ note, onChange }) => {
   const [newNote, setNewNote] = useState("");
 
+  // Function to add a new note
   const addNote = () => {
+    // Validation for empty fields
     if (newNote.trim()) {
       if (note.title == "") {
         toast.error("Add a title first!", {
@@ -21,6 +23,7 @@ const AddNotesForm = ({ note, onChange }) => {
           },
         });
       } else {
+        // Updating the notes array
         const updatedNotes = {
           ...note,
           content: [...note.content, newNote],
@@ -65,7 +68,9 @@ const AddNotesForm = ({ note, onChange }) => {
 };
 
 const CreateCulturalNote = ({ data, onChange, setCurrentStep }) => {
+  // Function to remove a note
   const removeNote = (index) => {
+    // Filtering the notes array to remove the note at the specified index
     const newNotes = data.filter((_, i) => i !== index);
     onChange(newNotes);
   };

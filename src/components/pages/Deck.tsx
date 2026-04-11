@@ -122,6 +122,7 @@ const Deck = () => {
   useEffect(() => {
     if (initialDeck) return;
     if (!deckId) return;
+    // Fetching the deck upon page load
     const fetchDeck = async () => {
       setLoading(true);
       try {

@@ -34,11 +34,14 @@ const Landing = () => {
 
   useGSAP(() => {
     gsap.registerPlugin(ScrollTrigger, SplitText);
+    // Splitting the language title into characters
     const splitLanguageTitle = new SplitText(".language-title", {
       type: "chars",
     });
 
     const languageTitle = splitLanguageTitle.chars;
+
+    //GSAPT animations
     gsap.fromTo(
       ".title",
       {
@@ -78,7 +81,7 @@ const Landing = () => {
         y: 0,
         opacity: 1,
         delay: 2.3,
-        duration: 1,
+        duration: 0.5,
         ease: "power1.inOut",
         stagger: 0.3,
       },
@@ -316,7 +319,7 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* Call to Action Section */}
       <section className="py-20 px-4">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">

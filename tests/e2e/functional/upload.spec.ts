@@ -70,7 +70,7 @@ test('lesson upload', async ({ page,request }) => {
   await page.getByRole('textbox', { name: 'Username' }).fill('newTeacher');
   await page.getByRole('textbox', { name: 'Password' }).fill('newPassword');
   await page.getByRole('button', { name: 'Submit' }).click();
-   await page.locator('#radix-_r_n_').click();
+  await page.locator('#radix-_r_n_').click();
   await page.getByRole('link', { name: 'Create Lesson' }).click();
   await page.getByRole('textbox', { name: 'Lesson Title' }).fill('testCustomLesson');
   await page.getByRole('textbox', { name: 'Enter an objective' }).fill('create a test lesson');

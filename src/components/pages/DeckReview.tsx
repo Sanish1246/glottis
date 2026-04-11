@@ -42,6 +42,7 @@ interface DeckProp {
 
 const DeckReview = () => {
   const [nextCards, setNextCards] = useState([0, 0, 0, 0, 0, 0, 0]);
+  // Chart data for the next reviews
   const chartData = [
     { day: "1 day", cards: nextCards[0] },
     { day: "2 days", cards: nextCards[1] },
@@ -58,6 +59,7 @@ const DeckReview = () => {
       color: "#2563eb",
     },
   } satisfies ChartConfig;
+
   const [index, setIndex] = useState(0);
   const [remaining, setRemaining] = useState(999);
   const { language } = useParams<{ language: string }>();
@@ -71,6 +73,8 @@ const DeckReview = () => {
   const [fullDeck, setFullDeck] = useState<DeckProp | null>(initialDeck);
   const [loading, setLoading] = useState(!initialDeck);
   const [late, setLate] = useState(0);
+
+  // Fetching the deck upon page load
   useEffect(() => {
     const fetchDeck = async () => {
       setLoading(true);
@@ -87,6 +91,7 @@ const DeckReview = () => {
 
         const today = dayjs(Date.now()).startOf("day");
 
+        // Getting crads due today for review
         const reviewDeck = data.items.filter(
           (c) => dayjs(c.dueDate, "YYYY-MM-DD").startOf("day") <= today,
         );
@@ -135,6 +140,10 @@ const DeckReview = () => {
         const data: DeckProp = await res.json();
         setFullDeck(data);
         const today = dayjs().startOf("day");
+        const lateDeck = data.items.filter(
+          (c) => dayjs(c.dueDate, "YYYY-MM-DD").startOf("day") < today,
+        );
+        setLate(lateDeck.length);
         const forecast = Array.from(
           { length: 7 },
           (_, i) =>

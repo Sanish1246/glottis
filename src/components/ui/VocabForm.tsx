@@ -16,13 +16,18 @@ import {
 const AddCardForm = ({ deck, onChange }) => {
   const [newCard, setNewCard] = useState({ word: "", english: "" });
 
+  // Function to add a new card
   const addCard = () => {
+    // Validation for empty fields
     if (newCard.word.trim() && newCard.english.trim()) {
+      // Updating the deck
       const updatedDeck = {
         ...deck,
         items: [...deck.items, newCard],
       };
+      // Updating the deck
       onChange(updatedDeck);
+      // Resetting the new card
       setNewCard({ word: "", english: "" });
     }
   };
@@ -73,25 +78,33 @@ const AddCardForm = ({ deck, onChange }) => {
 const VocabForm = ({ data, onChange, setCurrentStep }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
+  // Function to add a new deck
   const addDeck = () => {
+    // Updating the decks array
     const newDecks = [...data, { category: "", items: [] }];
     onChange(newDecks);
   };
 
+  // Function to update a deck
   const updateDeck = (index, updatedDeck) => {
+    // Updating the decks array
     const newDecks = data.map((deck, i) => (i === index ? updatedDeck : deck));
     onChange(newDecks);
   };
 
+  // Function to remove a deck
   const removeDeck = (index) => {
+    // Filtering the decks array to remove the deck at the specified index
     const newDecks = data.filter((_, i) => i !== index);
     onChange(newDecks);
   };
 
   return (
     <div className="space-y-6 w-full min-w-0">
+      {/* Displaying the decks */}
       {data.map((deck, idx) => (
         <div key={idx} className="min-w-0">
+          {/* Displaying the current deck */}
           {idx + 1 == currentPage ? (
             <>
               <AddCardForm

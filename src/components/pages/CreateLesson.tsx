@@ -87,6 +87,7 @@ const CreateLesson = () => {
             <CardTitle className="break-words">{steps[currentStep]}</CardTitle>
           </CardHeader>
           <CardContent className="min-w-0">
+            {/* Displaying the corresponding form for the current step */}
             {currentStep === 0 && (
               <BasicInfoForm
                 data={lessonData}

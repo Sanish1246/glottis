@@ -110,6 +110,8 @@ const UploadMediaForm = ({ onClose }: UploadProps) => {
   const [mediaType, setMediaType] = useState("Book");
   const [fileName, setFileName] = useState("");
   const [file, setFile] = useState<File | null>(null);
+
+  // Schema for the upload media form inputs
   const form = useForm<UploadMediaSchema>({
     resolver: zodResolver(uploadMediaSchema),
     defaultValues: {
@@ -131,6 +133,8 @@ const UploadMediaForm = ({ onClose }: UploadProps) => {
   async function onSubmit(values: UploadMediaSchema) {
     try {
       const formData = new FormData();
+
+      //Initializing the metadata for the media
       const metadata = {
         ...values,
         likes: 0,

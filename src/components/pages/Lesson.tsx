@@ -177,6 +177,8 @@ const Lesson = () => {
   useEffect(() => {
     const completeLesson = async () => {
       if (!lesson) return;
+
+      // Determining the language of the lesson
       let lang;
       if (lesson.author) {
         lang = "custom";

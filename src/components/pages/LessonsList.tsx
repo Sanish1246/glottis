@@ -132,6 +132,7 @@ const LessonsList = () => {
       <div className="space-y-4">
         {lessonArray.map((lesson: any) => {
           const showLevelHeader = lesson.lessonNumber_level == 1;
+          // Checking if the lesson is completed or not
           const completed =
             (lesson.language == "french" &&
               !lesson.author &&

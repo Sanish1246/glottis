@@ -114,6 +114,8 @@ const FlashCardDeckList = () => {
           setFilter={setLevel}
         ></Combobox>
       </div>
+
+      {/* Displaying list of decks */}
       {decksArray.map((deck: DeckProp) => {
         return (
           <Link

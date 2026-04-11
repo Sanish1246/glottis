@@ -45,6 +45,7 @@ const Combobox = ({ choices, filter, setFilter }: ComboboxProps) => {
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
+      {/* Display options */}
       <PopoverContent className="w-[200px] p-0">
         <Command>
           <CommandInput placeholder="Search option..." className="h-9" />

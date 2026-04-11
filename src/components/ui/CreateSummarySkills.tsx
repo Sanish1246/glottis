@@ -11,11 +11,13 @@ const AddSkillsForm = ({ data, onChange }) => {
   const [newSkill, setNewSkill] = useState("");
 
   const addSkill = () => {
+    // Validation for empty fields
     if (newSkill.trim()) {
       const updatedSummary = {
         ...data,
         skills: [...data.skills, newSkill],
       };
+      // Updating the skills array
       onChange(updatedSummary);
       setNewSkill("");
     }
@@ -54,7 +56,9 @@ const CreateSummarySkills = ({
   onChange,
   setCurrentStep,
 }) => {
+  // Function to remove a skill from the summary
   const removeSkill = (index) => {
+    // Filtering the skills array to remove the skill at the specified index
     const updatedSkills = data.skills.filter((_, i) => i !== index);
     onChange({
       ...data,
@@ -62,33 +66,8 @@ const CreateSummarySkills = ({
     });
   };
   const navigate = useNavigate();
-
-  // const submitLesson = async () => {
-  //   try {
-  //     const formData = new FormData();
-  //     formData.append("lesson", JSON.stringify(fullLesson));
-
-  //     // Collect all dialogue images
-  //     fullLesson.introduction?.dialogues?.forEach((dialogue, idx) => {
-  //       if (dialogue.file instanceof File) {
-  //         formData.append("dialogueImages", dialogue.file);
-  //       }
-  //     });
-
-  //     const res = await fetch("http://localhost:8000/lessons/submit", {
-  //       method: "POST",
-  //       credentials: "include",
-  //       body: formData,
-  //     });
-
-  //     const data = await res.json();
-  //     if (data.message) {
-  //       toast.success(data.message);
-  //     }
-  //   } catch (error: any) {
-  //     toast.error(error.message || "Submission failed");
-  //   }
-  // };
+  
+  // Function to submit the lesson
   const submitLesson = async () => {
     try {
       const formData = new FormData();

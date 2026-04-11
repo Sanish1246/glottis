@@ -68,6 +68,7 @@ const CustomLessons = () => {
     };
     fetchLessons();
   }, [level]);
+
   return (
     <div>
       <div className="flex flex-row items-center gap-1">
@@ -82,6 +83,7 @@ const CustomLessons = () => {
         {lessonArray.length > 0 ? "List of lessons" : "No lessons found!"}
       </h2>
 
+      {/* Displaying list of custom lessons */}
       {lessonArray.map((lesson: any) => {
         return (
           <div key={lesson._id}>

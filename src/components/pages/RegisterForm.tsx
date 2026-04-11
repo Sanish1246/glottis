@@ -48,6 +48,7 @@ const RegisterForm = ({
   const { setUser } = useUser();
   const [currentRole, setCurrentRole] = useState("student");
 
+  // Register form schema
   const form = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
     defaultValues: {

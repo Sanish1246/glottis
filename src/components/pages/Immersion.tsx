@@ -86,7 +86,7 @@ const Immersion = () => {
     gsap.fromTo(
       ".media",
       { opacity: 0 },
-      { opacity: 1, ease: "power1.inOut", duration: 0.8 },
+      { opacity: 1, ease: "power1.inOut", duration: 0.8, stagger:0.2 },
     );
   }, [currentPage, searchPage, searchResult]);
 
@@ -116,6 +116,7 @@ const Immersion = () => {
   };
 
   const clearSearch = () => {
+    // Clearing the search results and resetting the search term and page number
     setSearchResult([]);
     setSearchTerm("");
     setSearching(false);
@@ -245,6 +246,7 @@ const Immersion = () => {
           <h3 className="text-center text-lg sm:text-xl font-bold px-2">
             {searchResult.length == 0 ? "No media found!" : "Search Results"}
           </h3>
+          {/* Displaying list of search results */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 mx-auto mt-5 w-full justify-items-stretch media">
             {searchResult.map((m, index) => (
               <div key={index} className="min-w-0 w-full flex justify-center">
@@ -299,6 +301,7 @@ const Immersion = () => {
               />
             </div>
           </div>
+          {/* Displaying list of recommendations */}
           {recs.length > 0 ? (
             <div className="mt-6 w-full min-w-0">
               <h2 className="font-bold text-lg sm:text-xl text-center mb-3 px-2">
@@ -327,12 +330,14 @@ const Immersion = () => {
             List of medias
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 mx-auto mt-5 w-full justify-items-stretch media">
+            {/* Displaying list of medias */}
             {medias.map((m, index) => (
               <div key={index} className="min-w-0 w-full flex justify-center">
                 <MediaCard media={m} onLikeChange={filterMedia} />
               </div>
             ))}
           </div>
+          {/* Pagination for the medias */}
           <div className="mt-6 w-full overflow-x-auto">
             <Pagination>
               <PaginationContent className="flex-wrap justify-center gap-2">

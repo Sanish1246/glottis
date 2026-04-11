@@ -20,6 +20,8 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 
 const AIDashboard = () => {
+
+  //Animation for the model stat cards
   useGSAP(() => {
     gsap.fromTo(
       ".model-stat",
@@ -27,6 +29,8 @@ const AIDashboard = () => {
       { opacity: 1, y: 0, stagger: 0.2, ease: "power1.inOut", duration: 1 },
     );
   }, []);
+
+  // Fetching data from the json file
   const chartData = modelData.test.rocCurve;
   const aucScore = modelData.test.auc * 100;
 
@@ -46,6 +50,7 @@ const AIDashboard = () => {
           Model info
         </h1>
       </div>
+      {/* Container for the model stat cards */}
       <div className="flex flex-col lg:flex-row gap-3 mb-5 mx-auto">
         <Card className="model-stat flex flex-col lg:w-[50%] shadow-lg">
           <CardHeader className="items-center pb-0">
@@ -90,6 +95,7 @@ const AIDashboard = () => {
         </CardHeader>
         <CardContent>
           <ChartContainer config={chartConfig}>
+            {/* Line chart to display the ROC curve */}
             <LineChart
               accessibilityLayer
               data={chartData}

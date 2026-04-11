@@ -122,6 +122,7 @@ const DashboardInfo = ({ user }) => {
   return (
     <>
       <h1 className="text-center text-xl font-bold mb-2">Stats</h1>
+      {/* Displaying the stats */}
       <div className="flex lg:flex-row flex-col gap-2">
         <Card className="stat-card flex flex-col lg:w-[33%] w-full shadow-lg ">
           <CardHeader className="items-center pb-0">

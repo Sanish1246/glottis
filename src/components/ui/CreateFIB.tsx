@@ -11,6 +11,7 @@ const AddFibForm = ({ data, onChange }) => {
   const [newOpt, setNewOpt] = useState(["", "", ""]);
 
   const addQues = () => {
+    // Validation for empty fields
     if (newOpt.length === 3 && ques.text.trim() && ques.answer.trim()) {
       if (newOpt.includes(ques.answer)) {
         const updatedQuestion = { ...ques, options: newOpt };
@@ -100,13 +101,15 @@ const AddFibForm = ({ data, onChange }) => {
     </Card>
   );
 };
-
+  // Function to remove a question from the FIB
 const CreateFIB = ({ data, onChange, setCurrentStep }) => {
   const removeFib = (index) => {
+    // Filtering the questions array to remove the question at the specified index
     const newFibs = data.filter((_, i) => i !== index);
+    // Updating the questions array
     onChange(newFibs);
   };
-
+  // Displaying the FIB questions
   return (
     <div className="space-y-6 w-full min-w-0">
       <div className="min-w-0">

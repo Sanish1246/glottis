@@ -103,12 +103,12 @@ export function computeAUC(scores) {
   if (positives === 0 || negatives === 0) return 0.5;
 
   // Mann-Whitney U Statistic Method for AUC
-  // AUC = P(score_positive > score_negative) - probability that a random positive ranks higher than a random negative
+  // AUC: probability that a random positive ranks higher than a random negative
 
   // Sum the ranks of all positive samples (1-indexed rank positions after sorting)
   let sum = 0;
   for (let i = 0; i < scores.length; i++) {
-    if (scores[i].label === 1) sum += i + 1; // +1 because ranks start at 1, not 0
+    if (scores[i].label === 1) sum += i + 1; // Ranks start at 1
   }
 
   // Formula: (sum of positive ranks - minimum possible sum) / (max possible - min possible)

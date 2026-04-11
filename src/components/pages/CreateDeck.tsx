@@ -80,6 +80,7 @@ const CreateDeck = () => {
   const [language, setLanguage] = useState("italian");
   const [newDeck, setNewDeck] = useState([]);
 
+  // Schema for the flashcards
   const form = useForm<CreateDeckSchema>({
     resolver: zodResolver(createDeckSchema),
     defaultValues: {
@@ -104,6 +105,7 @@ const CreateDeck = () => {
         word: values.word,
         english: values.english,
       };
+      // Update displayed card list
       setNewDeck((prev) => [...prev, newCard]);
       form.reset({
         word: "",

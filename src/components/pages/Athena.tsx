@@ -36,6 +36,7 @@ const Athena = () => {
               <span className="text-sm font-medium">Use on WhatsApp</span>
             </Button>
           </DialogTrigger>
+          {/* Dialog content for the WhatsApp QR code */}
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Chat on WhatsApp</DialogTitle>
@@ -64,6 +65,7 @@ const Athena = () => {
                     : "self-start bg-background text-foreground border"
                 }`}
               >
+                {/* ReactMarkdown and styling rich text/HTML to display the message */}
                 <div className="[&_p]:m-0 [&_ul]:mt-1 [&_ul]:pl-4 [&_li]:text-xs [&_li]:leading-relaxed [&_a]:underline [&_a]:underline-offset-4">
                   <ReactMarkdown>{msg.text}</ReactMarkdown>
                 </div>

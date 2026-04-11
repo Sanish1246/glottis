@@ -11,6 +11,7 @@ const AddMcqForm = ({ data, onChange }) => {
   const [newOpt, setNewOpt] = useState(["", "", ""]);
 
   const addQues = () => {
+    // Validation for empty fields
     if (newOpt.length === 3 && ques.question.trim() && ques.answer.trim()) {
       if (newOpt.includes(ques.answer)) {
         const updatedQuestion = { ...ques, options: newOpt };
@@ -102,10 +103,13 @@ const AddMcqForm = ({ data, onChange }) => {
 };
 
 const CreateMcq = ({ data, onChange, setCurrentStep }) => {
+  // Function to remove a question from the MCQ
   const removeMcq = (index) => {
+    // Filtering the questions array to remove the question at the specified index
     const newMcqs = data.filter((_, i) => i !== index);
     onChange(newMcqs);
   };
+  // Displaying the MCQ questions
   return (
     <div className="space-y-6 w-full min-w-0">
       <div className="min-w-0">
@@ -117,16 +121,20 @@ const CreateMcq = ({ data, onChange, setCurrentStep }) => {
           {data.map((ques, idx) => (
             <li key={idx} className="break-words">
               <span className="font-medium">{ques.question}:</span>{" "}
+              {/* Displaying the options */}
               {ques.options.map((opt, index) => (
                 <span key={index}>{opt}, </span>
               ))}
+              {/* Displaying the answer */}
               <span> → {ques.answer}</span>{" "}
               <Button
                 type="button"
                 size="icon"
                 variant="ghost"
                 className="align-middle shrink-0 mt-1"
-                onClick={() => removeMcq(idx)}
+                onClick={() => {
+                  removeMcq(idx);
+                }}
               >
                 <Trash2 className="h-4 w-4" />
               </Button>

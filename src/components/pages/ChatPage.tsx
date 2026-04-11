@@ -91,6 +91,7 @@ const ChatPage = () => {
       }
     };
 
+    // Setting the room for the chat based on alphabetical order of the usernames
     if (username.localeCompare(currentUser) < 0) {
       setRoom(username + "&" + currentUser);
     } else {
@@ -139,8 +140,8 @@ const ChatPage = () => {
         credentials: "include",
         body: JSON.stringify(messageData),
       });
-      // const data = await res.json();
-      // setMessages(data.messages);
+      const data = await res.json();
+      setMessages(data.messages);
     } catch (error) {
       toast.error(String(error), {
         action: {

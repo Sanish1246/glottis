@@ -30,6 +30,7 @@ const LoginForm = ({
 }: LoginFormProps) => {
   const { setUser } = useUser();
 
+  // Login form schema
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {

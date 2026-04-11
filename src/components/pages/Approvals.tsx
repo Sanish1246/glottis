@@ -6,8 +6,6 @@ import { Badge } from "../ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "../ui/button";
 
-// import gsap from "gsap";
-// import { useGSAP } from "@gsap/react";
 
 interface FlashCardProps {
   word: string;
@@ -109,6 +107,7 @@ const Approvals = () => {
 
   const deckActions = async (id: string, approve: boolean) => {
     let url = "";
+    // URL for the approve or reject deck
     if (approve == true) {
       url = `http://localhost:8000/flashcards/approve/${id}`;
     } else {
@@ -120,6 +119,7 @@ const Approvals = () => {
         credentials: "include",
       });
       const data = await response.json();
+      // Filtering the decks array to remove the rejected or approved deck
       setDecksArray(decksArray.filter((item: DeckProp) => item._id !== id));
       toast.success(data.message, {
         action: {
@@ -142,6 +142,7 @@ const Approvals = () => {
   };
 
   const mediaActions = async (id: string, approve: boolean) => {
+    // URL for the approve or reject media
     let url = "";
     if (approve == true) {
       url = `http://localhost:8000/immersion/approve/${id}`;
@@ -154,6 +155,7 @@ const Approvals = () => {
         credentials: "include",
       });
       const data = await response.json();
+      // Filtering the medias array to remove the rejected or approved media
       setMedias(medias.filter((item: MediaProps) => item._id !== id));
       toast.success(data.message, {
         action: {
@@ -176,6 +178,7 @@ const Approvals = () => {
   };
 
   const lessonActions = async (id: string, approve: boolean) => {
+    // URL for the approve or reject lesson
     let url = "";
     if (approve == true) {
       url = `http://localhost:8000/lessons/approve/${id}`;
@@ -188,6 +191,7 @@ const Approvals = () => {
         credentials: "include",
       });
       const data = await response.json();
+      // Filtering the lessons array to remove the rejected or approved lesson
       setLessons(lessons.filter((item) => item._id !== id));
       toast.success(data.message, {
         action: {
@@ -210,6 +214,7 @@ const Approvals = () => {
   };
 
   useEffect(() => {
+    // Fetching decks pending for approval
     fetchDecks();
   }, []);
 
@@ -248,7 +253,6 @@ const Approvals = () => {
               ? "No decks pending for approval!"
               : "Decks pending for approval"}
           </h2>
-
           {decksArray.map((deck: DeckProp) => {
             return (
               <Link

@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 const UserDeckList = () => {
   const [userDecks, setUserDecks] = useState([]);
   const { user } = useUser();
+
   useEffect(() => {
     const fetchDecks = async () => {
       try {
@@ -28,6 +29,8 @@ const UserDeckList = () => {
     };
     fetchDecks();
   }, []);
+
+  // Displaying list of decks
   return (
     <div>
         <h1 className="text-2xl font-bold tracking-tight text-center">

@@ -27,10 +27,13 @@ import UserDashboard from "./components/pages/UserDashboard.tsx";
 import AIDashboard from "./components/pages/AIDashboard.tsx";
 import { RequireAuth } from "./components/RequireAuth.tsx";
 
+// Router configuration
 const router = createBrowserRouter([
+  // Root route
   {
     path: "/",
     element: <App />,
+    // Children routes
     children: [
       { index: true, element: <Landing /> },
       { path: "athena", element: <Athena /> },

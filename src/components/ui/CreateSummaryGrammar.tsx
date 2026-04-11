@@ -9,11 +9,13 @@ const AddGrammarForm = ({ data, onChange }) => {
   const [newGrammar, setNewGrammar] = useState("");
 
   const addGrammar = () => {
+    // Validation for empty fields
     if (newGrammar.trim()) {
       const updatedSummary = {
         ...data,
         grammarPoints: [...data.grammarPoints, newGrammar],
       };
+      // Updating the grammar points array
       onChange(updatedSummary);
       setNewGrammar("");
     }
@@ -47,10 +49,13 @@ const AddGrammarForm = ({ data, onChange }) => {
 };
 
 const CreateSummaryGrammar = ({ data, onChange, setCurrentStep }) => {
+  // Function to remove a grammar point from the summary
   const removeGrammar = (index) => {
+    // Filtering the grammar points array to remove the grammar point at the specified index
     const updatedGrammarPoints = data.grammarPoints.filter(
       (_, i) => i !== index
     );
+    // Updating the grammar points array
     onChange({
       ...data,
       grammarPoints: updatedGrammarPoints,

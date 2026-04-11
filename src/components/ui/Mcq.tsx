@@ -17,8 +17,13 @@ const Mcq = ({ question, setCorrectMcq }: QuestionProp) => {
   const [newAnswer, setNewAnswer] = useState("");
   const groupName = useId();
 
+  // Function to check the answer
   function checkAnswer() {
+    // Validation for empty fields
+    if (!newAnswer.trim()) return;
+    // Checking if the answer is correct
     if (newAnswer.toLowerCase() == question.answer.toLowerCase()) {
+      // Showing a success message
       toast.success("Correct Answer!", {
         action: {
           label: "Close",
@@ -30,6 +35,7 @@ const Mcq = ({ question, setCorrectMcq }: QuestionProp) => {
       setNewAnswer("");
       setCorrectMcq((prevCount) => prevCount + 1);
     } else {
+      // Showing an error message
       toast.error("Wrong answer!", {
         action: {
           label: "Close",
@@ -46,6 +52,7 @@ const Mcq = ({ question, setCorrectMcq }: QuestionProp) => {
       <p className="text-sm font-medium leading-relaxed">{question.question}</p>
 
       <div className="grid gap-2">
+        {/* Displaying the options */}
         {question.options.map((opt, i) => {
           const id = `${groupName}-${i}`;
           const selected = newAnswer === opt;

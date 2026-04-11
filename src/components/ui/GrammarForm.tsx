@@ -21,12 +21,15 @@ const AddCardForm = ({ grammarPoint, onChange }) => {
   });
   const [newNote, setNewNote] = useState("");
 
+ // Function to add a new grammar point
   const addPoint = () => {
+    // Validation for empty fields
     if (
       newPoint.point.trim() &&
       newPoint.english.trim() &&
       newPoint.example.trim()
     ) {
+      // Updating the grammar point
       const updatedGrammarPoint = {
         ...grammarPoint,
         content: [...grammarPoint.content, newPoint],
@@ -37,7 +40,9 @@ const AddCardForm = ({ grammarPoint, onChange }) => {
   };
 
   const addNote = () => {
+    // Validation for empty fields
     if (newNote.trim()) {
+      // Updating the grammar point
       const updatedGrammarPoint = {
         ...grammarPoint,
         notes: [...grammarPoint.notes, newNote],

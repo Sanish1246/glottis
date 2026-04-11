@@ -9,10 +9,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/components/context/ThemeProvider";
 
+// Function to toggle the theme
 export function ModeToggle() {
   const { setTheme } = useTheme();
 
   return (
+    // Dropdown menu to toggle the theme
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon">
@@ -22,6 +24,7 @@ export function ModeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
+        {/* Dropdown menu items to set the themes */}
         <DropdownMenuItem onClick={() => setTheme("light")}>
           Light
         </DropdownMenuItem>

@@ -15,13 +15,17 @@ interface messageProp {
 const Inputs = ({ setMessages }: messageProp) => {
   const [newMessage, setNewMessage] = useState("");
 
+  // Function to send a message to the chatbot
   async function sendMessage() {
+    // Validation for empty fields
     if (!newMessage.trim()) return;
+    // Updating the messages array
     setMessages((prev: Message[]) => [
       ...prev,
       { id: prev.length + 1, text: newMessage, sender: "user" },
     ]);
     setNewMessage("");
+    // Sending the message to the chatbot
     try {
       const response = await fetch("http://localhost:8000/chatbot/ask", {
         method: "POST",
@@ -31,11 +35,13 @@ const Inputs = ({ setMessages }: messageProp) => {
         body: JSON.stringify({ query: newMessage }),
       });
       const data = await response.json();
+      // Updating the messages array
       setMessages((prev: Message[]) => [
         ...prev,
         { id: prev.length + 1, text: data.response, sender: "bot" },
       ]);
     } catch (error) {
+      // Error handling
       console.error(error);
     }
   }

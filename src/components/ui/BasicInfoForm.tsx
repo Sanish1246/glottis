@@ -50,6 +50,7 @@ const languages: Options[] = [
 ];
 
 const BasicInfoForm = ({ data, onChange, setCurrentStep }: any) => {
+  // Function to update the fields of the main json object
   const updateField = (field, value) => {
     onChange({ ...data, [field]: value });
   };
@@ -71,6 +72,7 @@ const BasicInfoForm = ({ data, onChange, setCurrentStep }: any) => {
     onChange({ ...data, level, language });
   }, [level, language]);
 
+  // Function to check if a lesson with the same title and language already exists
   const checkExisting = async () => {
     const fields = {
       title: data.title,
@@ -174,11 +176,13 @@ const BasicInfoForm = ({ data, onChange, setCurrentStep }: any) => {
           })}
         </ul>
       </div>
+      
       <div className="flex flex-col gap-2 w-full lg:flex-row lg:justify-end">
         <Button
           type="button"
           className="w-full lg:w-auto"
           onClick={() => {
+            // Validation for empty fields
             if (
               data.title == "" ||
               data.language == "" ||

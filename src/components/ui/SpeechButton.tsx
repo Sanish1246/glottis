@@ -11,17 +11,25 @@ const SpeechButton: React.FC<SpeechButtonProps> = ({
   lang,
   voiceName,
 }) => {
+  // State to store the voice
   const [voice, setVoice] = useState<SpeechSynthesisVoice | null>(null);
+  // State to store if the browser supports speech synthesis
   const [supported, setSupported] = useState(false);
 
+  // Effect to check if the browser supports speech synthesis
   useEffect(() => {
+    // Checking if the browser supports speech synthesis
     setSupported(typeof window !== "undefined" && "speechSynthesis" in window);
   }, []);
 
+  // Effect to load the voices
   useEffect(() => {
+    // Checking if the browser supports speech synthesis
     if (!supported) return;
     const synth = window.speechSynthesis;
+    // Function to load the voices
     const loadVoices = () => {
+      // Getting the voices
       const voices = speechSynthesis.getVoices();
 
       let selected: SpeechSynthesisVoice | undefined;
@@ -35,24 +43,33 @@ const SpeechButton: React.FC<SpeechButtonProps> = ({
 
       setVoice(selected || null);
 
-      // if (selected) {
-      //   console.log("Selected voice:", selected.name);
-      // } else {
-      //   console.warn("No suitable voice found, fallback failed");
-      // }
+      if (selected) {
+        console.log("Selected voice:", selected.name);
+      } else {
+        console.warn("No suitable voice found, fallback failed");
+      }
     };
+    // Loading the voices
     loadVoices();
+    // Setting the onvoiceschanged event
     synth.onvoiceschanged = loadVoices;
+    // Returning a cleanup function
     return () => {
       synth.onvoiceschanged = null;
     };
   }, [lang, voiceName]);
 
+  // Function to handle the speech
   const handleSpeak = (event: React.MouseEvent<HTMLButtonElement>) => {
+    // Stopping the event propagation
     event.stopPropagation();
+    // Checking if the text is supported
     if (!text || !supported) return;
+    // Getting the speech synthesis
     const synth = window.speechSynthesis;
+    // Cancelling the speech
     synth.cancel();
+    // Creating a new speech synthesis utterance
     const utter = new SpeechSynthesisUtterance(text);
     utter.lang = lang;
     if (voice) utter.voice = voice;

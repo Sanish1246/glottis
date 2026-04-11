@@ -36,7 +36,9 @@ interface EditProps {
 
 const EditDeck = ({ deck, setFullDeck, setDeck, setRemaining }: EditProps) => {
   const { setUser, user } = useUser();
+  // Function to remove a card from the deck
   const removeFromDeck = async (card: FlashCardProps) => {
+    // Removing the card from the deck
     try {
       const res = await fetch(
         `http://localhost:8000/remove_card/${deck.language}`,

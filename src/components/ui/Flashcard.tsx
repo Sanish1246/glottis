@@ -47,7 +47,8 @@ const Flashcard = ({
   const alreadyExists =
     currentDeck?.items.some((i) => i.word === word && i.english === english) ??
     false;
-  const handleFlip = () => setFlipped((v) => !v);
+  const handleFlip = () => setFlipped((v) => !v); // Function to flip the card
+
   return (
     <div
       className="w-64 h-40"
@@ -88,7 +89,6 @@ const Flashcard = ({
           >
             {word}
           </p>
-          {/* <p className="text-center mt-8 text-lg font-semibold px-4">{word}</p> */}
           <div className="flex flex-row justify-between w-[80%] mt-5">
             <button
               title="Add to Deck"
@@ -152,12 +152,6 @@ const Flashcard = ({
           </div>
         </div>
       </div>
-
-      {/* <style>{`
-        .perspective-1000 {
-          perspective: 1000px;
-        }
-      `}</style> */}
     </div>
   );
 };

@@ -30,12 +30,15 @@ const AddResourceForm = ({ data, onChange }) => {
   });
   const [resourceType, setResourceType] = useState("Blog");
 
+  // Function to add a new resource
   const addResource = () => {
+    // Validation for empty fields
     if (newResource.title.trim() && newResource.url.trim()) {
       const resource = {
         ...newResource,
         type: resourceType,
       };
+      // Updating the resources array
       const updatedResources = [...data, resource];
       onChange(updatedResources);
       setNewResource({ title: "", url: "" });
