@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 
 test('user registration', async ({ page,request }) => {
   await page.goto('http://localhost:5173/');
-  await page.locator('#radix-_r_3_').click();
+  await page.getByRole('button', { name: 'User' }).click();
   await page.getByRole('menuitem', { name: 'Register' }).click();
   await page.getByRole('textbox', { name: 'Username' }).fill('newUser1');
   await page.getByRole('textbox', { name: 'Email' }).click();
@@ -21,7 +21,7 @@ test('user registration', async ({ page,request }) => {
 
 test('user login', async ({ page }) => {
   await page.goto('http://localhost:5173/');
-  await page.locator('#radix-_r_3_').click();
+  await page.getByRole('button', { name: 'User' }).click();
   await page.getByRole('menuitem', { name: 'Login' }).click();
   await page.getByRole('textbox', { name: 'Username' }).fill('San');
   await page.getByRole('textbox', { name: 'Password' }).fill('Sanish2003');
@@ -31,13 +31,13 @@ test('user login', async ({ page }) => {
 
 test('user logout', async ({ page }) => {
   await page.goto('http://localhost:5173/');
-  await page.locator('#radix-_r_3_').click();
+  await page.getByRole('button', { name: 'User' }).click();
   await page.getByRole('menuitem', { name: 'Login' }).click();
   await page.getByRole('textbox', { name: 'Username' }).fill('San');
   await page.getByRole('textbox', { name: 'Password' }).fill('Sanish2003');
   await page.getByRole('button', { name: 'Submit' }).click();
   await expect(page.getByText('User Logged in!')).toBeVisible();
-  await page.locator('#radix-_r_3_').click();
+  await page.getByRole('button', { name: 'User' }).click();
   await page.getByRole('menuitem', { name: 'Logout' }).click();
   await page.getByRole('button', { name: 'Confirm' }).click();
   await expect(page.getByText('User Logged out!')).toBeVisible();
@@ -45,7 +45,7 @@ test('user logout', async ({ page }) => {
 
 test('invalid username login', async ({ page }) => {
   await page.goto('http://localhost:5173/');
-  await page.locator('#radix-_r_3_').click();
+  await page.getByRole('button', { name: 'User' }).click();
   await page.getByRole('menuitem', { name: 'Login' }).click();
   await page.getByRole('textbox', { name: 'Username' }).fill('Invalid user');
   await page.getByRole('textbox', { name: 'Password' }).fill('Sanish2003');
@@ -55,7 +55,7 @@ test('invalid username login', async ({ page }) => {
 
 test('invalid password login', async ({ page }) => {
   await page.goto('http://localhost:5173/');
-  await page.locator('#radix-_r_3_').click();
+  await page.getByRole('button', { name: 'User' }).click();
   await page.getByRole('menuitem', { name: 'Login' }).click();
   await page.getByRole('textbox', { name: 'Username' }).fill('San');
   await page.getByRole('textbox', { name: 'Password' }).fill('Sanish2000000');

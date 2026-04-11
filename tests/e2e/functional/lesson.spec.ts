@@ -4,12 +4,12 @@ import { test, expect } from '@playwright/test';
 
 test('italian lesson completed', async ({ page }) => {
   await page.goto('http://localhost:5173/');
-  await page.locator('#radix-_r_3_').click();
+  await page.getByRole('button', { name: 'User' }).click();
   await page.getByRole('menuitem', { name: 'Login' }).click();
   await page.getByRole('textbox', { name: 'Username' }).fill('newUser');
   await page.getByRole('textbox', { name: 'Password' }).fill('newPassword');
   await page.getByRole('button', { name: 'Submit' }).click();
-  await page.locator('#radix-_r_n_').click();
+  await page.getByRole('button', { name: 'Lessons' }).click();
 await page.getByRole('menuitem', { name: 'Lessons', exact: true }).click();
   await page.getByRole('link', { name: 'Lesson 1 Greetings and' }).click();
   await page.getByRole('textbox', { name: 'Answer Answer Answer Answer' }).scrollIntoViewIfNeeded();
@@ -58,12 +58,12 @@ await page.getByRole('menuitem', { name: 'Lessons', exact: true }).click();
 
 test('french lesson completed', async ({ page }) => {
   await page.goto('http://localhost:5173/');
-  await page.locator('#radix-_r_3_').click();
+ await page.getByRole('button', { name: 'User' }).click();
   await page.getByRole('menuitem', { name: 'Login' }).click();
   await page.getByRole('textbox', { name: 'Username' }).fill('newUser');
   await page.getByRole('textbox', { name: 'Password' }).fill('newPassword');
   await page.getByRole('button', { name: 'Submit' }).click();
-  await page.locator('#radix-_r_n_').click();
+  await page.getByRole('button', { name: 'Lessons' }).click();
 await page.getByRole('menuitem', { name: 'Lessons', exact: true }).click();
 await page.waitForTimeout(3000)
   await page.getByText('Italian', { exact: true }).click();

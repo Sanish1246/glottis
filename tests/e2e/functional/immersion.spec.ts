@@ -4,7 +4,7 @@ import { test, expect } from '@playwright/test';
 
 test('like and remove like from media', async ({ page }) => {
   await page.goto('http://localhost:5173/');
-  await page.locator('#radix-_r_3_').click();
+  await page.getByRole('button', { name: 'User' }).click();
   await page.getByRole('menuitem', { name: 'Login' }).click();
   await page.getByRole('textbox', { name: 'Username' }).fill('newUser');
   await page.getByRole('textbox', { name: 'Password' }).fill('newPassword');
