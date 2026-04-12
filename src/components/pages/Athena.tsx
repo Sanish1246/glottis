@@ -15,7 +15,7 @@ import { Card, CardContent } from "../ui/card";
 
 const Athena = () => {
   const [messages, setMessages] = useState([
-    { id: 1, text: "How can I help you today?", sender: "bot" },
+    { id: 1, text: "What would you like to talk about today?", sender: "bot" },
   ]);
 
   return (
@@ -25,8 +25,8 @@ const Athena = () => {
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Athena</h1>
           <p className="text-sm text-muted-foreground">
-            Your AI language tutor. Ask questions, get explanations, and
-            practice freely.
+            Your AI language practice partner. Ask questions, get explanations,
+            and practice freely.
           </p>
         </div>
         <Dialog>
@@ -43,8 +43,8 @@ const Athena = () => {
             </DialogHeader>
             <div className="mx-auto flex flex-col items-center gap-2 py-2">
               <p className="text-sm text-muted-foreground text-center">
-                Scan this QR code with your phone to continue the conversation
-                on WhatsApp.
+                Scan this QR code with your phone to start using Athena on
+                WhatsApp.
               </p>
               <QrCode />
             </div>

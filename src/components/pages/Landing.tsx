@@ -147,7 +147,7 @@ const Landing = () => {
       color: "text-blue-600",
     },
     {
-      title: "Biblíon",
+      title: "Flashcards",
       description:
         "Flashcard decks for vocabulary review. Create custom decks and use spaced repetition to master new words.",
       icon: BookOpen,
@@ -163,7 +163,7 @@ const Landing = () => {
       color: "text-green-600",
     },
     {
-      title: "Agorà",
+      title: "People",
       description:
         "Connect with other learners in our community. Practice conversations and share your language learning journey.",
       icon: Users,

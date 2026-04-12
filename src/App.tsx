@@ -138,7 +138,7 @@ function SidebarNav({
         </button>
       )}
 
-      <div className={sectionClass}>Biblíon</div>
+      <div className={sectionClass}>Flashcards</div>
       {isLoggedIn ? (
         <>
           <Link to="decks" className={linkClass} onClick={onClose}>
@@ -163,7 +163,7 @@ function SidebarNav({
             onClose();
           }}
         >
-          Biblíon
+          Flashcards
         </button>
       )}
 
@@ -173,7 +173,7 @@ function SidebarNav({
       </Link>
       {isLoggedIn ? (
         <Link to="users" className={linkClass} onClick={onClose}>
-          Agorà
+          People
         </Link>
       ) : (
         <button
@@ -184,7 +184,7 @@ function SidebarNav({
             onClose();
           }}
         >
-          Agorà
+          People
         </button>
       )}
       {isLoggedIn ? (
@@ -280,7 +280,11 @@ function App() {
           {/* Desktop / large tablet: horizontal navbar */}
           <nav className="navbar-shell mb-1 hidden lg:flex flex-row justify-between items-center w-full gap-4">
             <div className="flex flex-row items-center gap-2 min-w-0">
-              <img src="/glottis.svg" alt="Glottis" className="w-6 h-6 shrink-0" />
+              <img
+                src="/glottis.svg"
+                alt="Glottis"
+                className="w-6 h-6 shrink-0"
+              />
               <h1 className="self-center text-md md:text-2xl font-extrabold truncate">
                 Glottis
               </h1>
@@ -310,7 +314,9 @@ function App() {
                       {user.role == "admin" ? (
                         <>
                           <Link to="approvals">
-                            <DropdownMenuItem>Pending approvals</DropdownMenuItem>
+                            <DropdownMenuItem>
+                              Pending approvals
+                            </DropdownMenuItem>
                           </Link>
                           <Link to="aiDashboard">
                             <DropdownMenuItem>AI Dashboard</DropdownMenuItem>
@@ -327,9 +333,7 @@ function App() {
                     </>
                   ) : (
                     <>
-                      <DropdownMenuItem
-                        onClick={() => setIsRegisterOpen(true)}
-                      >
+                      <DropdownMenuItem onClick={() => setIsRegisterOpen(true)}>
                         Register
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => setIsLoginOpen(true)}>
@@ -381,10 +385,10 @@ function App() {
                       type="button"
                       className="hover:underline cursor-pointer bg-transparent border-0 p-0 font-inherit"
                     >
-                      Biblíon
+                      Flashcards
                     </button>
                   </DropdownMenuTrigger>
-                  <span className="sr-only">Biblíon</span>
+                  <span className="sr-only">Flashcards</span>
                   <DropdownMenuContent align="end">
                     <Link to="decks">
                       <DropdownMenuItem>Decks</DropdownMenuItem>
@@ -406,7 +410,7 @@ function App() {
                   className="hover:underline cursor-pointer bg-transparent border-0 p-0 font-inherit shrink-0"
                   onClick={() => setIsLoginOpen(true)}
                 >
-                  Biblíon
+                  Flashcards
                 </button>
               )}
 
@@ -415,7 +419,7 @@ function App() {
               </Link>
               {isLoggedIn ? (
                 <Link to="users" className="hover:underline shrink-0">
-                  Agorà
+                  People
                 </Link>
               ) : (
                 <button
@@ -423,7 +427,7 @@ function App() {
                   className="hover:underline cursor-pointer bg-transparent border-0 p-0 font-inherit shrink-0"
                   onClick={() => setIsLoginOpen(true)}
                 >
-                  Agorà
+                  People
                 </button>
               )}
 
@@ -547,9 +551,7 @@ function App() {
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Logout</DialogTitle>
-                <DialogDescription>
-                  Do you want to logout?
-                </DialogDescription>
+                <DialogDescription>Do you want to logout?</DialogDescription>
               </DialogHeader>
               <DialogFooter>
                 <DialogClose asChild>
