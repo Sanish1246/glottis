@@ -243,7 +243,7 @@ const UserListPage = () => {
           </>
         ) : (
           <>
-            <h1 className="font-bold text-xl text-center">Search results</h1>
+            <h1 className="font-bold text-xl text-center mt-3">Search results</h1>
             {searchResult.length == 0 ? <p className="text-center">No result found!</p> : null}
             {searchResult.map((nextUser, index) => {
               return (

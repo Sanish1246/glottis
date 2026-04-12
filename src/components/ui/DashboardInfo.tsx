@@ -1,5 +1,12 @@
 import { Pie, PieChart } from "recharts";
-import { Bar, BarChart, CartesianGrid, Rectangle, XAxis } from "recharts";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Rectangle,
+  XAxis,
+} from "recharts";
 import {
   ChartContainer,
   ChartTooltip,
@@ -69,7 +76,7 @@ const DashboardInfo = ({ user }) => {
     },
     {
       difficulty: "hard",
-      number: user.revisionData.hard,
+      number: user.revisionData.difficult,
       fill: "var(--color-hard)",
     },
     {
@@ -217,7 +224,7 @@ const DashboardInfo = ({ user }) => {
           <CardTitle>Flashcard revision data</CardTitle>
           <CardDescription>
             Here is how many times each option has been selected during
-            revison{" "}
+            revision{" "}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -252,7 +259,11 @@ const DashboardInfo = ({ user }) => {
                     />
                   );
                 }}
-              />
+              >
+                {chartData.map((entry) => (
+                  <Cell key={entry.difficulty} fill={entry.fill} />
+                ))}
+              </Bar>
             </BarChart>
           </ChartContainer>
         </CardContent>
