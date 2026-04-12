@@ -362,7 +362,7 @@ const Lesson = () => {
                           <div className="shrink-0">
                             <SpeechButton
                               text={l.text}
-                              lang={lesson.voice_languagePath}
+                              lang={lesson.voice_language ?? languagePath}
                               voiceName={l.audio}
                             />
                           </div>
@@ -389,7 +389,7 @@ const Lesson = () => {
               <CardContent>
                 <FlashcardList
                   cardList={l.items}
-                  lang={lesson.languagePath}
+                  lang={lesson.language ?? languagePath}
                   addToDeck={addToDeck}
                   removeFromDeck={removeFromDeck}
                 />
@@ -411,7 +411,7 @@ const Lesson = () => {
               <CardContent className="space-y-4">
                 <GrammarTable
                   grammarPoint={g.content}
-                  lang={lesson.voice_languagePath}
+                  lang={lesson.voice_language ?? languagePath}
                 />
                 {(g.notes ?? []).length > 0 && (
                   <div className="space-y-2">

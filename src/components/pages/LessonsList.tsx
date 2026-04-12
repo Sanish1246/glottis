@@ -32,8 +32,13 @@ const LessonsList = () => {
   const { user } = useUser();
   const [loaded, setLoaded] = useState(false);
 
+  const officialLessons = useMemo(
+    () => lessonArray.filter((lesson: any) => !lesson.author),
+    [lessonArray],
+  );
+
   const { completedCount, totalCount, progress } = useMemo(() => {
-    const filtered = lessonArray.filter((lesson: any) => !lesson.author);
+    const filtered = officialLessons;
     const total = filtered.length;
 
     const completed = filtered.filter((lesson: any) => {
@@ -52,7 +57,7 @@ const LessonsList = () => {
       progress: total ? Math.round((completed / total) * 100) : 0,
     };
   }, [
-    lessonArray,
+    officialLessons,
     user.lessonsCompleted.french,
     user.lessonsCompleted.italian,
   ]);
@@ -123,30 +128,26 @@ const LessonsList = () => {
         <div className="text-sm text-muted-foreground">Loading lessons…</div>
       )}
 
-      {loaded && lessonArray.length === 0 && (
+      {loaded && officialLessons.length === 0 && (
         <div className="rounded-lg border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
           No lessons available yet for this language.
         </div>
       )}
 
       <div className="space-y-4">
-        {lessonArray.map((lesson: any) => {
+        {officialLessons.map((lesson: any) => {
           const showLevelHeader = lesson.lessonNumber_level == 1;
           // Checking if the lesson is completed or not
           const completed =
             (lesson.language == "french" &&
-              !lesson.author &&
               user.lessonsCompleted.french >= lesson.lessonNumber) ||
             (lesson.language == "italian" &&
-              !lesson.author &&
               user.lessonsCompleted.italian >= lesson.lessonNumber);
 
           const notCompleted =
             (lesson.language == "french" &&
-              !lesson.author &&
               user.lessonsCompleted.french + 1 < lesson.lessonNumber) ||
             (lesson.language == "italian" &&
-              !lesson.author &&
               user.lessonsCompleted.italian + 1 < lesson.lessonNumber);
           return (
             <div key={lesson._id} className="space-y-1">

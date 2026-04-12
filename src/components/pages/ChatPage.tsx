@@ -54,7 +54,7 @@ const ChatPage = () => {
           method: "POST",
           credentials: "include",
         });
-        const data = await response.json();
+        await response.json();
         setMessages([]);
       } catch (error) {
         toast.error(String(error), {
@@ -140,8 +140,24 @@ const ChatPage = () => {
         credentials: "include",
         body: JSON.stringify(messageData),
       });
-      const data = await res.json();
-      setMessages(data.messages);
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        toast.error(
+          typeof body.error === "string" ? body.error : "Failed to send message",
+          {
+            action: {
+              label: "Close",
+              onClick: () => {
+                toast.dismiss();
+              },
+            },
+          },
+        );
+        return;
+      }
+
+      socket.emit("send_message", messageData);
+      setCurrentMessage("");
     } catch (error) {
       toast.error(String(error), {
         action: {
@@ -152,15 +168,6 @@ const ChatPage = () => {
         },
       });
     }
-
-    // Emit to server — don't add to state here
-    socket.emit("send_message", messageData);
-
-    // Clear input immediately for better UX
-    setCurrentMessage("");
-
-    // The server will broadcast this back via receive_message
-    // so it will be added to state there (avoiding duplicates)
   };
 
   return (
