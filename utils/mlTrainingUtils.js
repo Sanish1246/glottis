@@ -9,8 +9,9 @@ export function sigmoid(z) {
 }
 
 // Training a logistic regression model
+
 export function trainModel(samples, featureOrder, options = {}) {
-  const { epochs = 500, lr = 0.05 } = options;
+  const { epochs = 200, lr = 0.05 } = options;
   const numFeatures = featureOrder.length;
 
   // intercept (bias term): the baseline prediction when all features are zero
